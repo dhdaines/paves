@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -24,15 +24,20 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "playa-pdf >= 0.2.5, < 0.3"  # not considered harmful as we depend on internals
+]
 
 [project.urls]
-Documentation = "https://github.com/David Huggins-Daines/paves#readme"
-Issues = "https://github.com/David Huggins-Daines/paves/issues"
-Source = "https://github.com/David Huggins-Daines/paves"
+Documentation = "https://github.com/dhdaines/paves#readme"
+Issues = "https://github.com/dhdaines/paves/issues"
+Source = "https://github.com/dhdaines/paves"
 
 [tool.hatch.version]
-path = "src/paves/__about__.py"
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/paves/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
