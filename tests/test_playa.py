@@ -11,7 +11,9 @@ THISDIR = Path(__file__).parent
 
 
 def test_playa_extract():
-    with playa.open(THISDIR / "Rgl-1314-2021-Z-en-vigueur-20240823.pdf") as pdf:
+    with playa.open(
+        THISDIR / "contrib" / "Rgl-1314-2021-Z-en-vigueur-20240823.pdf"
+    ) as pdf:
         for page in pdf.pages:
             layout = list(extract_page(page))
             playa_layout = list(page.layout)
@@ -22,5 +24,5 @@ def test_playa_extract():
                     print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_playa_extract()

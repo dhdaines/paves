@@ -39,6 +39,11 @@ source = "vcs"
 [tool.hatch.build.hooks.vcs]
 version-file = "src/paves/__about__.py"
 
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/tests/contrib",
+]
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
