@@ -14,14 +14,10 @@ def test_playa_extract():
     with playa.open(
         THISDIR / "contrib" / "Rgl-1314-2021-Z-en-vigueur-20240823.pdf"
     ) as pdf:
-        for page in pdf.pages:
-            layout = list(extract_page(page))
-            playa_layout = list(page.layout)
-            for i, (x, y) in enumerate(zip(layout, playa_layout)):
-                if x != y:
-                    print(f"paves[{page.label}][{i}]: {x}")
-                    print(f"playa[{page.label}][{i}]: {y}")
-                    print()
+        for idx in range(50):  # FIXME: PLAYA bug
+            layout = list(extract_page(pdf.pages[idx]))
+            playa_layout = list(pdf.pages[idx].layout)
+            assert layout == playa_layout
 
 
 if __name__ == "__main__":
