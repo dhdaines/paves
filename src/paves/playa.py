@@ -34,7 +34,7 @@ def process_object(obj: ContentObject) -> Iterator[LayoutDict]:
 
 
 def make_path(
-    obj: ContentObject,
+    obj: PathObject,
     *,
     object_type: str,
     x0: float,
@@ -75,7 +75,7 @@ def make_path(
 def _(obj: PathObject):
     for path in obj:
         ops = []
-        pts = []
+        pts: List[Point] = []
         for seg in path.raw_segments:
             ops.append(seg.operator)
             if seg.operator == "h":
@@ -185,8 +185,11 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
         x0, y0, x1, y1 = glyph.bbox
         tstate = glyph.textstate
         gstate = glyph.gstate
+        # apparently we can assert this?
+        font = tstate.font
+        assert font is not None
         # NOTE: This is not right at all for rotated text, but we'll live with it
-        if tstate.font.vertical:
+        if font.vertical:
             size = x1 - x0
         else:
             size = y1 - y0
@@ -208,7 +211,7 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
             upright=upright,
             text=glyph.text,
             cid=glyph.cid,
-            fontname=tstate.font.fontname,
+            fontname=font.fontname,
             glyph_offset_x=glyph_x,
             glyph_offset_y=glyph_y,
             render_mode=tstate.render_mode,
