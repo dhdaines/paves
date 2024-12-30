@@ -74,6 +74,8 @@ def make_path(
         non_stroking_colorspace=obj.gstate.ncs.name,
         non_stroking_color=obj.gstate.ncolor.values,
         non_stroking_pattern=obj.gstate.ncolor.pattern,
+        page_index=0,
+        page_label="0",
     )
 
 
@@ -182,6 +184,8 @@ def _(obj: ImageObject) -> Iterator[LayoutDict]:
         bits=obj.bits,
         image_colorspace=obj.colorspace,
         stream=stream_id,
+        page_index=0,
+        page_label="0",
     )
 
 
@@ -231,6 +235,8 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
             non_stroking_pattern=gstate.ncolor.pattern,
             mcid=None if obj.mcs is None else obj.mcs.mcid,
             tag=None if obj.mcs is None else obj.mcs.tag,
+            page_index=0,
+            page_label="0",
         )
 
 
