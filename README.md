@@ -40,7 +40,7 @@ documents and somewhat slower on small ones.  You can make it not do
 that by passing `max_workers=1`, or you can only use some CPUs by
 passing some other value.
 
-Yes, even with a single CPU, it is faster than `pdfminer.six`.
+Even with a single CPU, it is often faster than `pdfminer.six`.
 
 There are a few differences with `pdfminer.six` (some might call them
 bug fixes):

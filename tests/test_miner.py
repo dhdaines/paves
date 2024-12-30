@@ -5,7 +5,7 @@ Test pdfminer.six replacement functionality.
 from pathlib import Path
 
 import playa
-from paves.miner import extract_page, extract, LAParams
+from paves.miner import extract_page, extract, LAParams, LTFigure
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.pdfpage import PDFPage
@@ -46,6 +46,24 @@ def test_extract():
         for pv, pm in zip(paves_ltpage, pdfminer_ltpage):
             # Because in its infinite wisdom these have no __eq__
             assert str(pv) == str(pm)
+
+
+def test_serialization():
+    """Ensure stuff is reserialized properly"""
+    path = THISDIR / "contrib" / "PSC_Station.pdf"
+    pages = extract(path, LAParams())
+    first = next(pages)
+    for item in first:
+        if isinstance(item, LTFigure):
+            img = next(iter(item))
+            # We have a image stream
+            assert len(img.stream.buffer) == 52694
+            assert img.colorspace.name == "ICCBased"
+            # It has a colorspace, which has a stream as an indirect
+            # object reference, which we can resolve
+            icc = img.colorspace.spec[1].resolve()
+            assert len(icc.buffer) == 3144
+        # Probably we could test some other things too?
 
 
 if __name__ == "__main__":
