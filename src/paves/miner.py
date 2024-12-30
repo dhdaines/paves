@@ -428,7 +428,7 @@ class LTRect(LTCurve):
         self,
         path: PathObject,
         bbox: Rect,
-        transformed_path: List[PathSegment] = None,
+        transformed_path: List[PathSegment],
     ) -> None:
         (x0, y0, x1, y1) = bbox
         LTCurve.__init__(
@@ -496,7 +496,12 @@ class LTChar(LTComponent, LTText):
         # FIXME: expose this in PLAYA
         matrix = mult_matrix(textstate.line_matrix, glyph.ctm)
         matrix = translate_matrix(matrix, textstate.glyph_offset)
-        self._text = glyph.text
+        if glyph.text is None:
+            logger.debug("undefined: %r, %r", textstate.font, glyph.cid)
+            # Horrible awful pdfminer.six behaviour
+            self._text = "(cid:%d)" % glyph.cid
+        else:
+            self._text = glyph.text
         self.matrix = matrix
         self.mcs = glyph.mcs
         font = textstate.font
@@ -1112,13 +1117,13 @@ class LTPage(LTLayoutContainer):
 
 
 @singledispatch
-def process_object(obj: ContentObject) -> Iterator[LTItem]:
+def process_object(obj: ContentObject) -> Iterator[LTComponent]:
     """Handle obj according to its type"""
     yield from ()
 
 
 @process_object.register
-def _(obj: PathObject) -> Iterator[LTItem]:
+def _(obj: PathObject) -> Iterator[LTComponent]:
     for path in obj:
         ops = []
         pts: List[Point] = []
@@ -1150,7 +1155,7 @@ def _(obj: PathObject) -> Iterator[LTItem]:
                 path,
                 pts[0],
                 pts[1],
-                original_path=transformed_path,
+                transformed_path,
             )
             yield line
         elif shape in {"mlllh", "mllll"}:
@@ -1187,15 +1192,16 @@ def _(obj: PathObject) -> Iterator[LTItem]:
 
 
 @process_object.register
-def _(obj: XObjectObject) -> Iterator[LTItem]:
-    fig = LTFigure(obj.xobjid, obj.bbox, obj.ctm)
+def _(obj: XObjectObject) -> Iterator[LTComponent]:
+    fig = LTFigure(obj)
     for child in obj:
-        fig.add(process_object(child))
+        for grandchild in process_object(child):
+            fig.add(grandchild)
     yield fig
 
 
 @process_object.register
-def _(obj: ImageObject) -> Iterator[LTItem]:
+def _(obj: ImageObject) -> Iterator[LTComponent]:
     # pdfminer.six creates a redundant "figure" for images, even
     # inline ones, so we will do the same.
     fig = LTFigure(obj)
@@ -1205,7 +1211,7 @@ def _(obj: ImageObject) -> Iterator[LTItem]:
 
 
 @process_object.register
-def _(obj: TextObject) -> Iterator[LTItem]:
+def _(obj: TextObject) -> Iterator[LTComponent]:
     # We only create LTChar, the rest is some dark magic
     for glyph in obj:
         yield LTChar(glyph)
