@@ -2,6 +2,7 @@
 Test PLAYA-Bear functionality.
 """
 
+import warnings
 from pathlib import Path
 
 import playa
@@ -17,7 +18,8 @@ def test_playa_extract():
             if page.page_idx == 20:  # do not take forever
                 break
             layout = list(extract_page(page))
-            playa_layout = list(page.layout)
+            with warnings.catch_warnings():
+                playa_layout = list(page.layout)
             # Fill in missing information
             for dic in playa_layout:
                 dic["page_index"] = page.page_idx
