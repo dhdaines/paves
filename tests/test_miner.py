@@ -5,10 +5,11 @@ Test pdfminer.six replacement functionality.
 from pathlib import Path
 
 import playa
-from paves.miner import extract_page
+from paves.miner import extract_page, extract, LAParams
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.pdfpage import PDFPage
+from pdfminer.high_level import extract_pages as pdfminer_extract_pages
 
 THISDIR = Path(__file__).parent
 
@@ -34,5 +35,18 @@ def test_miner_extract():
                 assert str(pv) == str(pm)
 
 
+def test_extract():
+    path = THISDIR / "contrib" / "Rgl-1314-2021-Z-en-vigueur-20240823.pdf"
+    for idx, (paves_ltpage, pdfminer_ltpage) in enumerate(
+        zip(extract(path, LAParams()), pdfminer_extract_pages(path))
+    ):
+        # Otherwise pdfminer.six is just too darn slow
+        if idx == 20:
+            break
+        for pv, pm in zip(paves_ltpage, pdfminer_ltpage):
+            # Because in its infinite wisdom these have no __eq__
+            assert str(pv) == str(pm)
+
+
 if __name__ == "__main__":
-    test_miner_extract()
+    test_extract()

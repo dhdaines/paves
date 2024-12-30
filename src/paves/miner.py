@@ -2,9 +2,12 @@
 Reimplementation of pdfminer.six layout analysis on top of PLAYA.
 """
 
-from functools import singledispatch
+from functools import singledispatch, partial
+from multiprocessing.context import BaseContext
+from pathlib import Path
 import heapq
 import logging
+import multiprocessing
 from typing import (
     Callable,
     Dict,
@@ -30,7 +33,6 @@ from playa.utils import (
     translate_matrix,
     mult_matrix,
 )
-from playa.color import Color
 from playa.page import (
     Page,
     ContentObject,
@@ -38,10 +40,11 @@ from playa.page import (
     PathObject,
     TextObject,
     ImageObject,
+    MarkedContent,
     GlyphObject,
 )
-from playa.pdftypes import ContentStream as PDFStream
 from playa.exceptions import PDFException
+import playa
 
 # Contains much code from layout.py and utils.py in pdfminer.six:
 # Copyright (c) 2004-2016  Yusuke Shinyama <yusuke at shinyama dot jp>
@@ -293,9 +296,10 @@ class LTText:
 class LTComponent(LTItem):
     """Object with a bounding box"""
 
-    def __init__(self, bbox: Rect) -> None:
+    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
         LTItem.__init__(self)
         self.set_bbox(bbox)
+        self.mcs: Union[MarkedContent, None] = mcs
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {bbox2str(self.bbox)}>"
@@ -374,26 +378,20 @@ class LTCurve(LTComponent):
 
     def __init__(
         self,
-        linewidth: float,
+        path: PathObject,
         pts: List[Point],
-        stroke: bool = False,
-        fill: bool = False,
-        evenodd: bool = False,
-        stroking_color: Optional[Color] = None,
-        non_stroking_color: Optional[Color] = None,
-        original_path: Optional[List[PathSegment]] = None,
-        dashing_style: Optional[Tuple[object, object]] = None,
+        transformed_path: List[PathSegment],
     ) -> None:
-        LTComponent.__init__(self, get_bound(pts))
+        LTComponent.__init__(self, get_bound(pts), path.mcs)
         self.pts = pts
-        self.linewidth = linewidth
-        self.stroke = stroke
-        self.fill = fill
-        self.evenodd = evenodd
-        self.stroking_color = stroking_color
-        self.non_stroking_color = non_stroking_color
-        self.original_path = original_path
-        self.dashing_style = dashing_style
+        self.linewidth = path.gstate.linewidth
+        self.stroke = path.stroke
+        self.fill = path.fill
+        self.evenodd = path.evenodd
+        self.stroking_color = path.gstate.scolor
+        self.non_stroking_color = path.gstate.ncolor
+        self.original_path = transformed_path
+        self.dashing_style = path.gstate.dash
 
     def get_pts(self) -> str:
         return ",".join("%.3f,%.3f" % p for p in self.pts)
@@ -407,28 +405,16 @@ class LTLine(LTCurve):
 
     def __init__(
         self,
-        linewidth: float,
+        path: PathObject,
         p0: Point,
         p1: Point,
-        stroke: bool = False,
-        fill: bool = False,
-        evenodd: bool = False,
-        stroking_color: Optional[Color] = None,
-        non_stroking_color: Optional[Color] = None,
-        original_path: Optional[List[PathSegment]] = None,
-        dashing_style: Optional[Tuple[object, object]] = None,
+        transformed_path: List[PathSegment],
     ) -> None:
         LTCurve.__init__(
             self,
-            linewidth,
+            path,
             [p0, p1],
-            stroke,
-            fill,
-            evenodd,
-            stroking_color,
-            non_stroking_color,
-            original_path,
-            dashing_style,
+            transformed_path,
         )
 
 
@@ -440,28 +426,16 @@ class LTRect(LTCurve):
 
     def __init__(
         self,
-        linewidth: float,
+        path: PathObject,
         bbox: Rect,
-        stroke: bool = False,
-        fill: bool = False,
-        evenodd: bool = False,
-        stroking_color: Optional[Color] = None,
-        non_stroking_color: Optional[Color] = None,
-        original_path: Optional[List[PathSegment]] = None,
-        dashing_style: Optional[Tuple[object, object]] = None,
+        transformed_path: List[PathSegment] = None,
     ) -> None:
         (x0, y0, x1, y1) = bbox
         LTCurve.__init__(
             self,
-            linewidth,
+            path,
             [(x0, y0), (x1, y0), (x1, y1), (x0, y1)],
-            stroke,
-            fill,
-            evenodd,
-            stroking_color,
-            non_stroking_color,
-            original_path,
-            dashing_style,
+            transformed_path,
         )
 
 
@@ -471,16 +445,21 @@ class LTImage(LTComponent):
     Embedded images can be in JPEG, Bitmap or JBIG2.
     """
 
-    def __init__(self, name: str, stream: PDFStream, bbox: Rect) -> None:
-        LTComponent.__init__(self, bbox)
-        self.name = name
-        self.stream = stream
-        self.srcsize = (stream.get_any(("W", "Width")), stream.get_any(("H", "Height")))
-        self.imagemask = stream.get_any(("IM", "ImageMask"))
-        self.bits = stream.get_any(("BPC", "BitsPerComponent"), 1)
-        self.colorspace = stream.get_any(("CS", "ColorSpace"))
-        if not isinstance(self.colorspace, list):
-            self.colorspace = [self.colorspace]
+    def __init__(self, obj: ImageObject) -> None:
+        LTComponent.__init__(self, obj.bbox, obj.mcs)
+        # Inline images don't actually have an xobjid, so we make shit
+        # up like pdfminer.six does.
+        if obj.xobjid is None:
+            self.name = str(id(obj))
+        else:
+            self.name = obj.xobjid
+        # This is *not* serializable, so take a note of it to
+        # reconstruct it on the other side.
+        # self.stream = obj.stream
+        self.srcsize = obj.srcsize
+        self.imagemask = obj.imagemask
+        self.bits = obj.bits
+        self.colorspace = obj.colorspace
 
     def __repr__(self) -> str:
         return (
@@ -519,6 +498,7 @@ class LTChar(LTComponent, LTText):
         matrix = translate_matrix(matrix, textstate.glyph_offset)
         self._text = glyph.text
         self.matrix = matrix
+        self.mcs = glyph.mcs
         font = textstate.font
         assert font is not None
         self.fontname = font.fontname
@@ -529,7 +509,7 @@ class LTChar(LTComponent, LTText):
         scaling = textstate.scaling
         # FIXME: Still really not sure what this means
         self.upright = a * d * scaling > 0 and b * c <= 0
-        LTComponent.__init__(self, glyph.bbox)
+        LTComponent.__init__(self, glyph.bbox, glyph.mcs)
         # FIXME: This is now quite wrong for rotated glyphs
         if font.vertical:
             self.size = self.width
@@ -553,7 +533,7 @@ LTItemT = TypeVar("LTItemT", bound=LTItem)
 class LTContainer(LTComponent, Generic[LTItemT]):
     """Object that can be extended and analyzed"""
 
-    def __init__(self, bbox: Rect) -> None:
+    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
         LTComponent.__init__(self, bbox)
         self._objs: List[LTItemT] = []
 
@@ -837,8 +817,8 @@ class LTTextGroupTBRL(LTTextGroup):
 
 
 class LTLayoutContainer(LTContainer[LTComponent]):
-    def __init__(self, bbox: Rect) -> None:
-        LTContainer.__init__(self, bbox)
+    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
+        LTContainer.__init__(self, bbox, mcs)
         self.groups: Optional[List[LTTextGroup]] = None
 
     # group_objects: group text object to textlines.
@@ -1090,15 +1070,15 @@ class LTFigure(LTLayoutContainer):
     PDF Forms can be used to present figures or pictures by embedding yet
     another PDF document within a page. Note that LTFigure objects can appear
     recursively.
-
-    NOTE: Unlike in pdfminer.six, the constructor here takes the
-    *already transformed* bounding box.
     """
 
-    def __init__(self, name: str, bbox: Rect, matrix: Matrix) -> None:
-        self.name = name
-        self.matrix = matrix
-        LTLayoutContainer.__init__(self, bbox)
+    def __init__(self, obj: Union[ImageObject, XObjectObject]) -> None:
+        if obj.xobjid is None:
+            self.name = str(id(obj))
+        else:
+            self.name = obj.xobjid
+        self.matrix = obj.ctm
+        LTLayoutContainer.__init__(self, obj.bbox, obj.mcs)
 
     def __repr__(self) -> str:
         return (
@@ -1164,21 +1144,13 @@ def _(obj: PathObject) -> Iterator[LTItem]:
         transformed_path = [
             cast(PathSegment, (o, *p)) for o, p in zip(ops, transformed_points)
         ]
-        gstate = obj.gstate
-        stroke, fill, evenodd = obj.stroke, obj.fill, obj.evenodd
         if shape in {"mlh", "ml"}:
             # single line segment ("ml" is a frequent anomaly)
             line = LTLine(
-                gstate.linewidth,
+                path,
                 pts[0],
                 pts[1],
-                stroke,
-                fill,
-                evenodd,
-                gstate.scolor,
-                gstate.ncolor,
                 original_path=transformed_path,
-                dashing_style=gstate.dash,
             )
             yield line
         elif shape in {"mlllh", "mllll"}:
@@ -1193,41 +1165,23 @@ def _(obj: PathObject) -> Iterator[LTItem]:
                 if y0 > y2:
                     (y2, y0) = (y0, y2)
                 rect = LTRect(
-                    gstate.linewidth,
+                    path,
                     (*pts[0], *pts[2]),
-                    stroke,
-                    fill,
-                    evenodd,
-                    gstate.scolor,
-                    gstate.ncolor,
                     transformed_path,
-                    gstate.dash,
                 )
                 yield rect
             else:
                 curve = LTCurve(
-                    gstate.linewidth,
+                    path,
                     pts,
-                    stroke,
-                    fill,
-                    evenodd,
-                    gstate.scolor,
-                    gstate.ncolor,
                     transformed_path,
-                    gstate.dash,
                 )
                 yield curve
         else:
             curve = LTCurve(
-                gstate.linewidth,
+                path,
                 pts,
-                stroke,
-                fill,
-                evenodd,
-                gstate.scolor,
-                gstate.ncolor,
                 transformed_path,
-                gstate.dash,
             )
             yield curve
 
@@ -1243,14 +1197,9 @@ def _(obj: XObjectObject) -> Iterator[LTItem]:
 @process_object.register
 def _(obj: ImageObject) -> Iterator[LTItem]:
     # pdfminer.six creates a redundant "figure" for images, even
-    # inline ones, so we will do the same.  We will also make shit up
-    # for the xobjid in this case, just like pdfminer.six does.
-    if obj.xobjid is None:
-        name = str(id(obj))
-    else:
-        name = obj.xobjid
-    fig = LTFigure(name, obj.bbox, obj.ctm)
-    img = LTImage(name, obj.stream, obj.bbox)
+    # inline ones, so we will do the same.
+    fig = LTFigure(obj)
+    img = LTImage(obj)
     fig.add(img)
     yield fig
 
@@ -1302,3 +1251,21 @@ def extract_page(page: Page, laparams: Union[LAParams, None] = None) -> LTPage:
     if laparams is not None:
         ltpage.analyze(laparams)
     return ltpage
+
+
+def extract(
+    path: Path,
+    laparams: Union[LAParams, None] = None,
+    max_workers: Union[int, None] = None,
+    mp_context: Union[BaseContext, None] = None,
+) -> Iterator[LTPage]:
+    """Extract LTPages from a document."""
+    if max_workers is None:
+        max_workers = multiprocessing.cpu_count()
+    with playa.open(
+        path,
+        space="page",
+        max_workers=max_workers,
+        mp_context=mp_context,
+    ) as pdf:
+        yield from pdf.pages.map(partial(extract_page, laparams=laparams))
