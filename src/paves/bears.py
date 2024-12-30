@@ -182,7 +182,7 @@ def _(obj: ImageObject) -> Iterator[LayoutDict]:
         srcsize=obj.srcsize,
         imagemask=obj.imagemask,
         bits=obj.bits,
-        image_colorspace=obj.colorspace,
+        image_colorspace=obj.colorspace.name,
         stream=stream_id,
         page_index=0,
         page_label="0",
