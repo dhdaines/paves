@@ -1,11 +1,11 @@
 """
-Test PLAYA functionality.
+Test PLAYA-Bear functionality.
 """
 
 from pathlib import Path
 
 import playa
-from paves.playa import extract_page
+from paves.bears import extract_page
 
 THISDIR = Path(__file__).parent
 

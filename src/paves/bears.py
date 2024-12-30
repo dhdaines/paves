@@ -1,15 +1,19 @@
-"""
-Reimplementation of PLAYA 0.2 `page.layout` in a more appropriate location.
+"""Reimplementation of PLAYA 0.2 `page.layout` in a more appropriate location.
+
+Creates dictionaries appropriate for feeding to bears of different
+sorts (pandas or polars, your choice).
 """
 
 from functools import singledispatch
+from multiprocessing.context import BaseContext
+from pathlib import Path
 import logging
+import multiprocessing
 
-from typing import Iterator, List
+from typing import cast, Iterator, List, Union
 from playa.page import (
     Page,
     ContentObject,
-    LayoutDict,
     PathObject,
     ImageObject,
     TextObject,
@@ -23,6 +27,8 @@ from playa.utils import (
     mult_matrix,
     translate_matrix,
 )
+import playa
+from playa import DeviceSpace, LayoutDict, fieldnames as FIELDNAMES, schema as SCHEMA  # noqa: F401
 
 LOG = logging.getLogger(__name__)
 
@@ -72,7 +78,7 @@ def make_path(
 
 
 @process_object.register
-def _(obj: PathObject):
+def _(obj: PathObject) -> Iterator[LayoutDict]:
     for path in obj:
         ops = []
         pts: List[Point] = []
@@ -236,7 +242,31 @@ def _(obj: XObjectObject) -> Iterator[LayoutDict]:
             yield layout
 
 
-def extract_page(page: Page) -> Iterator[LayoutDict]:
+def extract_page(page: Page) -> List[LayoutDict]:
     """Extract LayoutDict items from a Page."""
+    page_layout = []
     for obj in page:
-        yield from process_object(obj)
+        for dic in process_object(obj):
+            dic = cast(LayoutDict, dic)  # ugh
+            dic["page_index"] = page.page_idx
+            dic["page_label"] = page.label
+            page_layout.append(dic)
+    return page_layout
+
+
+def extract(
+    path: Path,
+    space: DeviceSpace = "screen",
+    max_workers: Union[int, None] = None,
+    mp_context: Union[BaseContext, None] = None,
+) -> Iterator[LayoutDict]:
+    """Extract LayoutDict items from a document."""
+    if max_workers is None:
+        max_workers = multiprocessing.cpu_count()
+    with playa.open(
+        path,
+        max_workers=max_workers,
+        mp_context=mp_context,
+    ) as pdf:
+        for page in pdf.pages.map(extract_page):
+            yield from page
