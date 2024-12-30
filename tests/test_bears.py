@@ -2,8 +2,9 @@
 Test PLAYA-Bear functionality.
 """
 
-import warnings
 from pathlib import Path
+
+import pytest
 
 import playa
 from paves.bears import extract_page, extract
@@ -11,6 +12,8 @@ from paves.bears import extract_page, extract
 THISDIR = Path(__file__).parent
 
 
+# warnings.capture_warnings does not work in pytest because Reasons
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_playa_extract():
     path = THISDIR / "contrib" / "Rgl-1314-2021-Z-en-vigueur-20240823.pdf"
     with playa.open(path) as pdf:
@@ -18,8 +21,7 @@ def test_playa_extract():
             if page.page_idx == 20:  # do not take forever
                 break
             layout = list(extract_page(page))
-            with warnings.catch_warnings():
-                playa_layout = list(page.layout)
+            playa_layout = list(page.layout)
             # Fill in missing information
             for dic in playa_layout:
                 dic["page_index"] = page.page_idx
