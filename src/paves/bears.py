@@ -29,6 +29,7 @@ from playa.utils import (
 )
 import playa
 from playa import DeviceSpace, LayoutDict, fieldnames as FIELDNAMES, schema as SCHEMA  # noqa: F401
+from paves.miner import unref_colorspace, ref_colorspace
 
 LOG = logging.getLogger(__name__)
 
@@ -182,7 +183,9 @@ def _(obj: ImageObject) -> Iterator[LayoutDict]:
         srcsize=obj.srcsize,
         imagemask=obj.imagemask,
         bits=obj.bits,
-        image_colorspace=obj.colorspace.name,
+        image_colorspace=None
+        if obj.colorspace is None
+        else unref_colorspace(obj.colorspace),
         stream=stream_id,
         page_index=0,
         page_label="0",
@@ -275,4 +278,8 @@ def extract(
         mp_context=mp_context,
     ) as pdf:
         for page in pdf.pages.map(extract_page):
-            yield from page
+            for dic in page:
+                cs = dic.get("image_colorspace")
+                if cs is not None:
+                    dic["image_colorspace"] = ref_colorspace(cs, pdf)
+                yield dic

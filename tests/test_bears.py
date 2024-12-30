@@ -26,9 +26,6 @@ def test_playa_extract():
             for dic in playa_layout:
                 dic["page_index"] = page.page_idx
                 dic["page_label"] = page.label
-                # Correct what is arguably a bug in PLAYA
-                if "image_colorspace" in dic:
-                    dic["image_colorspace"] = dic["image_colorspace"].name
             assert layout == playa_layout
 
 
@@ -36,8 +33,7 @@ def test_extract():
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     for idx, dic in enumerate(extract(path)):
         if "image_colorspace" in dic:
-            # No stream for you! No!
-            assert dic["image_colorspace"] == "ICCBased"
+            assert dic["image_colorspace"].name == "ICCBased"
 
 
 if __name__ == "__main__":

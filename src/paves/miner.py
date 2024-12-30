@@ -45,7 +45,7 @@ from playa.page import (
     GlyphObject,
     GraphicState,
 )
-from playa.pdftypes import ObjRef as PDFObjRef, ContentStream as PDFStream
+from playa.pdftypes import ObjRef as PDFObjRef
 from playa.parser import PDFObject
 from playa.exceptions import PDFException
 from playa.color import ColorSpace
@@ -1275,9 +1275,9 @@ def unref_colorspace(cs: ColorSpace) -> ColorSpace:
     FIXME: This functionality should go into PLAYA soon.
     """
     if cs.spec is not None and isinstance(cs.spec, list):
-        return ColorSpace(name=cs.name,
-                          ncomponents=cs.ncomponents,
-                          spec=unref_list(cs.spec))
+        return ColorSpace(
+            name=cs.name, ncomponents=cs.ncomponents, spec=unref_list(cs.spec)
+        )
     return cs
 
 
@@ -1286,9 +1286,9 @@ def ref_colorspace(cs: ColorSpace, doc: PDFDocument) -> ColorSpace:
 
     FIXME: This functionality should go into PLAYA soon."""
     if cs.spec is not None and isinstance(cs.spec, list):
-        return ColorSpace(name=cs.name,
-                          ncomponents=cs.ncomponents,
-                          spec=ref_list(cs.spec, doc))
+        return ColorSpace(
+            name=cs.name, ncomponents=cs.ncomponents, spec=ref_list(cs.spec, doc)
+        )
     return cs
 
 
@@ -1315,9 +1315,9 @@ def unref_component(item: Union[LTContainer, LTItem]) -> None:
         and item.mcs is not None
         and item.mcs.props is not None
     ):
-        item.mcs = MarkedContent(mcid=item.mcs.mcid,
-                                 tag=item.mcs.tag,
-                                 props=unref_dict(item.mcs.props))
+        item.mcs = MarkedContent(
+            mcid=item.mcs.mcid, tag=item.mcs.tag, props=unref_dict(item.mcs.props)
+        )
     if isinstance(item, LTChar):
         unref_gstate(item.graphicstate)
         item.ncs = item.graphicstate.ncs
@@ -1388,9 +1388,9 @@ def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
         and item.mcs is not None
         and item.mcs.props is not None
     ):
-        item.mcs = MarkedContent(mcid=item.mcs.mcid,
-                                 tag=item.mcs.tag,
-                                 props=ref_dict(item.mcs.props, doc))
+        item.mcs = MarkedContent(
+            mcid=item.mcs.mcid, tag=item.mcs.tag, props=ref_dict(item.mcs.props, doc)
+        )
     if isinstance(item, LTChar):
         ref_gstate(item.graphicstate, doc)
         item.ncs = item.graphicstate.ncs
