@@ -1225,7 +1225,7 @@ def unref_list(items: Iterable[PDFObject]) -> List[PDFObject]:
     """Unlink object references if necessary for serialization.
 
     FIXME: This functionality should go into PLAYA soon."""
-    out = []
+    out: List[PDFObject] = []
     for v in items:
         if isinstance(v, dict):
             out.append(unref_dict(v))
@@ -1242,12 +1242,12 @@ def ref_list(items: Iterable[PDFObject], doc: PDFDocument) -> List[PDFObject]:
     """Relink object references if necessary after deserialization.
 
     FIXME: This functionality should go into PLAYA soon."""
-    out = []
+    out: List[PDFObject] = []
     for v in items:
         if isinstance(v, dict):
-            out.append(ref_dict(v))
+            out.append(ref_dict(v, doc))
         elif isinstance(v, list):
-            out.append(ref_list(v))
+            out.append(ref_list(v, doc))
         elif isinstance(v, PDFObjRef):
             out.append(PDFObjRef(weakref.ref(doc), v.objid))
         else:
@@ -1328,7 +1328,7 @@ def unref_component(item: Union[LTContainer, LTItem]) -> None:
         # copy their data unnecessarily (and also their attributes
         # contain indirect object references)
         # FIXME: What about the generation number?
-        item.stream = item.stream.objid
+        item.stream = item.stream.objid  # type: ignore[assignment]
     if isinstance(item, LTContainer):
         for child in item:
             unref_component(child)
@@ -1397,7 +1397,7 @@ def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
     if isinstance(item, LTImage):
         if item.colorspace is not None:
             item.colorspace = ref_colorspace(item.colorspace, doc)
-        item.stream = doc[item.stream]
+        item.stream = doc[item.stream]  # type: ignore[assignment, index]
     if isinstance(item, LTContainer):
         for child in item:
             ref_component(child, doc)
