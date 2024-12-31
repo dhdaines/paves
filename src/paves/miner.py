@@ -31,8 +31,6 @@ from playa.utils import (
     Matrix,
     get_bound,
     apply_matrix_pt,
-    translate_matrix,
-    mult_matrix,
 )
 from playa.page import (
     Page,
@@ -497,9 +495,7 @@ class LTChar(LTComponent, LTText):
         LTText.__init__(self)
         textstate = glyph.textstate
         gstate = glyph.gstate
-        # FIXME: expose this in PLAYA
-        matrix = mult_matrix(textstate.line_matrix, glyph.ctm)
-        matrix = translate_matrix(matrix, textstate.glyph_offset)
+        matrix = glyph.matrix
         if glyph.text is None:
             logger.debug("undefined: %r, %r", textstate.font, glyph.cid)
             # Horrible awful pdfminer.six behaviour

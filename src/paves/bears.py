@@ -24,8 +24,6 @@ from playa.utils import (
     apply_matrix_pt,
     Point,
     get_bound,
-    mult_matrix,
-    translate_matrix,
 )
 import playa
 from playa import DeviceSpace, LayoutDict, fieldnames as FIELDNAMES, schema as SCHEMA  # noqa: F401
@@ -207,10 +205,7 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
         else:
             size = y1 - y0
         glyph_x, glyph_y = apply_matrix_norm(glyph.ctm, tstate.glyph_offset)
-        # Ugh... all this just to get "upright" which is meaningless
-        matrix = mult_matrix(tstate.line_matrix, obj.ctm)
-        matrix = translate_matrix(matrix, tstate.glyph_offset)
-        (a, b, c, d, e, f) = matrix
+        (a, b, c, d, e, f) = glyph.matrix
         scaling = tstate.scaling * 0.01  # FIXME: unnecessary?
         upright = a * d * scaling > 0 and b * c <= 0
 
