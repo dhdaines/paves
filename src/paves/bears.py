@@ -199,13 +199,12 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
         # apparently we can assert this?
         font = tstate.font
         assert font is not None
-        # NOTE: This is not right at all for rotated text, but we'll live with it
-        if font.vertical:
-            size = x1 - x0
-        else:
-            size = y1 - y0
         glyph_x, glyph_y = apply_matrix_norm(glyph.ctm, tstate.glyph_offset)
         (a, b, c, d, e, f) = glyph.matrix
+        if font.vertical:
+            size = abs(tstate.fontsize * a)
+        else:
+            size = abs(tstate.fontsize * d)
         scaling = tstate.scaling * 0.01  # FIXME: unnecessary?
         upright = a * d * scaling > 0 and b * c <= 0
 

@@ -63,11 +63,6 @@ bug fixes):
 Probably more... but you didn't use any of that stuff anyway, you just
 wanted to get `LTTextBoxes` to feed to your hallucination factories.
 
-There is also a bug:
-
-- The `size` of rotated glyphs is incorrect (this will get fixed in
-  PLAYA soon hopefully).
-
 ## PLAYA Bears
 
 [PLAYA](https://github.com/dhdaines/playa) has a nice "lazy" API which
