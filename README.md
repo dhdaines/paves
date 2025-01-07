@@ -60,9 +60,8 @@ bug fixes):
 - Colours and colour spaces are the PLAYA versions, which do not
   correspond to what `pdfminer.six` gives you, because what
   `pdfminer.six` gives you is not useful and often wrong.
-- You have access to the marked content section ID and tag in every
-  `LTComponent`, as the `mcs` attribute (but this is often `None` in
-  the case where there is no MCS, or there are multiple MCSes)
+- You have access to the list of enclosing marked content sections in
+  every `LTComponent`, as the `mcstack` attribute.
 - Bounding boxes of rotated glyphs are the actual bounding box.
 
 Probably more... but you didn't use any of that stuff anyway, you just
