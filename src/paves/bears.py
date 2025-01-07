@@ -24,8 +24,6 @@ from playa.utils import (
     apply_matrix_pt,
     Point,
     get_bound,
-    mult_matrix,
-    translate_matrix,
 )
 import playa
 from playa import DeviceSpace, LayoutDict, fieldnames as FIELDNAMES, schema as SCHEMA  # noqa: F401
@@ -201,16 +199,12 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
         # apparently we can assert this?
         font = tstate.font
         assert font is not None
-        # NOTE: This is not right at all for rotated text, but we'll live with it
-        if font.vertical:
-            size = x1 - x0
-        else:
-            size = y1 - y0
         glyph_x, glyph_y = apply_matrix_norm(glyph.ctm, tstate.glyph_offset)
-        # Ugh... all this just to get "upright" which is meaningless
-        matrix = mult_matrix(tstate.line_matrix, obj.ctm)
-        matrix = translate_matrix(matrix, tstate.glyph_offset)
-        (a, b, c, d, e, f) = matrix
+        (a, b, c, d, e, f) = glyph.matrix
+        if font.vertical:
+            size = abs(tstate.fontsize * a)
+        else:
+            size = abs(tstate.fontsize * d)
         scaling = tstate.scaling * 0.01  # FIXME: unnecessary?
         upright = a * d * scaling > 0 and b * c <= 0
 
@@ -266,7 +260,7 @@ def extract_page(page: Page) -> List[LayoutDict]:
 def extract(
     path: Path,
     space: DeviceSpace = "screen",
-    max_workers: Union[int, None] = None,
+    max_workers: Union[int, None] = 1,
     mp_context: Union[BaseContext, None] = None,
 ) -> Iterator[LayoutDict]:
     """Extract LayoutDict items from a document."""

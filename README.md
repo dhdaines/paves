@@ -35,12 +35,17 @@ for page in extract(path, laparams):
     # do something
 ```
 
-By default this will use all of your CPUs to go fast on large
-documents and somewhat slower on small ones.  You can make it not do
-that by passing `max_workers=1`, or you can only use some CPUs by
-passing some other value.
+This is generally faster than `pdfminer.six`.  You can often make it
+even faster on large documents by running in parallel with the
+`max_workers` argument, which is the same as the one you will find in
+`concurrent.futures.ProcessPoolExecutor`.  If you pass `None` it will
+use all your CPUs, but due to some unfortunate overhead (which will be
+fixed soon) this isn't so great, so 2-4 workers is best:
 
-Even with a single CPU, it is often faster than `pdfminer.six`.
+```
+for page in extract(path, laparams, max_workers=2):
+    # do something
+```
 
 There are a few differences with `pdfminer.six` (some might call them
 bug fixes):
@@ -55,18 +60,12 @@ bug fixes):
 - Colours and colour spaces are the PLAYA versions, which do not
   correspond to what `pdfminer.six` gives you, because what
   `pdfminer.six` gives you is not useful and often wrong.
-- You have access to the marked content section ID and tag in every
-  `LTComponent`, as the `mcs` attribute (but this is often `None` in
-  the case where there is no MCS, or there are multiple MCSes)
+- You have access to the list of enclosing marked content sections in
+  every `LTComponent`, as the `mcstack` attribute.
 - Bounding boxes of rotated glyphs are the actual bounding box.
 
 Probably more... but you didn't use any of that stuff anyway, you just
 wanted to get `LTTextBoxes` to feed to your hallucination factories.
-
-There is also a bug:
-
-- The `size` of rotated glyphs is incorrect (this will get fixed in
-  PLAYA soon hopefully).
 
 ## PLAYA Bears
 
@@ -117,8 +116,9 @@ from paves.bears import SCHEMA
 df = polars.DataFrame(extract(path), schema=SCHEMA)
 ```
 
-As above, this will use all of your CPUs and return a possibly quite
-large object.
+As above, you can use multiple CPUs with `max_workers`, though this
+will scale considerably better since the objects are (mostly) easily
+serializable.
 
 ## License
 

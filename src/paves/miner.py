@@ -31,8 +31,6 @@ from playa.utils import (
     Matrix,
     get_bound,
     apply_matrix_pt,
-    translate_matrix,
-    mult_matrix,
 )
 from playa.page import (
     Page,
@@ -302,10 +300,10 @@ class LTText:
 class LTComponent(LTItem):
     """Object with a bounding box"""
 
-    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
+    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
         LTItem.__init__(self)
         self.set_bbox(bbox)
-        self.mcs: Union[MarkedContent, None] = mcs
+        self.mcstack = mcstack
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {bbox2str(self.bbox)}>"
@@ -337,36 +335,30 @@ class LTComponent(LTItem):
         return self.width <= 0 or self.height <= 0
 
     def is_hoverlap(self, obj: "LTComponent") -> bool:
-        assert isinstance(obj, LTComponent), str(type(obj))
         return obj.x0 <= self.x1 and self.x0 <= obj.x1
 
     def hdistance(self, obj: "LTComponent") -> float:
-        assert isinstance(obj, LTComponent), str(type(obj))
         if self.is_hoverlap(obj):
             return 0
         else:
             return min(abs(self.x0 - obj.x1), abs(self.x1 - obj.x0))
 
     def hoverlap(self, obj: "LTComponent") -> float:
-        assert isinstance(obj, LTComponent), str(type(obj))
         if self.is_hoverlap(obj):
             return min(abs(self.x0 - obj.x1), abs(self.x1 - obj.x0))
         else:
             return 0
 
     def is_voverlap(self, obj: "LTComponent") -> bool:
-        assert isinstance(obj, LTComponent), str(type(obj))
         return obj.y0 <= self.y1 and self.y0 <= obj.y1
 
     def vdistance(self, obj: "LTComponent") -> float:
-        assert isinstance(obj, LTComponent), str(type(obj))
         if self.is_voverlap(obj):
             return 0
         else:
             return min(abs(self.y0 - obj.y1), abs(self.y1 - obj.y0))
 
     def voverlap(self, obj: "LTComponent") -> float:
-        assert isinstance(obj, LTComponent), str(type(obj))
         if self.is_voverlap(obj):
             return min(abs(self.y0 - obj.y1), abs(self.y1 - obj.y0))
         else:
@@ -388,7 +380,7 @@ class LTCurve(LTComponent):
         pts: List[Point],
         transformed_path: List[PathSegment],
     ) -> None:
-        LTComponent.__init__(self, get_bound(pts), path.mcs)
+        LTComponent.__init__(self, get_bound(pts), path.mcstack)
         self.pts = pts
         self.linewidth = path.gstate.linewidth
         self.stroke = path.stroke
@@ -452,7 +444,7 @@ class LTImage(LTComponent):
     """
 
     def __init__(self, obj: ImageObject) -> None:
-        LTComponent.__init__(self, obj.bbox, obj.mcs)
+        LTComponent.__init__(self, obj.bbox, obj.mcstack)
         # Inline images don't actually have an xobjid, so we make shit
         # up like pdfminer.six does.
         if obj.xobjid is None:
@@ -497,9 +489,7 @@ class LTChar(LTComponent, LTText):
         LTText.__init__(self)
         textstate = glyph.textstate
         gstate = glyph.gstate
-        # FIXME: expose this in PLAYA
-        matrix = mult_matrix(textstate.line_matrix, glyph.ctm)
-        matrix = translate_matrix(matrix, textstate.glyph_offset)
+        matrix = glyph.matrix
         if glyph.text is None:
             logger.debug("undefined: %r, %r", textstate.font, glyph.cid)
             # Horrible awful pdfminer.six behaviour
@@ -507,7 +497,7 @@ class LTChar(LTComponent, LTText):
         else:
             self._text = glyph.text
         self.matrix = matrix
-        self.mcs = glyph.mcs
+        self.mcstack = glyph.mcstack
         font = textstate.font
         assert font is not None
         self.fontname = font.fontname
@@ -518,7 +508,7 @@ class LTChar(LTComponent, LTText):
         scaling = textstate.scaling
         # FIXME: Still really not sure what this means
         self.upright = a * d * scaling > 0 and b * c <= 0
-        LTComponent.__init__(self, glyph.bbox, glyph.mcs)
+        LTComponent.__init__(self, glyph.bbox, glyph.mcstack)
         # FIXME: This is now quite wrong for rotated glyphs
         if font.vertical:
             self.size = self.width
@@ -542,8 +532,8 @@ LTItemT = TypeVar("LTItemT", bound=LTItem)
 class LTContainer(LTComponent, Generic[LTItemT]):
     """Object that can be extended and analyzed"""
 
-    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
-        LTComponent.__init__(self, bbox)
+    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
+        LTComponent.__init__(self, bbox, mcstack)
         self._objs: List[LTItemT] = []
 
     def __iter__(self) -> Iterator[LTItemT]:
@@ -566,7 +556,7 @@ class LTContainer(LTComponent, Generic[LTItemT]):
 
 class LTExpandableContainer(LTContainer[LTItemT]):
     def __init__(self) -> None:
-        LTContainer.__init__(self, (INT32_MAX, INT32_MAX, INT32_MIN, INT32_MIN))
+        LTContainer.__init__(self, (INT32_MAX, INT32_MAX, INT32_MIN, INT32_MIN), [])
 
     # Incompatible override: we take an LTComponent (with bounding box), but
     # super() LTContainer only considers LTItem (no bounding box).
@@ -826,8 +816,8 @@ class LTTextGroupTBRL(LTTextGroup):
 
 
 class LTLayoutContainer(LTContainer[LTComponent]):
-    def __init__(self, bbox: Rect, mcs: Union[MarkedContent, None] = None) -> None:
-        LTContainer.__init__(self, bbox, mcs)
+    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
+        LTContainer.__init__(self, bbox, mcstack)
         self.groups: Optional[List[LTTextGroup]] = None
 
     # group_objects: group text object to textlines.
@@ -1087,7 +1077,7 @@ class LTFigure(LTLayoutContainer):
         else:
             self.name = obj.xobjid
         self.matrix = obj.ctm
-        LTLayoutContainer.__init__(self, obj.bbox, obj.mcs)
+        LTLayoutContainer.__init__(self, obj.bbox, obj.mcstack)
 
     def __repr__(self) -> str:
         return (
@@ -1109,7 +1099,7 @@ class LTPage(LTLayoutContainer):
     """
 
     def __init__(self, pageid: int, bbox: Rect, rotate: float = 0) -> None:
-        LTLayoutContainer.__init__(self, bbox)
+        LTLayoutContainer.__init__(self, bbox, [])
         self.pageid = pageid
         self.rotate = rotate
 
@@ -1310,14 +1300,12 @@ def ref_gstate(gs: GraphicState, doc: PDFDocument) -> None:
 
 def unref_component(item: Union[LTContainer, LTItem]) -> None:
     """Unlink object references if necessary for serialization."""
-    if (
-        isinstance(item, LTComponent)
-        and item.mcs is not None
-        and item.mcs.props is not None
-    ):
-        item.mcs = MarkedContent(
-            mcid=item.mcs.mcid, tag=item.mcs.tag, props=unref_dict(item.mcs.props)
-        )
+    if isinstance(item, LTComponent):
+        for idx, mcs in enumerate(item.mcstack):
+            if mcs.props:
+                item.mcstack[idx] = MarkedContent(
+                    mcid=mcs.mcid, tag=mcs.tag, props=unref_dict(mcs.props)
+                )
     if isinstance(item, LTChar):
         unref_gstate(item.graphicstate)
         item.ncs = item.graphicstate.ncs
@@ -1383,14 +1371,12 @@ def extract_page(page: Page, laparams: Union[LAParams, None] = None) -> LTPage:
 
 def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
     """Relink object references if necessary after deserialization."""
-    if (
-        isinstance(item, LTComponent)
-        and item.mcs is not None
-        and item.mcs.props is not None
-    ):
-        item.mcs = MarkedContent(
-            mcid=item.mcs.mcid, tag=item.mcs.tag, props=ref_dict(item.mcs.props, doc)
-        )
+    if isinstance(item, LTComponent):
+        for idx, mcs in enumerate(item.mcstack):
+            if mcs.props:
+                item.mcstack[idx] = MarkedContent(
+                    mcid=mcs.mcid, tag=mcs.tag, props=ref_dict(mcs.props, doc)
+                )
     if isinstance(item, LTChar):
         ref_gstate(item.graphicstate, doc)
         item.ncs = item.graphicstate.ncs
@@ -1406,7 +1392,7 @@ def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
 def extract(
     path: Path,
     laparams: Union[LAParams, None] = None,
-    max_workers: Union[int, None] = None,
+    max_workers: Union[int, None] = 1,
     mp_context: Union[BaseContext, None] = None,
 ) -> Iterator[LTPage]:
     """Extract LTPages from a document."""
