@@ -1396,7 +1396,7 @@ def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
 def extract(
     path: Path,
     laparams: Union[LAParams, None] = None,
-    max_workers: Union[int, None] = None,
+    max_workers: Union[int, None] = 1,
     mp_context: Union[BaseContext, None] = None,
 ) -> Iterator[LTPage]:
     """Extract LTPages from a document."""

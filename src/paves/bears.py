@@ -260,7 +260,7 @@ def extract_page(page: Page) -> List[LayoutDict]:
 def extract(
     path: Path,
     space: DeviceSpace = "screen",
-    max_workers: Union[int, None] = None,
+    max_workers: Union[int, None] = 1,
     mp_context: Union[BaseContext, None] = None,
 ) -> Iterator[LayoutDict]:
     """Extract LayoutDict items from a document."""
