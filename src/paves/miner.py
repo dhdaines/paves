@@ -1301,7 +1301,7 @@ def ref_gstate(gs: GraphicState, doc: PDFDocument) -> None:
 def unref_component(item: Union[LTContainer, LTItem]) -> None:
     """Unlink object references if necessary for serialization."""
     if isinstance(item, LTComponent):
-        for idx, mcs in item.mcstack:
+        for idx, mcs in enumerate(item.mcstack):
             if mcs.props:
                 item.mcstack[idx] = MarkedContent(
                     mcid=mcs.mcid, tag=mcs.tag, props=unref_dict(mcs.props)
@@ -1372,10 +1372,10 @@ def extract_page(page: Page, laparams: Union[LAParams, None] = None) -> LTPage:
 def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
     """Relink object references if necessary after deserialization."""
     if isinstance(item, LTComponent):
-        for idx, mcs in item.mcstack:
+        for idx, mcs in enumerate(item.mcstack):
             if mcs.props:
                 item.mcstack[idx] = MarkedContent(
-                    mcid=mcs.mcid, tag=mcs.tag, props=ref_dict(mcs.props)
+                    mcid=mcs.mcid, tag=mcs.tag, props=ref_dict(mcs.props, doc)
                 )
     if isinstance(item, LTChar):
         ref_gstate(item.graphicstate, doc)
