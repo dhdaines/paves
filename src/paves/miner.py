@@ -8,7 +8,6 @@ from pathlib import Path
 import heapq
 import logging
 import multiprocessing
-import weakref
 from typing import (
     Callable,
     Dict,
@@ -1211,117 +1210,6 @@ def _(obj: TextObject) -> Iterator[LTComponent]:
         yield LTChar(glyph)
 
 
-def unref_list(items: Iterable[PDFObject]) -> List[PDFObject]:
-    """Unlink object references if necessary for serialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    out: List[PDFObject] = []
-    for v in items:
-        if isinstance(v, dict):
-            out.append(unref_dict(v))
-        elif isinstance(v, list):
-            out.append(unref_list(v))
-        elif isinstance(v, PDFObjRef):
-            out.append(PDFObjRef(None, v.objid))
-        else:
-            out.append(v)
-    return out
-
-
-def ref_list(items: Iterable[PDFObject], doc: PDFDocument) -> List[PDFObject]:
-    """Relink object references if necessary after deserialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    out: List[PDFObject] = []
-    for v in items:
-        if isinstance(v, dict):
-            out.append(ref_dict(v, doc))
-        elif isinstance(v, list):
-            out.append(ref_list(v, doc))
-        elif isinstance(v, PDFObjRef):
-            out.append(PDFObjRef(weakref.ref(doc), v.objid))
-        else:
-            out.append(v)
-    return out
-
-
-def unref_dict(props: Dict[str, PDFObject]) -> Dict[str, PDFObject]:
-    """Unlink object references if necessary for serialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    return dict(zip(props.keys(), unref_list(props.values())))
-
-
-def ref_dict(props: Dict[str, PDFObject], doc: PDFDocument) -> Dict[str, PDFObject]:
-    """Relink object references if necessary after deserialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    return dict(zip(props.keys(), ref_list(props.values(), doc)))
-
-
-def unref_colorspace(cs: ColorSpace) -> ColorSpace:
-    """Unlink object references if necessary for serialization.
-
-    FIXME: This functionality should go into PLAYA soon.
-    """
-    if cs.spec is not None and isinstance(cs.spec, list):
-        return ColorSpace(
-            name=cs.name, ncomponents=cs.ncomponents, spec=unref_list(cs.spec)
-        )
-    return cs
-
-
-def ref_colorspace(cs: ColorSpace, doc: PDFDocument) -> ColorSpace:
-    """Relink object references if necessary after deserialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    if cs.spec is not None and isinstance(cs.spec, list):
-        return ColorSpace(
-            name=cs.name, ncomponents=cs.ncomponents, spec=ref_list(cs.spec, doc)
-        )
-    return cs
-
-
-def unref_gstate(gs: GraphicState) -> None:
-    """Unlink object references if necessary for serialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    gs.scs = unref_colorspace(gs.scs)
-    gs.ncs = unref_colorspace(gs.ncs)
-
-
-def ref_gstate(gs: GraphicState, doc: PDFDocument) -> None:
-    """Relink object references if necessary after deserialization.
-
-    FIXME: This functionality should go into PLAYA soon."""
-    gs.scs = ref_colorspace(gs.scs, doc)
-    gs.ncs = ref_colorspace(gs.ncs, doc)
-
-
-def unref_component(item: Union[LTContainer, LTItem]) -> None:
-    """Unlink object references if necessary for serialization."""
-    if isinstance(item, LTComponent):
-        for idx, mcs in enumerate(item.mcstack):
-            if mcs.props:
-                item.mcstack[idx] = MarkedContent(
-                    mcid=mcs.mcid, tag=mcs.tag, props=unref_dict(mcs.props)
-                )
-    if isinstance(item, LTChar):
-        unref_gstate(item.graphicstate)
-        item.ncs = item.graphicstate.ncs
-    if isinstance(item, LTImage):
-        if item.colorspace is not None:
-            item.colorspace = unref_colorspace(item.colorspace)
-        # Content streams should never be serialized, since it would
-        # copy their data unnecessarily (and also their attributes
-        # contain indirect object references)
-        # FIXME: What about the generation number?
-        item.stream = item.stream.objid  # type: ignore[assignment]
-    if isinstance(item, LTContainer):
-        for child in item:
-            unref_component(child)
-
-
 def extract_page(page: Page, laparams: Union[LAParams, None] = None) -> LTPage:
     """Extract an LTPage from a Page, and possibly do some layout analysis.
 
@@ -1362,31 +1250,7 @@ def extract_page(page: Page, laparams: Union[LAParams, None] = None) -> LTPage:
     if laparams is not None:
         ltpage.analyze(laparams)
 
-    # We do, however, need to "unreference" any indirect object
-    # references before serializing.
-    if playa.document.__pdf is not None:
-        unref_component(ltpage)
     return ltpage
-
-
-def ref_component(item: Union[LTContainer, LTItem], doc: PDFDocument) -> None:
-    """Relink object references if necessary after deserialization."""
-    if isinstance(item, LTComponent):
-        for idx, mcs in enumerate(item.mcstack):
-            if mcs.props:
-                item.mcstack[idx] = MarkedContent(
-                    mcid=mcs.mcid, tag=mcs.tag, props=ref_dict(mcs.props, doc)
-                )
-    if isinstance(item, LTChar):
-        ref_gstate(item.graphicstate, doc)
-        item.ncs = item.graphicstate.ncs
-    if isinstance(item, LTImage):
-        if item.colorspace is not None:
-            item.colorspace = ref_colorspace(item.colorspace, doc)
-        item.stream = doc[item.stream]  # type: ignore[assignment, index]
-    if isinstance(item, LTContainer):
-        for child in item:
-            ref_component(child, doc)
 
 
 def extract(
@@ -1408,7 +1272,4 @@ def extract(
             for page in pdf.pages:
                 yield extract_page(page, laparams)
         else:
-            # And "rereference" indirect object references after deserializing
-            for ltpage in pdf.pages.map(partial(extract_page, laparams=laparams)):
-                ref_component(ltpage, pdf)
-                yield ltpage
+            yield from pdf.pages.map(partial(extract_page, laparams=laparams))
