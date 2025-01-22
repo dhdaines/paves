@@ -39,8 +39,8 @@ This is generally faster than `pdfminer.six`.  You can often make it
 even faster on large documents by running in parallel with the
 `max_workers` argument, which is the same as the one you will find in
 `concurrent.futures.ProcessPoolExecutor`.  If you pass `None` it will
-use all your CPUs, but due to some unfortunate overhead (which will be
-fixed soon) this isn't so great, so 2-4 workers is best:
+use all your CPUs, but due to some unavoidable overhead, it usually
+doesn't help to use more than 2-4:
 
 ```
 for page in extract(path, laparams, max_workers=2):
@@ -116,9 +116,8 @@ from paves.bears import SCHEMA
 df = polars.DataFrame(extract(path), schema=SCHEMA)
 ```
 
-As above, you can use multiple CPUs with `max_workers`, though this
-will scale considerably better since the objects are (mostly) easily
-serializable.
+As above, you can use multiple CPUs with `max_workers`, and this will
+scale considerably better than `paves.miner`.
 
 ## License
 
