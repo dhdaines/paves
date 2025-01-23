@@ -49,7 +49,7 @@ exclude = [
 extra-dependencies = [ "pdfminer.six", "pandas", "polars-lts-cpu" ]
 
 [tool.hatch.envs.default]
-dependencies = [ "pytest", "mypy", "pdfminer.six", "pandas", "polars-lts-cpu" ]
+dependencies = [ "pytest", "mypy", "pdfminer.six", "pandas", "polars-lts-cpu", "pillow" ]
 
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "none"  # Disable hatch's unreasonable ruff defaults
