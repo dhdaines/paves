@@ -31,7 +31,7 @@ jobs:
       - name: Install Hatch
         uses: pypa/hatch@install
       - name: Install poppler
-        if: ${{ matrix.os }} == "ubuntu-latest"
+        if: runner.os == "Linux"
         run: sudo apt install poppler-utils
       - name: Run tests
         run: hatch test --cover -py 3.9
