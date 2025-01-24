@@ -10,7 +10,7 @@ THISDIR = Path(__file__).parent
 
 
 @pytest.mark.skipif(
-    sys.platform != "linux",
+    sys.platform.startswith("win") or sys.platform.startswith("darwin"),
     reason="Poppler Probably not Present on Proprietary Platforms",
 )
 def test_popple():
