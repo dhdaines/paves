@@ -30,5 +30,7 @@ jobs:
           python-version: "3.9"
       - name: Install Hatch
         uses: pypa/hatch@install
+      - name: Install poppler
+        run: sudo apt install poppler-utils
       - name: Run tests
         run: hatch test --cover -py 3.9
