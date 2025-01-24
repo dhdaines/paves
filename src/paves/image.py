@@ -36,7 +36,7 @@ def make_poppler_args(dpi: int, width: int, height: int) -> List[str]:
 
 
 @functools.singledispatch
-def _popple(pdf, args: List[str]) -> None:
+def _popple(pdf, tempdir: Path, args: List[str]) -> None:
     pass
 
 
@@ -71,6 +71,7 @@ def _popple_doc(pdf: Document, tempdir: Path, args: List[str]) -> None:
 
 @_popple.register(Page)
 def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
+    assert pdf.doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     pdfpdf = tempdir / "pdf.pdf"
     with open(pdfpdf, "wb") as outfh:
         outfh.write(pdf.doc.buffer)
@@ -80,9 +81,9 @@ def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
             "pdftoppm",
             *args,
             "-f",
-            page_number,
+            str(page_number),
             "-l",
-            page_number,
+            str(page_number),
             str(pdfpdf),
             tempdir / "ppm",
         ],
@@ -93,6 +94,7 @@ def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
 @_popple.register(PageList)
 def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
     pdfpdf = tempdir / "pdf.pdf"
+    assert pdf[0].doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     with open(pdfpdf, "wb") as outfh:
         outfh.write(pdf[0].doc.buffer)
     pages = sorted(page.page_idx + 1 for page in pdf)

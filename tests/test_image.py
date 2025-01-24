@@ -24,3 +24,5 @@ def test_popple():
         assert len(images) == 5
         images = list(popple(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
+        images = list(popple(pdf.pages[1]))
+        assert len(images) == 1
