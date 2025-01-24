@@ -79,8 +79,10 @@ def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
         [
             "pdftoppm",
             *args,
-            "-f", page_number,
-            "-l", page_number,
+            "-f",
+            page_number,
+            "-l",
+            page_number,
             str(pdfpdf),
             tempdir / "ppm",
         ],
@@ -113,8 +115,10 @@ def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
             [
                 "pdftoppm",
                 *args,
-                "-f", str(first),
-                "-l", str(last),
+                "-f",
+                str(first),
+                "-l",
+                str(last),
                 str(pdfpdf),
                 tempdir / "ppm",
             ],
@@ -128,7 +132,7 @@ def popple(
     dpi: int = 72,
     width: int = 0,
     height: int = 0,
-    **kwargs
+    **kwargs,
 ) -> Iterator[Image.Image]:
     """Convert a PDF to images using Poppler's pdftoppm.
 

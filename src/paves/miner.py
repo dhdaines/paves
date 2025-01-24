@@ -40,13 +40,8 @@ from playa.page import (
     ImageObject,
     MarkedContent,
     GlyphObject,
-    GraphicState,
 )
-from playa.pdftypes import ObjRef as PDFObjRef
-from playa.parser import PDFObject
 from playa.exceptions import PDFException
-from playa.color import ColorSpace
-from playa.document import Document as PDFDocument
 import playa
 
 # Contains much code from layout.py and utils.py in pdfminer.six:
