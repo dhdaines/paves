@@ -26,7 +26,9 @@ from typing import (
 )
 
 import playa
+from playa import pdftypes
 from playa.color import ColorSpace
+from playa.data_structures import NameTree, NumberTree
 from playa.document import Document as PDFDocument
 from playa.exceptions import PDFException
 from playa.page import (
@@ -39,24 +41,31 @@ from playa.page import (
 from playa.page import Page
 from playa.page import Page as PDFPage
 from playa.page import PathObject, TextObject, XObjectObject
-from playa.pdftypes import ObjRef as PDFObjRef, resolve1, resolve_all
-from playa.utils import (
-    Matrix,
-    Point,
-    Rect,
-    apply_matrix_pt,
-    get_bound,
-)
+from playa.parser import PSLiteral, KEYWORD_NULL, PDFObject
+from playa.pdftypes import ObjRef as PDFObjRef
+from playa.pdftypes import resolve1, resolve_all, LIT, KWD
+from playa.utils import Matrix, PDFDocEncoding, Point, Rect, apply_matrix_pt, get_bound
 
+PSException = Exception
 __all__ = [
     "ColorSpace",
     "GraphicState",
+    "KEYWORD_NULL",
+    "KWD",
+    "LIT",
+    "NameTree",
+    "NumberTree",
+    "PDFDocEncoding",
     "PDFDocument",
     "PDFPage",
     "PDFException",
     "PDFObjRef",
+    "PDFObject",
+    "PSException",
+    "PSLiteral",
     "extract",
     "extract_page",
+    "pdftypes",
     "resolve1",
     "resolve_all",
 ]
