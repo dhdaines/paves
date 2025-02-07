@@ -41,7 +41,7 @@ from playa.page import (
 from playa.page import Page
 from playa.page import Page as PDFPage
 from playa.page import PathObject, TextObject, XObjectObject
-from playa.parser import PSLiteral, KEYWORD_NULL, PDFObject
+from playa.parser import PSLiteral, PDFObject
 from playa.pdftypes import ObjRef as PDFObjRef
 from playa.pdftypes import resolve1, resolve_all, LIT, KWD
 from playa.utils import Matrix, PDFDocEncoding, Point, Rect, apply_matrix_pt, get_bound
@@ -50,7 +50,6 @@ PSException = Exception
 __all__ = [
     "ColorSpace",
     "GraphicState",
-    "KEYWORD_NULL",
     "KWD",
     "LIT",
     "NameTree",
@@ -323,7 +322,7 @@ class LTComponent(LTItem):
     def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
         LTItem.__init__(self)
         self.set_bbox(bbox)
-        self.mcstack = mcstack
+        self.mcstack = mcstack[:]
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {bbox2str(self.bbox)}>"
