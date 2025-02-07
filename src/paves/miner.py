@@ -9,6 +9,7 @@ from functools import partial, singledispatch
 from multiprocessing.context import BaseContext
 from pathlib import Path
 from typing import (
+    Any,
     Callable,
     Dict,
     Generic,
@@ -836,8 +837,8 @@ class LTLayoutContainer(LTContainer[LTComponent]):
         laparams: LAParams,
         objs: Iterable[LTComponent],
     ) -> Iterator[LTTextLine]:
-        obj0 = None
-        line = None
+        obj0: Any = None
+        line: Any = None
         for obj1 in objs:
             if obj0 is not None:
                 # halign: obj0 and obj1 is horizontally aligned.
