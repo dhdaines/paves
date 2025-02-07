@@ -405,10 +405,14 @@ class LTCurve(LTComponent):
         self.stroke = path.stroke
         self.fill = path.fill
         self.evenodd = path.evenodd
-        self.stroking_color = path.gstate.scolor
-        self.non_stroking_color = path.gstate.ncolor
+        gstate = path.gstate
+        self.graphicstate = gstate
+        self.stroking_color = gstate.scolor
+        self.non_stroking_color = gstate.ncolor
+        self.scs = gstate.scs
+        self.ncs = gstate.ncs
         self.original_path = transformed_path
-        self.dashing_style = path.gstate.dash
+        self.dashing_style = gstate.dash
 
     def get_pts(self) -> str:
         return ",".join("%.3f,%.3f" % p for p in self.pts)
@@ -520,8 +524,12 @@ class LTChar(LTComponent, LTText):
         font = textstate.font
         assert font is not None
         self.fontname = font.fontname
+        self.render_mode = textstate.render_mode
         self.graphicstate = gstate
-        self.ncs = self.graphicstate.ncs
+        self.stroking_color = gstate.scolor
+        self.non_stroking_color = gstate.ncolor
+        self.scs = gstate.scs
+        self.ncs = gstate.ncs
         self.adv = glyph.adv
         (a, b, c, d, e, f) = matrix
         scaling = textstate.scaling
@@ -622,6 +630,7 @@ class LTTextLine(LTTextContainer[TextLineElement]):
     def analyze(self, laparams: LAParams) -> None:
         for obj in self._objs:
             obj.analyze(laparams)
+        # FIXME: Should probably inherit mcstack somehow
         LTContainer.add(self, LTAnno("\n"))
 
     def find_neighbors(
@@ -646,6 +655,7 @@ class LTTextLineHorizontal(LTTextLine):
         if isinstance(obj, LTChar) and self.word_margin:
             margin = self.word_margin * max(obj.width, obj.height)
             if self._x1 < obj.x0 - margin:
+                # FIXME: Should probably inherit mcstack somehow
                 LTContainer.add(self, LTAnno(" "))
         self._x1 = obj.x1
         super().add(obj)
@@ -709,6 +719,7 @@ class LTTextLineVertical(LTTextLine):
         if isinstance(obj, LTChar) and self.word_margin:
             margin = self.word_margin * max(obj.width, obj.height)
             if obj.y1 + margin < self._y0:
+                # FIXME: Should probably inherit mcstack somehow
                 LTContainer.add(self, LTAnno(" "))
         self._y0 = obj.y0
         super().add(obj)
