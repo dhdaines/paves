@@ -38,15 +38,13 @@ from playa.page import (
 from playa.page import Page
 from playa.page import Page as PDFPage
 from playa.page import PathObject, TextObject, XObjectObject
-from playa.pdftypes import ObjRef as PDFObjRef
+from playa.pdftypes import ObjRef as PDFObjRef, resolve1, resolve_all
 from playa.utils import (
     Matrix,
     Point,
     Rect,
     apply_matrix_pt,
     get_bound,
-    resolve1,
-    resolve_all,
 )
 
 __all__ = [
