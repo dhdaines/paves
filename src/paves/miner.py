@@ -2,12 +2,12 @@
 Reimplementation of pdfminer.six layout analysis on top of PLAYA.
 """
 
-from functools import singledispatch, partial
-from multiprocessing.context import BaseContext
-from pathlib import Path
 import heapq
 import logging
 import multiprocessing
+from functools import partial, singledispatch
+from multiprocessing.context import BaseContext
+from pathlib import Path
 from typing import (
     Callable,
     Dict,
@@ -24,30 +24,43 @@ from typing import (
     cast,
 )
 
-from playa.utils import (
-    Rect,
-    Point,
-    Matrix,
-    get_bound,
-    apply_matrix_pt,
-)
-from playa.page import (
-    Page,
-    ContentObject,
-    XObjectObject,
-    PathObject,
-    TextObject,
-    ImageObject,
-    MarkedContent,
-    GlyphObject,
-    GraphicState,
-)
-from playa.pdftypes import ObjRef as PDFObjRef
-from playa.parser import PDFObject
-from playa.exceptions import PDFException
+import playa
 from playa.color import ColorSpace
 from playa.document import Document as PDFDocument
-import playa
+from playa.exceptions import PDFException
+from playa.page import (
+    ContentObject,
+    GlyphObject,
+    GraphicState,
+    ImageObject,
+    MarkedContent,
+)
+from playa.page import Page
+from playa.page import Page as PDFPage
+from playa.page import PathObject, TextObject, XObjectObject
+from playa.pdftypes import ObjRef as PDFObjRef
+from playa.utils import (
+    Matrix,
+    Point,
+    Rect,
+    apply_matrix_pt,
+    get_bound,
+    resolve1,
+    resolve_all,
+)
+
+__all__ = [
+    "ColorSpace",
+    "GraphicState",
+    "PDFDocument",
+    "PDFPage",
+    "PDFException",
+    "PDFObjRef",
+    "extract",
+    "extract_page",
+    "resolve1",
+    "resolve_all",
+]
 
 # Contains much code from layout.py and utils.py in pdfminer.six:
 # Copyright (c) 2004-2016  Yusuke Shinyama <yusuke at shinyama dot jp>
