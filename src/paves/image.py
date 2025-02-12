@@ -277,8 +277,8 @@ def convert(
     Args:
         pdf: PLAYA-PDF document, page, pages, or path to a PDF.
         dpi: Render to this resolution (default is 72 dpi).
-        width: Render to this width in pixels.
-        height: Render to this height in pixels.
+        width: Render to this width in pixels (0 to keep aspect ratio).
+        height: Render to this height in pixels (0 to keep aspect ratio).
     Yields:
         Pillow `Image.Image` objects, one per page.
     Raises:

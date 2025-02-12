@@ -23,6 +23,51 @@ pip install paves
 
 ## Looking at Stuff in a PDF
 
+When poking around in a PDF, it is useful not simply to read
+descriptions of objects (text, images, etc) but also to visualise them
+in the rendered document.  `pdfplumber` is quite nice for this, though
+it is oriented towards the particular set of objects that it can
+extract from the PDF.
+
+The primary goal of PLAYA-PDF is to give access to all the objects and
+particularly the metadata in a PDF.  One goal of PAVÉS (because there
+are a few) is to give an easy way to visualise these objects and
+metadata.
+
+Say, for instance, that you have a tagged PDF and you would like to
+draw a box around each marked content section on a page, marking each
+one with its tag.  With PAVÉS, in a Jupyter notebook:
+
+```python
+import playa, paves.image as pi
+pdf = playa.open("my_awesome.pdf")
+page = pdf[3]
+pi.box(pi.mcs(page))
+```
+
+You can also directly show the PDF objects, or one particular sort:
+
+```python
+pi.box(page)
+pi.box(page.texts)
+pi.box(page.images)
+```
+
+This also works for PDF metadata that have defined bounding boxes:
+
+```python
+pi.box(page.annots)
+```
+
+(any annotations that can't be drawn will simply be ignored)
+
+Alternately you can "highlight" objects by overlaying them with a
+semi-transparent colour:
+
+```python
+pi.mark(page.images)
+```
+
 ## Working in the PDF mine
 
 `pdfminer.six` is widely used for text extraction and layout analysis
