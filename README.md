@@ -21,7 +21,9 @@ There will be dependencies.  Oh, there will be dependencies.
 pip install paves
 ```
 
-## Workin' in a PDF mine
+## Looking at Stuff in a PDF
+
+## Working in the PDF mine
 
 `pdfminer.six` is widely used for text extraction and layout analysis
 due to its liberal licensing terms.  Unfortunately it is quite slow

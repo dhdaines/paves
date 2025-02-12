@@ -25,7 +25,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "playa-pdf >= 0.2.8, < 0.3",  # not considered harmful as we depend on internals
+  "playa-pdf >= 0.2.9, < 0.3",  # not considered harmful as we depend on internals
   "pillow",
 ]
 
@@ -50,7 +50,7 @@ exclude = [
 extra-dependencies = [ "pdfminer.six", "pandas", "polars-lts-cpu" ]
 
 [tool.hatch.envs.default]
-dependencies = [ "pytest", "mypy", "pdfminer.six", "pandas", "polars-lts-cpu", "pillow" ]
+dependencies = [ "pytest", "mypy", "pdfminer.six", "pandas", "polars-lts-cpu", "pillow", "pypdfium2" ]
 
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "none"  # Disable hatch's unreasonable ruff defaults
@@ -80,3 +80,6 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
+
+[tool.mypy]
+mypy_path = "stubs"
