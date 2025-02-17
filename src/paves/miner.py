@@ -319,7 +319,7 @@ class LTText:
 class LTComponent(LTItem):
     """Object with a bounding box"""
 
-    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
+    def __init__(self, bbox: Rect, mcstack: Sequence[MarkedContent]) -> None:
         LTItem.__init__(self)
         self.set_bbox(bbox)
         self.mcstack = mcstack[:]
@@ -559,7 +559,7 @@ LTItemT = TypeVar("LTItemT", bound=LTItem)
 class LTContainer(LTComponent, Generic[LTItemT]):
     """Object that can be extended and analyzed"""
 
-    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
+    def __init__(self, bbox: Rect, mcstack: Sequence[MarkedContent]) -> None:
         LTComponent.__init__(self, bbox, mcstack)
         self._objs: List[LTItemT] = []
 
@@ -846,7 +846,7 @@ class LTTextGroupTBRL(LTTextGroup):
 
 
 class LTLayoutContainer(LTContainer[LTComponent]):
-    def __init__(self, bbox: Rect, mcstack: List[MarkedContent]) -> None:
+    def __init__(self, bbox: Rect, mcstack: Sequence[MarkedContent]) -> None:
         LTContainer.__init__(self, bbox, mcstack)
         self.groups: Optional[List[LTTextGroup]] = None
 
