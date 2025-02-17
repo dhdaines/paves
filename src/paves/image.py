@@ -319,7 +319,9 @@ def box(
             image = show(obj.page)
         left, top, right, bottom = obj.bbox
         draw = ImageDraw.ImageDraw(image)
-        obj_color = color if isinstance(color, str) else color.get(obj.object_type, "red")
+        obj_color = (
+            color if isinstance(color, str) else color.get(obj.object_type, "red")
+        )
         draw.rectangle((left, top, right, bottom), outline=obj_color)
         if label:
             text = obj.object_type
@@ -363,7 +365,9 @@ def mark(
             mask = Image.new("L", image.size, 255)
         left, top, right, bottom = obj.bbox
         draw = ImageDraw.ImageDraw(overlay)
-        obj_color = color if isinstance(color, str) else color.get(obj.object_type, "red")
+        obj_color = (
+            color if isinstance(color, str) else color.get(obj.object_type, "red")
+        )
         draw.rectangle((left, top, right, bottom), fill=obj_color)
         if label:
             text = obj.object_type

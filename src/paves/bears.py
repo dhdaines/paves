@@ -23,6 +23,7 @@ from playa.page import (
     XObjectObject,
 )
 from playa.utils import Point, apply_matrix_norm, apply_matrix_pt, get_bound
+
 # Stub out Polars if not present
 try:
     import polars as pl
@@ -32,6 +33,7 @@ except ImportError:
         def Array(*args, **kwargs): ...
         def List(*args, **kwargs): ...
         def Object(*args, **kwargs): ...
+
 
 LOG = logging.getLogger(__name__)
 
