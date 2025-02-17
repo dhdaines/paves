@@ -34,38 +34,46 @@ particularly the metadata in a PDF.  One goal of PAVÉS (because there
 are a few) is to give an easy way to visualise these objects and
 metadata.
 
-Say, for instance, that you have a tagged PDF and you would like to
-draw a box around each marked content section on a page, marking each
-one with its tag.  With PAVÉS, in a Jupyter notebook:
+First, maybe you want to just look at a page in your Jupyter notebook.
+Okay!
 
 ```python
 import playa, paves.image as pi
 pdf = playa.open("my_awesome.pdf")
-page = pdf[3]
-pi.box(pi.mcs(page))
+page = pdf.pages[3]
+pi.show(page)
 ```
 
-You can also directly show the PDF objects, or one particular sort:
+Perhaps you have a tagged PDF and you would like to draw a box around
+each marked content section on a page, marking each one with its tag.
+With PAVÉS:
 
 ```python
-pi.box(page)
+pi.box(page.mcs)
+```
+
+You can of course draw boxes around those individual PDF objects, or
+one particular sort of object, or filter them with a generator
+expression:
+
+```python
+pi.box(page)  # outlines everything
 pi.box(page.texts)
 pi.box(page.images)
+pi.box(t for t in page.texts if "spam" in t.chars)
 ```
-
-This also works for PDF metadata that have defined bounding boxes:
-
-```python
-pi.box(page.annots)
-```
-
-(any annotations that can't be drawn will simply be ignored)
 
 Alternately you can "highlight" objects by overlaying them with a
-semi-transparent colour:
+semi-transparent colour, which otherwise works the same way:
 
 ```python
 pi.mark(page.images)
+```
+
+If you wish you can give each type of object a different colour:
+
+```python
+pi.mark(page, color={"text": "red", "image": "blue", "path": green"})
 ```
 
 ## Working in the PDF mine

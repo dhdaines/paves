@@ -8,10 +8,10 @@ import subprocess
 import tempfile
 from os import PathLike
 from pathlib import Path
-from typing import Iterator, Union, List, TYPE_CHECKING
-from PIL import Image
+from typing import Dict, Iterable, Iterator, Union, List, TYPE_CHECKING
+from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
-from playa.page import Page
+from playa.page import ContentObject, Page
 
 
 if TYPE_CHECKING:
@@ -164,9 +164,10 @@ def popple(
 
 @functools.singledispatch
 def _get_pdfium_pages(
-    pdf: Union[str, PathLike, Document, Page, PageList]
+    pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator["pypdfium2.PdfPage"]:
     import pypdfium2
+
     doc = pypdfium2.PdfDocument(pdf)
     for page in doc:
         yield page
@@ -175,10 +176,9 @@ def _get_pdfium_pages(
 
 
 @_get_pdfium_pages.register(Document)
-def _get_pdfium_pages_doc(
-    pdf: Document
-) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_doc(pdf: Document) -> Iterator["pypdfium2.PdfPage"]:
     import pypdfium2
+
     doc = pypdfium2.PdfDocument(pdf._fp)
     for page in doc:
         yield page
@@ -187,10 +187,9 @@ def _get_pdfium_pages_doc(
 
 
 @_get_pdfium_pages.register(Page)
-def _get_pdfium_pages_page(
-    page: Page
-) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_page(page: Page) -> Iterator["pypdfium2.PdfPage"]:
     import pypdfium2
+
     pdf = page.doc
     assert pdf is not None
     doc = pypdfium2.PdfDocument(pdf._fp)
@@ -201,10 +200,9 @@ def _get_pdfium_pages_page(
 
 
 @_get_pdfium_pages.register(PageList)
-def _get_pdfium_pages_pagelist(
-    pages: PageList
-) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_pagelist(pages: PageList) -> Iterator["pypdfium2.PdfPage"]:
     import pypdfium2
+
     pdf = pages.doc
     assert pdf is not None
     doc = pypdfium2.PdfDocument(pdf._fp)
@@ -249,8 +247,7 @@ def pdfium(
             if width and height:
                 # Scale to longest side (since pypdfium2 doesn't
                 # appear to allow non-1:1 aspect ratio)
-                scale = max(width / page.get_width(),
-                            height / page.get_height())
+                scale = max(width / page.get_width(), height / page.get_height())
                 img = page.render(scale=scale).to_pil()
                 # Resize down to desired size
                 yield img.resize(size=(width, height))
@@ -293,5 +290,103 @@ def convert(
         except NotInstalledError:
             continue
     else:
-        raise NotInstalledError("No renderers available, tried: %s"
-                                % (", ".join(m.__name__ for m in METHODS)))
+        raise NotInstalledError(
+            "No renderers available, tried: %s"
+            % (", ".join(m.__name__ for m in METHODS))
+        )
+
+
+def show(page: Page, dpi: int = 72) -> Image.Image:
+    """Show a single page with some reasonable defaults."""
+    return next(convert(page, dpi=dpi))
+
+
+def box(
+    objs: Iterable[ContentObject],
+    *,
+    color: str = "red",
+    label: bool = True,
+    label_color: str = "white",
+    label_size: int = 9,
+    label_margin: int = 1,
+    image: Union[Image.Image, None] = None,
+) -> Union[Image.Image, None]:
+    """Draw boxes around things in a page of a PDF."""
+    draw: ImageDraw.ImageDraw
+    font = ImageFont.load_default(label_size)
+    for obj in objs:
+        if image is None:
+            image = show(obj.page)
+        left, top, right, bottom = obj.bbox
+        draw = ImageDraw.ImageDraw(image)
+        obj_color = color if isinstance(color, str) else color.get(obj.object_type, "red")
+        draw.rectangle((left, top, right, bottom), outline=obj_color)
+        if label:
+            text = obj.object_type
+            tl, tt, tr, tb = font.getbbox(text)
+            draw.rectangle(
+                (left, top - tb - label_margin * 2, left + tr + label_margin * 2, top),
+                outline=obj_color,
+                fill=obj_color,
+            )
+            draw.text(
+                xy=(left + label_margin, top - label_margin),
+                text=obj.object_type,
+                font=font,
+                fill="white",
+                anchor="ld",
+            )
+    return image
+
+
+def mark(
+    objs: Iterable[ContentObject],
+    *,
+    color: Union[str, Dict[str, str]] = "red",
+    transparency: float = 0.75,
+    label: bool = False,
+    label_color: str = "white",
+    label_size: int = 9,
+    label_margin: int = 1,
+    image: Union[Image.Image, None] = None,
+) -> Union[Image.Image, None]:
+    """Highlight things in a page of a PDF."""
+    overlay: Image.Image
+    mask: Image.Image
+    draw: ImageDraw.ImageDraw
+    font = ImageFont.load_default(label_size)
+    alpha = min(255, int(transparency * 255))
+    for obj in objs:
+        if image is None:
+            image = show(obj.page)
+            overlay = Image.new("RGB", image.size)
+            mask = Image.new("L", image.size, 255)
+        left, top, right, bottom = obj.bbox
+        draw = ImageDraw.ImageDraw(overlay)
+        obj_color = color if isinstance(color, str) else color.get(obj.object_type, "red")
+        draw.rectangle((left, top, right, bottom), fill=obj_color)
+        if label:
+            text = obj.object_type
+            tl, tt, tr, tb = font.getbbox(text)
+            draw.rectangle(
+                (left, top - tb - label_margin * 2, left + tr + label_margin * 2, top),
+                outline=obj_color,
+                fill=obj_color,
+            )
+            draw.text(
+                xy=(left + label_margin, top - label_margin),
+                text=obj.object_type,
+                font=font,
+                fill="white",
+                anchor="ld",
+            )
+        draw = ImageDraw.ImageDraw(mask)
+        draw.rectangle((left, top, right, bottom), fill=alpha)
+        if label:
+            draw.rectangle(
+                (left, top - tb - label_margin * 2, left + tr + label_margin * 2, top),
+                fill=alpha,
+            )
+    if image is None:
+        return None
+    return Image.composite(image, overlay, mask)
