@@ -304,7 +304,7 @@ def show(page: Page, dpi: int = 72) -> Image.Image:
 def box(
     objs: Iterable[ContentObject],
     *,
-    color: str = "red",
+    color: Union[str, Dict[str, str]] = "red",
     label: bool = True,
     label_color: str = "white",
     label_size: int = 9,
