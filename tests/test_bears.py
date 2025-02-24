@@ -4,10 +4,7 @@ Test PLAYA-Bear functionality.
 
 from pathlib import Path
 
-import pytest
-
-import playa
-from paves.bears import extract_page, extract
+from paves.bears import extract
 
 THISDIR = Path(__file__).parent
 
