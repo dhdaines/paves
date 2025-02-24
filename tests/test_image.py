@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 import playa
-from paves.image import popple
+import paves.image as pi
 
 THISDIR = Path(__file__).parent
 
@@ -16,13 +16,44 @@ THISDIR = Path(__file__).parent
 def test_popple():
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
-        images = list(popple(path))
+        images = list(pi.popple(path))
         assert len(images) == len(pdf.pages)
-        images = list(popple(pdf))
+        images = list(pi.popple(pdf))
         assert len(images) == len(pdf.pages)
-        images = list(popple(pdf.pages[1:6]))
+        images = list(pi.popple(pdf.pages[1:6]))
         assert len(images) == 5
-        images = list(popple(pdf.pages[[3, 4, 5, 9, 10]]))
+        images = list(pi.popple(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
-        images = list(popple(pdf.pages[1]))
+        images = list(pi.popple(pdf.pages[1]))
         assert len(images) == 1
+
+
+def test_pdfium():
+    path = THISDIR / "contrib" / "PSC_Station.pdf"
+    with playa.open(path) as pdf:
+        images = list(pi.pdfium(path))
+        assert len(images) == len(pdf.pages)
+        images = list(pi.pdfium(pdf))
+        assert len(images) == len(pdf.pages)
+        images = list(pi.pdfium(pdf.pages[1:6]))
+        assert len(images) == 5
+        images = list(pi.pdfium(pdf.pages[[3, 4, 5, 9, 10]]))
+        assert len(images) == 5
+        images = list(pi.pdfium(pdf.pages[1]))
+        assert len(images) == 1
+
+
+def test_box():
+    path = THISDIR / "contrib" / "PSC_Station.pdf"
+    with playa.open(path) as pdf:
+        page = pdf.pages[0]
+        img = pi.box(page)
+        assert img
+
+
+def test_mark():
+    path = THISDIR / "contrib" / "PSC_Station.pdf"
+    with playa.open(path) as pdf:
+        page = pdf.pages[0]
+        img = pi.mark(page)
+        assert img

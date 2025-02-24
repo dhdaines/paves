@@ -4,31 +4,203 @@ Creates dictionaries appropriate for feeding to bears of different
 sorts (pandas or polars, your choice).
 """
 
+import logging
+import multiprocessing
 from functools import singledispatch
 from multiprocessing.context import BaseContext
 from pathlib import Path
-import logging
-import multiprocessing
+from typing import Iterator, List, Tuple, TypedDict, Union, cast
 
-from typing import cast, Iterator, List, Union
+import playa
+from playa import DeviceSpace
+from playa.color import ColorSpace
 from playa.page import (
-    Page,
     ContentObject,
-    PathObject,
     ImageObject,
+    Page,
+    PathObject,
     TextObject,
     XObjectObject,
 )
-from playa.utils import (
-    apply_matrix_norm,
-    apply_matrix_pt,
-    Point,
-    get_bound,
-)
-import playa
-from playa import DeviceSpace, LayoutDict, fieldnames as FIELDNAMES, schema as SCHEMA  # noqa: F401
+from playa.utils import Point, apply_matrix_norm, apply_matrix_pt, get_bound
+
+# Stub out Polars if not present
+try:
+    import polars as pl
+except ImportError:
+
+    class pl:  # type: ignore
+        def Array(*args, **kwargs): ...
+        def List(*args, **kwargs): ...
+        def Object(*args, **kwargs): ...
+
 
 LOG = logging.getLogger(__name__)
+
+
+class LayoutDict(TypedDict, total=False):
+    """Dictionary-based layout objects.
+
+    These closely match the dictionaries returned by pdfplumber.  The
+    type of coordinates returned are determined by the `space`
+    argument passed to `Document`.  By default, `(0, 0)` is
+    the top-left corner of the page, with 72 units per inch.
+
+    All values can be converted to strings in some meaningful fashion,
+    such that you can simply write one of these to a CSV.  You can access
+    the field names through the `__annotations__` property:
+
+        writer = DictWriter(fieldnames=LayoutDict.__annotations__.keys())
+        dictwriter.write_rows(writer)
+
+    Attributes:
+      page_index: Index (0-based) of page.
+      page_label: Page label if any.
+      object_type: Type of object as a string.
+      mcid: Containing marked content section ID (or None if marked
+        content has no ID, such as artifacts or if there is no logical
+        structure).
+      tag: Containing marked content tag name (or None if not in a marked
+        content section).
+      xobjid: String name of containing Form XObject, if any.
+      cid: Integer character ID of glyph, if `object_type == "char"`.
+      text: Unicode mapping for glyph, if any.
+      fontname: str
+      size: Font size in device space.
+      glyph_offset_x: Horizontal offset (in device space) of glyph
+        from start of line.
+      glyph_offset_y: Vertical offset (in device space) of glyph from
+        start of line.
+      render_mode: Text rendering mode.
+      upright: FIXME: Not really sure what this means.  pdfminer.six?
+      x0: Minimum x coordinate of bounding box (top or bottom
+        depending on device space).
+      x1: Maximum x coordinate of bounding box (top or bottom
+        depending on device space).
+      y0: Minimum y coordinate of bounding box (left or right
+        depending on device space).
+      x1: Minimum x coordinate of bounding box (left or right
+        depending on device space).
+      stroking_colorspace: String name of colour space for stroking
+        operations.
+      stroking_color: Numeric parameters for stroking color.
+      stroking_pattern: Name of stroking pattern, if any.
+      non_stroking_colorspace: String name of colour space for non-stroking
+        operations.
+      non_stroking_color: Numeric parameters for non-stroking color.
+      non_stroking_pattern: Name of stroking pattern, if any.
+      path_ops: Sequence of path operations (e.g. `"mllh"` for a
+        triangle or `"mlllh"` for a quadrilateral)
+      dash_pattern: Sequence of user space units for alternating
+        stroke and non-stroke segments of dash pattern, `()` for solid
+        line. (Cannot be in device space because this would depend on
+        which direction the line or curve is drawn).
+      dash_phase: Initial position in `dash_pattern` in user space
+        units.  (see above for why it's in user space)
+      evenodd: Was this path filled with Even-Odd (if `True`) or
+        Nonzero-Winding-Number rule (if `False`)?  Note that this is
+        **meaningless** for determining if a path is actually filled
+        since subpaths have already been decomposed.  If you really
+        care then use the lazy API instead.
+      stroke: Is this path stroked?
+      fill: Is this path filled?
+      linewidth: Line width in user space units (again, not possible
+        to transform to device space).
+      pts_x: X coordinates of path endpoints, one for each character
+        in `path_ops`.  This is optimized for CSV/DataFrame output, if
+        you care about the control points then use the lazy API.
+      pts_y: Y coordinates of path endpoints, one for each character
+        in `path_ops`.  This is optimized for CSV/DataFrame output, if
+        you care about the control points then use the lazy API.
+      stream: Object number and generation number for the content
+        stream associated with an image, or `None` for inline images.
+        If you want image data then use the lazy API.
+      imagemask: Is this image a mask?
+      image_colorspace: String description of image colour space, or
+        `None` if irrelevant/forbidden,
+      srcsize: Source dimensions of image in pixels.
+      bits: Number of bits per channel of image.
+    """
+
+    page_index: int
+    page_label: Union[str, None]
+    object_type: str
+    mcid: Union[int, None]
+    tag: Union[str, None]
+    xobjid: Union[str, None]
+    cid: int
+    text: Union[str, None]
+    fontname: str
+    size: float
+    glyph_offset_x: float
+    glyph_offset_y: float
+    render_mode: int
+    upright: bool
+    x0: float
+    y0: float
+    x1: float
+    y1: float
+    stroking_colorspace: str
+    stroking_color: Tuple[float, ...]
+    stroking_pattern: Union[str, None]
+    non_stroking_colorspace: str
+    non_stroking_color: Tuple[float, ...]
+    non_stroking_pattern: Union[str, None]
+    path_ops: str
+    dash_pattern: Tuple[float, ...]
+    dash_phase: float
+    evenodd: bool
+    stroke: bool
+    fill: bool
+    linewidth: float
+    pts_x: List[float]
+    pts_y: List[float]
+    stream: Union[Tuple[int, int], None]
+    imagemask: bool
+    image_colorspace: Union[ColorSpace, None]
+    srcsize: Tuple[int, int]
+    bits: int
+
+
+fieldnames = LayoutDict.__annotations__.keys()
+schema = {
+    "page_index": int,
+    "page_label": str,
+    "object_type": str,
+    "mcid": int,
+    "tag": str,
+    "xobjid": str,
+    "text": str,
+    "cid": int,
+    "fontname": str,
+    "size": float,
+    "glyph_offset_x": float,
+    "glyph_offset_y": float,
+    "render_mode": int,
+    "upright": bool,
+    "x0": float,
+    "x1": float,
+    "y0": float,
+    "y1": float,
+    "stroking_colorspace": str,
+    "non_stroking_colorspace": str,
+    "stroking_color": pl.List(float),
+    "non_stroking_color": pl.List(float),
+    "path_ops": str,
+    "dash_pattern": pl.List(float),
+    "dash_phase": float,
+    "evenodd": bool,
+    "stroke": bool,
+    "fill": bool,
+    "linewidth": float,
+    "pts_x": pl.List(float),
+    "pts_y": pl.List(float),
+    "stream": pl.Array(int, 2),
+    "imagemask": bool,
+    "image_colorspace": str,
+    "srcsize": pl.Array(int, 2),
+    "bits": int,
+}
 
 
 @singledispatch
