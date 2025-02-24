@@ -44,14 +44,6 @@ page = pdf.pages[3]
 pi.show(page)
 ```
 
-Perhaps you have a tagged PDF and you would like to draw a box around
-each marked content section on a page, marking each one with its tag.
-With PAVÉS:
-
-```python
-pi.box(page.mcs)
-```
-
 You can of course draw boxes around those individual PDF objects, or
 one particular sort of object, or filter them with a generator
 expression:
