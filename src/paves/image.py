@@ -312,6 +312,12 @@ BoxFunc = Callable[[ContentObject], Rect]
 @functools.singledispatch
 def get_box(obj: Union[Annotation, ContentObject, Element, Rect]) -> Rect:
     """Default function to get the bounding box for an object."""
+    raise RuntimeError(f"Don't know how to get the box for {obj!r}")
+
+
+@get_box.register(tuple)
+def get_box_rect(obj: Rect) -> Rect:
+    """Get the bounding box of a ContentObject"""
     return obj
 
 
@@ -331,8 +337,11 @@ def get_box_annotation(obj: Annotation) -> Rect:
 def get_box_element(obj: Element) -> Rect:
     """Get the bounding box for a structural Element"""
     # It might just *have* a BBox already
+    page = obj.page
+    if page is None:
+        raise ValueError("Has no page, has no content! No box for you!")
     if "BBox" in obj.props:
-        return get_transformed_bound(obj.page.ctm, resolve(obj.props["BBox"]))
+        return get_transformed_bound(page.ctm, resolve(obj.props["BBox"]))
     else:
         return _get_marked_content_box(obj)
 
@@ -343,6 +352,8 @@ def _get_marked_content_box(el: Element) -> Rect:
     This will be superseded in PLAYA 0.3.x so do not use!
     """
     page = el.page
+    if page is None:
+        raise ValueError("Has no page, has no content! No box for you!")
 
     def get_mcids(k):
         k = resolve(k)
@@ -364,7 +375,7 @@ def _get_marked_content_box(el: Element) -> Rect:
 
 
 @functools.singledispatch
-def get_label(obj: Union[Annotation, ContentObject, Element, Rect]) -> Rect:
+def get_label(obj: Union[Annotation, ContentObject, Element, Rect]) -> str:
     """Default function to get the label text for an object."""
     return str(obj)
 
