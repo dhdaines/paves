@@ -44,7 +44,27 @@ page = pdf.pages[3]
 pi.show(page)
 ```
 
-You can of course draw boxes around those individual PDF objects, or
+Something quite interesting to do is, if your PDF contains a logical
+structure tree, to look at the bounding boxes of the contents of those
+structure elements (FIXME: This is not a very efficient way to do
+this, and it will be optimized in an upcoming PLAYA):
+
+```python
+pi.box(pdf.structure.find_all(lambda el: el.page is page))
+```
+
+![Structure Elements](./docs/page3-elements.png)
+
+Alternately, if you have annotations (such as links), you can look at
+those too:
+
+```python
+pi.box(page.annotations)
+```
+
+![Annotations](./docs/page2-annotations.png)
+
+You can of course draw boxes around individual PDF objects, or
 one particular sort of object, or filter them with a generator
 expression:
 
@@ -62,11 +82,27 @@ semi-transparent colour, which otherwise works the same way:
 pi.mark(page.images)
 ```
 
+![Annotations](./docs/page298-images.png)
+
 If you wish you can give each type of object a different colour:
 
 ```python
-pi.mark(page, color={"text": "red", "image": "blue", "path": green"})
+pi.mark(page, color={"text": "red", "image": "blue", "path": "green"})
 ```
+
+![Annotations](./docs/page298-colors.png)
+
+You can also add outlines and labels around the highlighting:
+
+```python
+pi.mark(page, outline=True, label=True,
+        color={"text": "red", "image": "blue", "path": "green"})
+```
+
+![Annotations](./docs/page298-outlines.png)
+
+There are even more options!  For now you will need to look at the
+source code, documentation is Coming Soon.
 
 ## Working in the PDF mine
 

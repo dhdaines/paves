@@ -3,6 +3,7 @@ Various ways of converting PDFs to images for feeding them to
 models and/or visualisation.`
 """
 
+import itertools
 import functools
 import subprocess
 import tempfile
@@ -13,7 +14,9 @@ from typing import TYPE_CHECKING, Callable, Dict, Iterable, Iterator, List, Unio
 from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
-from playa.utils import Rect, get_transformed_bound
+from playa.structure import Element
+from playa.utils import Rect, get_transformed_bound, get_bound
+from playa import resolve
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore
@@ -307,33 +310,91 @@ BoxFunc = Callable[[ContentObject], Rect]
 
 
 @functools.singledispatch
-def get_box(obj: Union[Rect, ContentObject, Annotation]) -> Rect:
+def get_box(obj: Union[Annotation, ContentObject, Element, Rect]) -> Rect:
+    """Default function to get the bounding box for an object."""
     return obj
 
 
 @get_box.register(ContentObject)
 def get_box_content(obj: ContentObject) -> Rect:
+    """Get the bounding box of a ContentObject"""
     return obj.bbox
 
 
 @get_box.register(Annotation)
 def get_box_annotation(obj: Annotation) -> Rect:
+    """Get the bounding box of an Annotation"""
     return get_transformed_bound(obj.page.ctm, obj.rect)
 
 
+@get_box.register(Element)
+def get_box_element(obj: Element) -> Rect:
+    """Get the bounding box for a structural Element"""
+    # It might just *have* a BBox already
+    if "BBox" in obj.props:
+        return get_transformed_bound(obj.page.ctm, resolve(obj.props["BBox"]))
+    else:
+        return _get_marked_content_box(obj)
+
+
+def _get_marked_content_box(el: Element) -> Rect:
+    """Get the bounding box of an Element's marked content.
+
+    This will be superseded in PLAYA 0.3.x so do not use!
+    """
+    page = el.page
+
+    def get_mcids(k):
+        k = resolve(k)
+        if isinstance(k, int):
+            yield k
+        elif isinstance(k, list):
+            for kk in k:
+                yield from get_mcids(kk)
+        elif isinstance(k, dict):
+            if "K" in k:
+                yield from get_mcids(k["K"])
+
+    mcids = set(get_mcids(el.props["K"]))
+    pts = itertools.chain.from_iterable(
+        ((x0, y0), (x1, y1))
+        for x0, y0, x1, y1 in (obj.bbox for obj in page if obj.mcid in mcids)
+    )
+    return get_bound(pts)
+
+
 @functools.singledispatch
-def get_label(obj: Union[Rect, ContentObject, Annotation]) -> str:
+def get_label(obj: Union[Annotation, ContentObject, Element, Rect]) -> Rect:
+    """Default function to get the label text for an object."""
     return str(obj)
 
 
 @get_label.register(ContentObject)
 def get_label_content(obj: ContentObject) -> str:
+    """Get the label text for a ContentObject."""
     return obj.object_type
 
 
 @get_label.register(Annotation)
 def get_label_annotation(obj: Annotation) -> str:
+    """Get the default label text for an Annotation.
+
+    Note: This is just a default.
+        This is one of many possible options, so you may wish to
+        define your own custom LabelFunc.
+    """
     return obj.subtype
+
+
+@get_label.register(Element)
+def get_label_element(obj: Element) -> str:
+    """Get the default label text for an Element.
+
+    Note: This is just a default.
+        This is one of many possible options, so you may wish to
+        define your own custom LabelFunc.
+    """
+    return obj.type
 
 
 def box(
@@ -354,7 +415,10 @@ def box(
     for obj in objs:
         if image is None:
             image = show(obj.page)
-        left, top, right, bottom = boxfunc(obj)
+        try:
+            left, top, right, bottom = boxfunc(obj)
+        except ValueError:  # it has no content and no box
+            continue
         draw = ImageDraw.ImageDraw(image)
         obj_color = (
             color if isinstance(color, str) else color.get(obj.object_type, "red")
@@ -409,7 +473,10 @@ def mark(
             image = show(obj.page)
             overlay = Image.new("RGB", image.size)
             mask = Image.new("L", image.size, 255)
-        left, top, right, bottom = boxfunc(obj)
+        try:
+            left, top, right, bottom = boxfunc(obj)
+        except ValueError:  # it has no content and no box
+            continue
         draw = ImageDraw.ImageDraw(overlay)
         obj_color = (
             color if isinstance(color, str) else color.get(obj.object_type, "red")
