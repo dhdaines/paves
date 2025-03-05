@@ -416,18 +416,22 @@ def box(
     label_color: str = "white",
     label_size: int = 9,
     label_margin: int = 1,
+    label_fill: bool = True,
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
+    dpi: float = 72,
 ) -> Union[Image.Image, None]:
     """Draw boxes around things in a page of a PDF."""
     draw: ImageDraw.ImageDraw
-    font = ImageFont.load_default(label_size)
+    scale = dpi / 72
+    font = ImageFont.load_default(label_size * scale)
+    label_margin *= scale
     for obj in objs:
         if image is None:
-            image = show(obj.page)
+            image = show(obj.page, dpi=dpi)
         try:
-            left, top, right, bottom = boxfunc(obj)
+            left, top, right, bottom = (x * scale for x in boxfunc(obj))
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(image)
@@ -447,13 +451,13 @@ def box(
             draw.rectangle(
                 label_box,
                 outline=obj_color,
-                fill=obj_color,
+                fill=obj_color if label_fill else None,
             )
             draw.text(
                 xy=(left + label_margin, top - label_margin),
                 text=text,
                 font=font,
-                fill="white",
+                fill="white" if label_fill else obj_color,
                 anchor="ld",
             )
     return image
@@ -472,20 +476,23 @@ def mark(
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
+    dpi: float = 72,
 ) -> Union[Image.Image, None]:
     """Highlight things in a page of a PDF."""
     overlay: Image.Image
     mask: Image.Image
     draw: ImageDraw.ImageDraw
-    font = ImageFont.load_default(label_size)
+    scale = dpi / 72
+    font = ImageFont.load_default(label_size * scale)
     alpha = min(255, int(transparency * 255))
+    label_margin *= scale
     for obj in objs:
         if image is None:
-            image = show(obj.page)
+            image = show(obj.page, dpi=dpi)
             overlay = Image.new("RGB", image.size)
             mask = Image.new("L", image.size, 255)
         try:
-            left, top, right, bottom = boxfunc(obj)
+            left, top, right, bottom = (x * scale for x in boxfunc(obj))
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(overlay)
