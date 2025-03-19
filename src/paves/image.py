@@ -479,8 +479,8 @@ def mark(
     dpi: float = 72,
 ) -> Union[Image.Image, None]:
     """Highlight things in a page of a PDF."""
-    overlay: Image.Image
-    mask: Image.Image
+    overlay: Union[Image.Image, None] = None
+    mask: Union[Image.Image, None] = None
     draw: ImageDraw.ImageDraw
     scale = dpi / 72
     font = ImageFont.load_default(label_size * scale)
@@ -489,7 +489,9 @@ def mark(
     for obj in objs:
         if image is None:
             image = show(obj.page, dpi=dpi)
+        if overlay is None:
             overlay = Image.new("RGB", image.size)
+        if mask is None:
             mask = Image.new("L", image.size, 255)
         try:
             left, top, right, bottom = (x * scale for x in boxfunc(obj))
