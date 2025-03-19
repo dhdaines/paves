@@ -414,13 +414,13 @@ def box(
     color: Union[str, Dict[str, str]] = "red",
     label: bool = True,
     label_color: str = "white",
-    label_size: int = 9,
-    label_margin: int = 1,
+    label_size: float = 9,
+    label_margin: float = 1,
     label_fill: bool = True,
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
-    dpi: float = 72,
+    dpi: int = 72,
 ) -> Union[Image.Image, None]:
     """Draw boxes around things in a page of a PDF."""
     draw: ImageDraw.ImageDraw
@@ -470,13 +470,13 @@ def mark(
     transparency: float = 0.75,
     label: bool = False,
     label_color: str = "white",
-    label_size: int = 9,
-    label_margin: int = 1,
+    label_size: float = 9,
+    label_margin: float = 1,
     outline: bool = False,
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
-    dpi: float = 72,
+    dpi: int = 72,
 ) -> Union[Image.Image, None]:
     """Highlight things in a page of a PDF."""
     overlay: Union[Image.Image, None] = None
@@ -558,4 +558,7 @@ def mark(
                 )
     if image is None:
         return None
-    return Image.composite(image, overlay, mask)
+    if overlay is not None and mask is not None:
+        return Image.composite(image, overlay, mask)
+    else:
+        return image
