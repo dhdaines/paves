@@ -1,9 +1,10 @@
 # PAVÉS: Bajo los adoquines, la PLAYA 🏖️
 
-The goal with **PLAYA** is just to get objects out of PDF, with no
+[**PLAYA**](https://github.com/dhdaines/playa) is intended
+to get objects out of PDF, with no
 dependencies or further analysis.  So, over top of **PLAYA** there is
 **PAVÉS**: "**P**DF, **A**nalyse et **V**isualisation ... plus
-**É**laborée**s**", I guess?
+**É**laborée**S**", I guess?
 
 Anything that deviates from the core mission of "getting objects out
 of PDF" goes here, so, hopefully, more interesting analysis and
@@ -29,7 +30,8 @@ in the rendered document.  `pdfplumber` is quite nice for this, though
 it is oriented towards the particular set of objects that it can
 extract from the PDF.
 
-The primary goal of PLAYA-PDF is to give access to all the objects and
+The primary goal of [PLAYA-PDF](https://dhdaines.github.io/playa)
+is to give access to all the objects and
 particularly the metadata in a PDF.  One goal of PAVÉS (because there
 are a few) is to give an easy way to visualise these objects and
 metadata.
