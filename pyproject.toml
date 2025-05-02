@@ -9,24 +9,29 @@ description = "PDF, Analyse et Visualisation avancÉS"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-keywords = []
+keywords = ["pdf", "graphics"]
 authors = [
-  { name = "David Huggins-Daines", email = "dhd@ecolingui.ca" },
+    { name = "David Huggins-Daines", email = "dhd@ecolingui.ca" },
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.1",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "playa-pdf>=0.3.0",
-  "pillow",
+    "playa-pdf>=0.3.0",
+    "pillow",
 ]
 
 [project.urls]
@@ -45,8 +50,8 @@ version-file = "src/paves/__about__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
-  "/.github",
-  "/tests/contrib",
+    "/.github",
+    "/tests/contrib",
 ]
 
 [tool.hatch.envs.hatch-test]
@@ -60,7 +65,7 @@ config-path = "none"  # Disable hatch's unreasonable ruff defaults
 
 [tool.hatch.envs.types]
 extra-dependencies = [
-  "mypy>=1.0.0",
+   "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/paves tests}"
@@ -70,7 +75,7 @@ source_pkgs = ["paves", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/paves/__about__.py",
+    "src/paves/__about__.py",
 ]
 
 [tool.coverage.paths]
@@ -79,9 +84,9 @@ tests = ["tests", "*/paves/tests"]
 
 [tool.coverage.report]
 exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
 ]
 
 [tool.mypy]

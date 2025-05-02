@@ -4,7 +4,7 @@
 to get objects out of PDF, with no
 dependencies or further analysis.  So, over top of **PLAYA** there is
 **PAVÉS**: "**P**DF, **A**nalyse et **V**isualisation ... plus
-**É**laborée**S**", I guess?
+avancé**ES**", I guess?
 
 Anything that deviates from the core mission of "getting objects out
 of PDF" goes here, so, hopefully, more interesting analysis and
