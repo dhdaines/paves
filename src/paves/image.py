@@ -9,7 +9,16 @@ import subprocess
 import tempfile
 from os import PathLike
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable, Dict, Iterable, Iterator, List, Union
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    Union,
+    cast,
+)
 
 from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
@@ -305,8 +314,8 @@ def show(page: Page, dpi: int = 72) -> Image.Image:
     return next(convert(page, dpi=dpi))
 
 
-LabelFunc = Callable[[ContentObject], str]
-BoxFunc = Callable[[ContentObject], Rect]
+LabelFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], str]
+BoxFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], Rect]
 
 
 @functools.singledispatch
@@ -349,7 +358,7 @@ def get_box_element(obj: Element) -> Rect:
 def _get_marked_content_box(el: Element) -> Rect:
     """Get the bounding box of an Element's marked content.
 
-    This will be superseded in PLAYA 0.3.x so do not use!
+    This will be superseded in PLAYA 0.5 so do not use!
     """
     page = el.page
     if page is None:
@@ -408,8 +417,50 @@ def get_label_element(obj: Element) -> str:
     return obj.type
 
 
+def _make_boxes(
+    obj: Union[
+        Annotation,
+        ContentObject,
+        Element,
+        Rect,
+        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+    ]
+) -> List[Union[Annotation, ContentObject, Element, Rect]]:
+    """Put a box into a list of boxes if necessary."""
+    # Is it a single Rect? (mypy is incapable of understanding the
+    # runtime check here so we need the cast among other things)
+    if isinstance(obj, tuple):
+        if len(obj) == 4 and all(isinstance(x, (int, float)) for x in obj):
+            return [cast(Rect, obj)]
+        # This shouldn't be necessary... but mypy needs it
+        return list(obj)
+    if isinstance(obj, (Annotation, ContentObject, Element)):
+        return [obj]
+    return list(obj)
+
+
+def _render(
+    obj: Union[Annotation, ContentObject, Element, Rect],
+    page: Union[Page, None] = None,
+    dpi: int = 72,
+) -> Image.Image:
+    if page is None:
+        if isinstance(obj, tuple):
+            raise ValueError("Must explicitly specify page or image to show rectangles")
+        page = obj.page
+    if page is None:
+        raise ValueError("No page found in object: %r" % (obj,))
+    return show(page, dpi=dpi)
+
+
 def box(
-    objs: Iterable[ContentObject],
+    objs: Union[
+        Annotation,
+        ContentObject,
+        Element,
+        Rect,
+        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+    ],
     *,
     color: Union[str, Dict[str, str]] = "red",
     label: bool = True,
@@ -421,22 +472,24 @@ def box(
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
     dpi: int = 72,
+    page: Union[Page, None] = None,
 ) -> Union[Image.Image, None]:
     """Draw boxes around things in a page of a PDF."""
     draw: ImageDraw.ImageDraw
     scale = dpi / 72
     font = ImageFont.load_default(label_size * scale)
     label_margin *= scale
+    objs = _make_boxes(objs)
     for obj in objs:
         if image is None:
-            image = show(obj.page, dpi=dpi)
+            image = _render(obj, page, dpi)
         try:
             left, top, right, bottom = (x * scale for x in boxfunc(obj))
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(image)
         obj_color = (
-            color if isinstance(color, str) else color.get(obj.object_type, "red")
+            color if isinstance(color, str) else color.get(labelfunc(obj), "red")
         )
         draw.rectangle((left, top, right, bottom), outline=obj_color)
         if label:
@@ -464,7 +517,13 @@ def box(
 
 
 def mark(
-    objs: Iterable[ContentObject],
+    objs: Union[
+        Annotation,
+        ContentObject,
+        Element,
+        Rect,
+        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+    ],
     *,
     color: Union[str, Dict[str, str]] = "red",
     transparency: float = 0.75,
@@ -477,6 +536,7 @@ def mark(
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
     dpi: int = 72,
+    page: Union[Page, None] = None,
 ) -> Union[Image.Image, None]:
     """Highlight things in a page of a PDF."""
     overlay: Union[Image.Image, None] = None
@@ -486,9 +546,10 @@ def mark(
     font = ImageFont.load_default(label_size * scale)
     alpha = min(255, int(transparency * 255))
     label_margin *= scale
+    objs = _make_boxes(objs)
     for obj in objs:
         if image is None:
-            image = show(obj.page, dpi=dpi)
+            image = _render(obj, page, dpi)
         if overlay is None:
             overlay = Image.new("RGB", image.size)
         if mask is None:
@@ -499,7 +560,7 @@ def mark(
             continue
         draw = ImageDraw.ImageDraw(overlay)
         obj_color = (
-            color if isinstance(color, str) else color.get(obj.object_type, "red")
+            color if isinstance(color, str) else color.get(labelfunc(obj), "red")
         )
         draw.rectangle((left, top, right, bottom), fill=obj_color)
         mask_draw = ImageDraw.ImageDraw(mask)
