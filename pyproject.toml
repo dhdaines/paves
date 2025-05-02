@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "paves"
 dynamic = ["version"]
-description = ''
+description = "PDF, Analyse et Visualisation avancÉS"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
