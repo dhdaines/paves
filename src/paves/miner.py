@@ -44,7 +44,15 @@ from playa.page import PathObject, TextObject, XObjectObject
 from playa.parser import PSLiteral, PDFObject
 from playa.pdftypes import ObjRef as PDFObjRef
 from playa.pdftypes import resolve1, resolve_all, LIT, KWD
-from playa.utils import Matrix, PDFDocEncoding, Point, Rect, apply_matrix_pt, get_bound
+from playa.utils import (
+    Matrix,
+    PDFDocEncoding,
+    Point,
+    Rect,
+    apply_matrix_pt,
+    decode_text,
+    get_bound,
+)
 
 PSException = Exception
 __all__ = [
@@ -62,6 +70,7 @@ __all__ = [
     "PDFObject",
     "PSException",
     "PSLiteral",
+    "decode_text",
     "extract",
     "extract_page",
     "pdftypes",
