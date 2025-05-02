@@ -33,6 +33,6 @@ jobs:
         uses: pypa/hatch@install
       - name: Install poppler
         if: runner.os == 'Linux'
-        run: sudo apt install poppler-utils
+        run: sudo apt-get update && sudo apt-get install poppler-utils
       - name: Run tests
         run: hatch test --cover -py 3.9
