@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "playa-pdf>=0.3.0",
+    "playa-pdf>=0.3.0,<=0.4.2",
     "pillow",
 ]
 
