@@ -424,8 +424,8 @@ def _make_boxes(
         Element,
         Rect,
         Iterable[Union[Annotation, ContentObject, Element, Rect]],
-    ]
-) -> List[Union[Annotation, ContentObject, Element, Rect]]:
+    ],
+) -> Iterable[Union[Annotation, ContentObject, Element, Rect]]:
     """Put a box into a list of boxes if necessary."""
     # Is it a single Rect? (mypy is incapable of understanding the
     # runtime check here so we need the cast among other things)
@@ -436,7 +436,7 @@ def _make_boxes(
         return list(obj)
     if isinstance(obj, (Annotation, ContentObject, Element)):
         return [obj]
-    return list(obj)
+    return obj
 
 
 def _render(
@@ -479,8 +479,7 @@ def box(
     scale = dpi / 72
     font = ImageFont.load_default(label_size * scale)
     label_margin *= scale
-    objs = _make_boxes(objs)
-    for obj in objs:
+    for obj in _make_boxes(objs):
         if image is None:
             image = _render(obj, page, dpi)
         try:
@@ -546,8 +545,7 @@ def mark(
     font = ImageFont.load_default(label_size * scale)
     alpha = min(255, int(transparency * 255))
     label_margin *= scale
-    objs = _make_boxes(objs)
-    for obj in objs:
+    for obj in _make_boxes(objs):
         if image is None:
             image = _render(obj, page, dpi)
         if overlay is None:
