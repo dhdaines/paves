@@ -22,7 +22,7 @@ from playa.page import (
     TextObject,
     XObjectObject,
 )
-from playa.utils import Point, apply_matrix_norm, apply_matrix_pt, get_bound
+from playa.utils import Point, apply_matrix_pt, get_bound
 
 # Stub out Polars if not present
 try:
@@ -251,6 +251,7 @@ def make_path(
 
 @process_object.register
 def _(obj: PathObject) -> Iterator[LayoutDict]:
+    # FIXME: Implement pdfminer.six subpaths
     for path in obj:
         ops = []
         pts: List[Point] = []
@@ -363,18 +364,16 @@ def _(obj: ImageObject) -> Iterator[LayoutDict]:
 def _(obj: TextObject) -> Iterator[LayoutDict]:
     for glyph in obj:
         x0, y0, x1, y1 = glyph.bbox
-        tstate = glyph.textstate
         gstate = glyph.gstate
-        # apparently we can assert this?
-        font = tstate.font
-        assert font is not None
-        glyph_x, glyph_y = apply_matrix_norm(glyph.ctm, tstate.glyph_offset)
+        font = glyph.font
+        glyph_origin_x, glyph_origin_y = glyph.origin
+        line_origin_x, line_origin_y = obj.line_matrix[-2:]
         (a, b, c, d, e, f) = glyph.matrix
         if font.vertical:
-            size = abs(tstate.fontsize * a)
+            size = abs(gstate.fontsize * a)
         else:
-            size = abs(tstate.fontsize * d)
-        scaling = tstate.scaling * 0.01  # FIXME: unnecessary?
+            size = abs(gstate.fontsize * d)
+        scaling = gstate.scaling * 0.01  # FIXME: unnecessary?
         upright = a * d * scaling > 0 and b * c <= 0
 
         yield LayoutDict(
@@ -388,9 +387,9 @@ def _(obj: TextObject) -> Iterator[LayoutDict]:
             text=glyph.text,
             cid=glyph.cid,
             fontname=font.fontname,
-            glyph_offset_x=glyph_x,
-            glyph_offset_y=glyph_y,
-            render_mode=tstate.render_mode,
+            glyph_offset_x=glyph_origin_x - line_origin_x,
+            glyph_offset_y=glyph_origin_y - line_origin_y,
+            render_mode=gstate.render_mode,
             dash_pattern=gstate.dash.dash,
             dash_phase=gstate.dash.phase,
             stroking_colorspace=gstate.scs.name,
