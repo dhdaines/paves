@@ -31,7 +31,7 @@ from playa.color import ColorSpace
 from playa.data_structures import NameTree, NumberTree
 from playa.document import Document as PDFDocument
 from playa.exceptions import PDFException
-from playa.page import (
+from playa.content import (
     ContentObject,
     GlyphObject,
     GraphicState,
@@ -519,34 +519,33 @@ class LTChar(LTComponent, LTText):
         glyph: GlyphObject,
     ) -> None:
         LTText.__init__(self)
-        textstate = glyph.textstate
         gstate = glyph.gstate
         matrix = glyph.matrix
         if glyph.text is None:
-            logger.debug("undefined: %r, %r", textstate.font, glyph.cid)
+            logger.debug("undefined: %r, %r", glyph.font, glyph.cid)
             # Horrible awful pdfminer.six behaviour
             self._text = "(cid:%d)" % glyph.cid
         else:
             self._text = glyph.text
         self.matrix = matrix
         self.mcstack = glyph.mcstack
-        font = textstate.font
-        assert font is not None
-        self.fontname = font.fontname
-        self.render_mode = textstate.render_mode
+        self.fontname = glyph.font.fontname
         self.graphicstate = gstate
+        self.render_mode = gstate.render_mode
         self.stroking_color = gstate.scolor
         self.non_stroking_color = gstate.ncolor
         self.scs = gstate.scs
         self.ncs = gstate.ncs
+        # FIXME: Recreate pdfminer's "adv" (which is almost but not
+        # quite displacement)
         self.adv = glyph.adv
         (a, b, c, d, e, f) = matrix
-        scaling = textstate.scaling
+        scaling = gstate.scaling
         # FIXME: Still really not sure what this means
         self.upright = a * d * scaling > 0 and b * c <= 0
         LTComponent.__init__(self, glyph.bbox, glyph.mcstack)
         # FIXME: This is now quite wrong for rotated glyphs
-        if font.vertical:
+        if glyph.font.vertical:
             self.size = self.width
         else:
             self.size = self.height
@@ -1157,6 +1156,7 @@ def process_object(obj: ContentObject) -> Iterator[LTComponent]:
 
 @process_object.register
 def _(obj: PathObject) -> Iterator[LTComponent]:
+    # FIXME: recreate pdfminer's subpaths
     for path in obj:
         ops = []
         pts: List[Point] = []
