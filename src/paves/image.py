@@ -3,7 +3,6 @@ Various ways of converting PDFs to images for feeding them to
 models and/or visualisation.`
 """
 
-import itertools
 import functools
 import subprocess
 import tempfile
@@ -24,8 +23,7 @@ from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
 from playa.structure import Element
-from playa.utils import Rect, get_transformed_bound, get_bound
-from playa import resolve
+from playa.utils import Rect, get_transformed_bound
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore
