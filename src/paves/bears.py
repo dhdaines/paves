@@ -23,6 +23,7 @@ from playa.page import (
     XObjectObject,
 )
 from playa.utils import Point, apply_matrix_pt, get_bound
+from paves.compat import subpaths
 
 # Stub out Polars if not present
 try:
@@ -251,8 +252,7 @@ def make_path(
 
 @process_object.register
 def _(obj: PathObject) -> Iterator[LayoutDict]:
-    # FIXME: Implement pdfminer.six subpaths
-    for path in obj:
+    for path in subpaths(obj):
         ops = []
         pts: List[Point] = []
         for seg in path.raw_segments:

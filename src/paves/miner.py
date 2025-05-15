@@ -52,7 +52,9 @@ from playa.utils import (
     apply_matrix_pt,
     decode_text,
     get_bound,
+    transform_bbox,
 )
+from paves.compat import subpaths
 
 PSException = Exception
 __all__ = [
@@ -1156,8 +1158,7 @@ def process_object(obj: ContentObject) -> Iterator[LTComponent]:
 
 @process_object.register
 def _(obj: PathObject) -> Iterator[LTComponent]:
-    # FIXME: recreate pdfminer's subpaths
-    for path in obj:
+    for path in subpaths(obj):
         ops = []
         pts: List[Point] = []
         for seg in path.raw_segments:
