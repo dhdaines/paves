@@ -328,7 +328,8 @@ def get_box_rect(obj: Rect) -> Rect:
     return obj
 
 
-@get_box.register
+@get_box.register(ContentObject)
+@get_box.register(Element)
 def get_box_content(obj: Union[ContentObject, Element]) -> Rect:
     """Get the bounding box of a ContentObject"""
     return obj.bbox
