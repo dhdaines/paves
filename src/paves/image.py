@@ -3,7 +3,6 @@ Various ways of converting PDFs to images for feeding them to
 models and/or visualisation.`
 """
 
-import itertools
 import functools
 import subprocess
 import tempfile
@@ -24,8 +23,7 @@ from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
 from playa.structure import Element
-from playa.utils import Rect, get_transformed_bound, get_bound
-from playa import resolve
+from playa.utils import Rect, get_transformed_bound
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore
@@ -331,7 +329,8 @@ def get_box_rect(obj: Rect) -> Rect:
 
 
 @get_box.register(ContentObject)
-def get_box_content(obj: ContentObject) -> Rect:
+@get_box.register(Element)
+def get_box_content(obj: Union[ContentObject, Element]) -> Rect:
     """Get the bounding box of a ContentObject"""
     return obj.bbox
 
@@ -340,47 +339,6 @@ def get_box_content(obj: ContentObject) -> Rect:
 def get_box_annotation(obj: Annotation) -> Rect:
     """Get the bounding box of an Annotation"""
     return get_transformed_bound(obj.page.ctm, obj.rect)
-
-
-@get_box.register(Element)
-def get_box_element(obj: Element) -> Rect:
-    """Get the bounding box for a structural Element"""
-    # It might just *have* a BBox already
-    page = obj.page
-    if page is None:
-        raise ValueError("Has no page, has no content! No box for you!")
-    if "BBox" in obj.props:
-        return get_transformed_bound(page.ctm, resolve(obj.props["BBox"]))
-    else:
-        return _get_marked_content_box(obj)
-
-
-def _get_marked_content_box(el: Element) -> Rect:
-    """Get the bounding box of an Element's marked content.
-
-    This will be superseded in PLAYA 0.5 so do not use!
-    """
-    page = el.page
-    if page is None:
-        raise ValueError("Has no page, has no content! No box for you!")
-
-    def get_mcids(k):
-        k = resolve(k)
-        if isinstance(k, int):
-            yield k
-        elif isinstance(k, list):
-            for kk in k:
-                yield from get_mcids(kk)
-        elif isinstance(k, dict):
-            if "K" in k:
-                yield from get_mcids(k["K"])
-
-    mcids = set(get_mcids(el.props["K"]))
-    pts = itertools.chain.from_iterable(
-        ((x0, y0), (x1, y1))
-        for x0, y0, x1, y1 in (obj.bbox for obj in page if obj.mcid in mcids)
-    )
-    return get_bound(pts)
 
 
 @functools.singledispatch

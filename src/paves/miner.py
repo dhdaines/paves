@@ -31,7 +31,7 @@ from playa.color import ColorSpace
 from playa.data_structures import NameTree, NumberTree
 from playa.document import Document as PDFDocument
 from playa.exceptions import PDFException
-from playa.page import (
+from playa.content import (
     ContentObject,
     GlyphObject,
     GraphicState,
@@ -52,7 +52,9 @@ from playa.utils import (
     apply_matrix_pt,
     decode_text,
     get_bound,
+    transform_bbox,
 )
+from paves.compat import subpaths
 
 PSException = Exception
 __all__ = [
@@ -519,33 +521,45 @@ class LTChar(LTComponent, LTText):
         glyph: GlyphObject,
     ) -> None:
         LTText.__init__(self)
-        textstate = glyph.textstate
         gstate = glyph.gstate
         matrix = glyph.matrix
+        font = glyph.font
         if glyph.text is None:
-            logger.debug("undefined: %r, %r", textstate.font, glyph.cid)
+            logger.debug("undefined: %r, %r", font, glyph.cid)
             # Horrible awful pdfminer.six behaviour
             self._text = "(cid:%d)" % glyph.cid
         else:
             self._text = glyph.text
-        self.matrix = matrix
         self.mcstack = glyph.mcstack
-        font = textstate.font
-        assert font is not None
         self.fontname = font.fontname
-        self.render_mode = textstate.render_mode
         self.graphicstate = gstate
+        self.render_mode = gstate.render_mode
         self.stroking_color = gstate.scolor
         self.non_stroking_color = gstate.ncolor
         self.scs = gstate.scs
         self.ncs = gstate.ncs
-        self.adv = glyph.adv
+        scaling = gstate.scaling * 0.01
+        fontsize = gstate.fontsize
         (a, b, c, d, e, f) = matrix
-        scaling = textstate.scaling
         # FIXME: Still really not sure what this means
         self.upright = a * d * scaling > 0 and b * c <= 0
-        LTComponent.__init__(self, glyph.bbox, glyph.mcstack)
-        # FIXME: This is now quite wrong for rotated glyphs
+        # Unscale the matrix to match pdfminer.six
+        xscale = 1 / (fontsize * scaling)
+        yscale = 1 / fontsize
+        self.matrix = (a * xscale, b * yscale, c * xscale, d * yscale, e, f)
+        # Recreate pdfminer.six's bogus bboxes
+        if font.vertical:
+            vdisp = font.vdisp(glyph.cid)
+            self.adv = vdisp * fontsize
+            vx, vy = font.position(glyph.cid)
+            textbox = (-vx, vy + vdisp, -vx + 1, vy)
+        else:
+            textwidth = font.char_width(glyph.cid)
+            self.adv = textwidth * fontsize * scaling
+            textbox = (0, font.get_descent(), textwidth, font.get_descent() + 1)
+        miner_box = transform_bbox(glyph.matrix, textbox)
+        LTComponent.__init__(self, miner_box, glyph.mcstack)
+        # FIXME: This is quite wrong for rotated glyphs, but so is pdfminer.six
         if font.vertical:
             self.size = self.width
         else:
@@ -1157,7 +1171,7 @@ def process_object(obj: ContentObject) -> Iterator[LTComponent]:
 
 @process_object.register
 def _(obj: PathObject) -> Iterator[LTComponent]:
-    for path in obj:
+    for path in subpaths(obj):
         ops = []
         pts: List[Point] = []
         for seg in path.raw_segments:
