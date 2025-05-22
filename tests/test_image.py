@@ -49,6 +49,12 @@ def test_box():
         page = pdf.pages[0]
         img = pi.box(page)
         assert img
+        img = pi.box(page, color="red")
+        assert img
+        img = pi.box(page, color=["green", "orange", "purple"])
+        assert img
+        img = pi.box(page, dpi=100, color={"text": "red", "image": "green"})
+        assert img
 
 
 def test_mark():
@@ -56,4 +62,10 @@ def test_mark():
     with playa.open(path) as pdf:
         page = pdf.pages[0]
         img = pi.mark(page)
+        assert img
+        img = pi.mark(page, color="red")
+        assert img
+        img = pi.mark(page, color=["green", "orange", "purple"])
+        assert img
+        img = pi.mark(page, dpi=100, color={"text": "red", "image": "green"})
         assert img
