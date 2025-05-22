@@ -11,6 +11,7 @@ from os import PathLike
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
+    Any,
     Callable,
     Dict,
     Iterable,
@@ -314,7 +315,7 @@ def show(page: Page, dpi: int = 72) -> Image.Image:
     return next(convert(page, dpi=dpi))
 
 
-LabelFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], str]
+LabelFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], Any]
 BoxFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], Rect]
 
 
@@ -519,7 +520,7 @@ def box(
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(image)
-        text = labelfunc(obj)
+        text = str(labelfunc(obj))
         obj_color = make_color(text)
         draw.rectangle((left, top, right, bottom), outline=obj_color)
         if label:
@@ -588,7 +589,7 @@ def mark(
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(overlay)
-        text = labelfunc(obj)
+        text = str(labelfunc(obj))
         obj_color = make_color(text)
         draw.rectangle((left, top, right, bottom), fill=obj_color)
         mask_draw = ImageDraw.ImageDraw(mask)
