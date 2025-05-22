@@ -413,10 +413,14 @@ def _render(
     return show(page, dpi=dpi)
 
 
-Color = Union[str, Tuple[int, int, int]]
+Color = Union[str, Tuple[int, int, int], Tuple[float, float, float]]
 """Type alias for things that can be used as colors."""
 Colors = Union[Color, List[Color], Dict[str, Color]]
 """Type alias for colors or collections of colors."""
+PillowColor = Union[str, Tuple[int, int, int]]
+"""Type alias for things Pillow accepts as colors."""
+ColorMaker = Callable[[str], PillowColor]
+"""Function that makes a Pillow color for a string label."""
 DEFAULT_COLOR_CYCLE: Colors = [
     "blue",
     "orange",
@@ -432,38 +436,50 @@ DEFAULT_COLOR_CYCLE: Colors = [
 """Default color cycle (same as matplotlib)"""
 
 
+def pillow_color(color: Color) -> PillowColor:
+    """Convert colors to a form acceptable to Pillow."""
+    if isinstance(color, str):
+        return color
+    r, g, b = color
+    # Would sure be nice if MyPy understood all()
+    if isinstance(r, int) and isinstance(g, int) and isinstance(b, int):
+        return (r, g, b)
+    r, g, b = (int(x * 255) for x in color)
+    return (r, g, b)
+
+
 @functools.singledispatch
-def color_maker(spec: Colors, default: Color = "red") -> Callable[[str], Color]:
+def color_maker(spec: Colors, default: Color = "red") -> ColorMaker:
     """Create a function that makes colors."""
-    return lambda _: default
+    return lambda _: pillow_color(default)
 
 
 @color_maker.register(str)
 @color_maker.register(tuple)
-def _color_maker_single(spec: Color, default: Color = "red") -> Callable[[str], Color]:
-    return lambda _: spec
+def _color_maker_string(spec: Color, default: Color = "red") -> ColorMaker:
+    return lambda _: pillow_color(spec)
 
 
 @color_maker.register(dict)
-def _color_maker_dict(
-    spec: Dict[str, Color], default: Color = "red"
-) -> Callable[[str], Color]:
-    def maker(label: str) -> Color:
-        return spec.get(label, default)
+def _color_maker_dict(spec: Dict[str, Color], default: Color = "red") -> ColorMaker:
+    colors: Dict[str, PillowColor] = {k: pillow_color(v)
+                                      for k, v in spec.items()}
+    pdefault: PillowColor = pillow_color(default)
+
+    def maker(label: str) -> PillowColor:
+        return colors.get(label, pdefault)
 
     return maker
 
 
 @color_maker.register(list)
-def _color_maker_list(
-    spec: List[Color], default: Color = "UNUSED"
-) -> Callable[[str], Color]:
+def _color_maker_list(spec: List[Color], default: Color = "UNUSED") -> ColorMaker:
     itor = itertools.cycle(spec)
-    colors: Dict[str, Color] = {}
+    colors: Dict[str, PillowColor] = {}
 
-    def maker(label: str) -> Color:
-        if label not in spec:
-            colors[label] = next(itor)
+    def maker(label: str) -> PillowColor:
+        if label not in colors:
+            colors[label] = pillow_color(next(itor))
         return colors[label]
 
     return maker
