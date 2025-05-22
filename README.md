@@ -114,11 +114,19 @@ import matplotlib
 pi.box(page, color=matplotlib.color_sequences["Dark2"])
 ```
 
+![Color Cycles](./docs/page2-color-cycles.png)
+
 Or just any list (it must be a `list`) of color specifications (which
 are either strings, 3-tuples of integers in the range `[0, 255]`, or
-3-tuples of floats in the range `[0.0, 1.0]`)
+3-tuples of floats in the range `[0.0, 1.0]`):
 
-![Annotations](./docs/page2-color-cycles.png)
+```
+pi.mark(page, color=["blue", "magenta", (0.0, 0.5, 0.32), (233, 222, 111)], labelfunc=repr)
+```
+
+![Cycle Harder](./docs/page298-color-cycles.png)
+
+(yes, that just cycles through the colors for each new object)
 
 ## Working in the PDF mine
 
