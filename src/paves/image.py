@@ -462,8 +462,7 @@ def _color_maker_string(spec: Color, default: Color = "red") -> ColorMaker:
 
 @color_maker.register(dict)
 def _color_maker_dict(spec: Dict[str, Color], default: Color = "red") -> ColorMaker:
-    colors: Dict[str, PillowColor] = {k: pillow_color(v)
-                                      for k, v in spec.items()}
+    colors: Dict[str, PillowColor] = {k: pillow_color(v) for k, v in spec.items()}
     pdefault: PillowColor = pillow_color(default)
 
     def maker(label: str) -> PillowColor:
