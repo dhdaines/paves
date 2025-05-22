@@ -4,6 +4,7 @@ models and/or visualisation.`
 """
 
 import functools
+import itertools
 import subprocess
 import tempfile
 from os import PathLike
@@ -15,6 +16,7 @@ from typing import (
     Iterable,
     Iterator,
     List,
+    Tuple,
     Union,
     cast,
 )
@@ -411,6 +413,77 @@ def _render(
     return show(page, dpi=dpi)
 
 
+Color = Union[str, Tuple[int, int, int], Tuple[float, float, float]]
+"""Type alias for things that can be used as colors."""
+Colors = Union[Color, List[Color], Dict[str, Color]]
+"""Type alias for colors or collections of colors."""
+PillowColor = Union[str, Tuple[int, int, int]]
+"""Type alias for things Pillow accepts as colors."""
+ColorMaker = Callable[[str], PillowColor]
+"""Function that makes a Pillow color for a string label."""
+DEFAULT_COLOR_CYCLE: Colors = [
+    "blue",
+    "orange",
+    "green",
+    "red",
+    "purple",
+    "brown",
+    "pink",
+    "gray",
+    "olive",
+    "cyan",
+]
+"""Default color cycle (same as matplotlib)"""
+
+
+def pillow_color(color: Color) -> PillowColor:
+    """Convert colors to a form acceptable to Pillow."""
+    if isinstance(color, str):
+        return color
+    r, g, b = color
+    # Would sure be nice if MyPy understood all()
+    if isinstance(r, int) and isinstance(g, int) and isinstance(b, int):
+        return (r, g, b)
+    r, g, b = (int(x * 255) for x in color)
+    return (r, g, b)
+
+
+@functools.singledispatch
+def color_maker(spec: Colors, default: Color = "red") -> ColorMaker:
+    """Create a function that makes colors."""
+    return lambda _: pillow_color(default)
+
+
+@color_maker.register(str)
+@color_maker.register(tuple)
+def _color_maker_string(spec: Color, default: Color = "red") -> ColorMaker:
+    return lambda _: pillow_color(spec)
+
+
+@color_maker.register(dict)
+def _color_maker_dict(spec: Dict[str, Color], default: Color = "red") -> ColorMaker:
+    colors: Dict[str, PillowColor] = {k: pillow_color(v) for k, v in spec.items()}
+    pdefault: PillowColor = pillow_color(default)
+
+    def maker(label: str) -> PillowColor:
+        return colors.get(label, pdefault)
+
+    return maker
+
+
+@color_maker.register(list)
+def _color_maker_list(spec: List[Color], default: Color = "UNUSED") -> ColorMaker:
+    itor = itertools.cycle(spec)
+    colors: Dict[str, PillowColor] = {}
+
+    def maker(label: str) -> PillowColor:
+        if label not in colors:
+            colors[label] = pillow_color(next(itor))
+        return colors[label]
+
+    return maker
+
+
 def box(
     objs: Union[
         Annotation,
@@ -420,9 +493,9 @@ def box(
         Iterable[Union[Annotation, ContentObject, Element, Rect]],
     ],
     *,
-    color: Union[str, Dict[str, str]] = "red",
+    color: Colors = DEFAULT_COLOR_CYCLE,
     label: bool = True,
-    label_color: str = "white",
+    label_color: Color = "white",
     label_size: float = 9,
     label_margin: float = 1,
     label_fill: bool = True,
@@ -437,6 +510,7 @@ def box(
     scale = dpi / 72
     font = ImageFont.load_default(label_size * scale)
     label_margin *= scale
+    make_color = color_maker(color)
     for obj in _make_boxes(objs):
         if image is None:
             image = _render(obj, page, dpi)
@@ -445,12 +519,10 @@ def box(
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(image)
-        obj_color = (
-            color if isinstance(color, str) else color.get(labelfunc(obj), "red")
-        )
+        text = labelfunc(obj)
+        obj_color = make_color(text)
         draw.rectangle((left, top, right, bottom), outline=obj_color)
         if label:
-            text = labelfunc(obj)
             tl, tt, tr, tb = font.getbbox(text)
             label_box = (
                 left,
@@ -482,10 +554,10 @@ def mark(
         Iterable[Union[Annotation, ContentObject, Element, Rect]],
     ],
     *,
-    color: Union[str, Dict[str, str]] = "red",
+    color: Colors = DEFAULT_COLOR_CYCLE,
     transparency: float = 0.75,
     label: bool = False,
-    label_color: str = "white",
+    label_color: Color = "white",
     label_size: float = 9,
     label_margin: float = 1,
     outline: bool = False,
@@ -503,6 +575,7 @@ def mark(
     font = ImageFont.load_default(label_size * scale)
     alpha = min(255, int(transparency * 255))
     label_margin *= scale
+    make_color = color_maker(color)
     for obj in _make_boxes(objs):
         if image is None:
             image = _render(obj, page, dpi)
@@ -515,9 +588,8 @@ def mark(
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(overlay)
-        obj_color = (
-            color if isinstance(color, str) else color.get(labelfunc(obj), "red")
-        )
+        text = labelfunc(obj)
+        obj_color = make_color(text)
         draw.rectangle((left, top, right, bottom), fill=obj_color)
         mask_draw = ImageDraw.ImageDraw(mask)
         mask_draw.rectangle((left, top, right, bottom), fill=alpha)
@@ -525,7 +597,6 @@ def mark(
             draw.rectangle((left, top, right, bottom), outline="black")
             mask_draw.rectangle((left, top, right, bottom), outline=0)
         if label:
-            text = labelfunc(obj)
             tl, tt, tr, tb = font.getbbox(text)
             label_box = (
                 left,

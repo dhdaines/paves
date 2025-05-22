@@ -103,8 +103,30 @@ pi.mark(page, outline=True, label=True,
 
 ![Annotations](./docs/page298-outlines.png)
 
-There are even more options!  For now you will need to look at the
-source code, documentation is Coming Soon.
+By default, PAVÉS will assign a new colour to each distinct label based
+on a colour cycle [borrowed from
+Matplotlib](https://matplotlib.org/stable/gallery/color/color_cycle_default.html)
+(no actual Matplotlib was harmed in the making of this library).  You
+can use Matplotlib's colour cycles if you like:
+
+```
+import matplotlib
+pi.box(page, color=matplotlib.color_sequences["Dark2"])
+```
+
+![Color Cycles](./docs/page2-color-cycles.png)
+
+Or just any list (it must be a `list`) of color specifications (which
+are either strings, 3-tuples of integers in the range `[0, 255]`, or
+3-tuples of floats in the range `[0.0, 1.0]`):
+
+```
+pi.mark(page, color=["blue", "magenta", (0.0, 0.5, 0.32), (233, 222, 111)], labelfunc=repr)
+```
+
+![Cycle Harder](./docs/page298-color-cycles.png)
+
+(yes, that just cycles through the colors for each new object)
 
 ## Working in the PDF mine
 
