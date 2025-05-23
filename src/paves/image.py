@@ -388,9 +388,9 @@ def _make_boxes(
         ContentObject,
         Element,
         Rect,
-        Iterable[Boxable],
+        Iterable[Union[Boxable, None]],
     ],
-) -> Iterable[Boxable]:
+) -> Iterable[Union[Boxable, None]]:
     """Put a box into a list of boxes if necessary."""
     # Is it a single Rect? (mypy is incapable of understanding the
     # runtime check here so we need the cast among other things)
@@ -492,7 +492,7 @@ def _color_maker_list(spec: List[Color], default: Color = "UNUSED") -> ColorMake
 def box(
     objs: Union[
         Boxable,
-        Iterable[Boxable],
+        Iterable[Union[Boxable, None]],
     ],
     *,
     color: Colors = DEFAULT_COLOR_CYCLE,
@@ -514,6 +514,8 @@ def box(
     label_margin *= scale
     make_color = color_maker(color)
     for obj in _make_boxes(objs):
+        if obj is None:
+            continue
         if image is None:
             image = _render(obj, page, dpi)
         try:
@@ -550,7 +552,7 @@ def box(
 def mark(
     objs: Union[
         Boxable,
-        Iterable[Boxable],
+        Iterable[Union[Boxable, None]],
     ],
     *,
     color: Colors = DEFAULT_COLOR_CYCLE,
@@ -576,6 +578,8 @@ def mark(
     label_margin *= scale
     make_color = color_maker(color)
     for obj in _make_boxes(objs):
+        if obj is None:
+            continue
         if image is None:
             image = _render(obj, page, dpi)
         if overlay is None:
