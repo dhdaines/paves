@@ -315,12 +315,16 @@ def show(page: Page, dpi: int = 72) -> Image.Image:
     return next(convert(page, dpi=dpi))
 
 
-LabelFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], Any]
-BoxFunc = Callable[[Union[Annotation, ContentObject, Element, Rect]], Rect]
+Boxable = Union[Annotation, ContentObject, Element, Rect]
+"""Object for which we can get a bounding box."""
+LabelFunc = Callable[[Boxable], Any]
+"""Function to get a label for a Boxable."""
+BoxFunc = Callable[[Boxable], Rect]
+"""Function to get a bounding box for a Boxable."""
 
 
 @functools.singledispatch
-def get_box(obj: Union[Annotation, ContentObject, Element, Rect]) -> Rect:
+def get_box(obj: Boxable) -> Rect:
     """Default function to get the bounding box for an object."""
     raise RuntimeError(f"Don't know how to get the box for {obj!r}")
 
@@ -345,7 +349,7 @@ def get_box_annotation(obj: Annotation) -> Rect:
 
 
 @functools.singledispatch
-def get_label(obj: Union[Annotation, ContentObject, Element, Rect]) -> str:
+def get_label(obj: Boxable) -> str:
     """Default function to get the label text for an object."""
     return str(obj)
 
@@ -384,9 +388,9 @@ def _make_boxes(
         ContentObject,
         Element,
         Rect,
-        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+        Iterable[Boxable],
     ],
-) -> Iterable[Union[Annotation, ContentObject, Element, Rect]]:
+) -> Iterable[Boxable]:
     """Put a box into a list of boxes if necessary."""
     # Is it a single Rect? (mypy is incapable of understanding the
     # runtime check here so we need the cast among other things)
@@ -401,7 +405,7 @@ def _make_boxes(
 
 
 def _render(
-    obj: Union[Annotation, ContentObject, Element, Rect],
+    obj: Boxable,
     page: Union[Page, None] = None,
     dpi: int = 72,
 ) -> Image.Image:
@@ -487,11 +491,8 @@ def _color_maker_list(spec: List[Color], default: Color = "UNUSED") -> ColorMake
 
 def box(
     objs: Union[
-        Annotation,
-        ContentObject,
-        Element,
-        Rect,
-        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+        Boxable,
+        Iterable[Boxable],
     ],
     *,
     color: Colors = DEFAULT_COLOR_CYCLE,
@@ -548,11 +549,8 @@ def box(
 
 def mark(
     objs: Union[
-        Annotation,
-        ContentObject,
-        Element,
-        Rect,
-        Iterable[Union[Annotation, ContentObject, Element, Rect]],
+        Boxable,
+        Iterable[Boxable],
     ],
     *,
     color: Colors = DEFAULT_COLOR_CYCLE,
