@@ -48,14 +48,20 @@ pi.show(page)
 
 Something quite interesting to do is, if your PDF contains a logical
 structure tree, to look at the bounding boxes of the contents of those
-structure elements (FIXME: This is not a very efficient way to do
-this, and it will be optimized in an upcoming PLAYA):
+structure elements for a given page:
 
 ```python
 pi.box(pdf.structure.find_all(lambda el: el.page is page))
 ```
 
 ![Structure Elements](./docs/page3-elements.png)
+
+You can also look at the marked content sections, which are the
+leaf-nodes of the structure tree:
+
+```python
+pi.box(page.structure)
+```
 
 Alternately, if you have annotations (such as links), you can look at
 those too:
