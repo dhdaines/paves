@@ -23,6 +23,7 @@ def subpaths(path: PathObject) -> Iterator[PathObject]:
         if seg.operator == "m" and segs:
             yield PathObject(
                 _pageref=path._pageref,
+                _parentkey=path._parentkey,
                 gstate=path.gstate,
                 ctm=path.ctm,
                 mcstack=path.mcstack,
@@ -36,6 +37,7 @@ def subpaths(path: PathObject) -> Iterator[PathObject]:
     if segs:
         yield PathObject(
             _pageref=path._pageref,
+            _parentkey=path._parentkey,
             gstate=path.gstate,
             ctm=path.ctm,
             mcstack=path.mcstack,

@@ -554,10 +554,11 @@ class LTChar(LTComponent, LTText):
             vx, vy = font.position(glyph.cid)
             textbox = (-vx, vy + vdisp, -vx + 1, vy)
         else:
-            textwidth = font.char_width(glyph.cid)
+            textwidth = font.hdisp(glyph.cid)
             self.adv = textwidth * fontsize * scaling
-            textbox = (0, font.get_descent(), textwidth, font.get_descent() + 1)
-        miner_box = transform_bbox(glyph.matrix, textbox)
+            descent = font.descent * font.matrix[3]
+            textbox = (0, descent, textwidth, descent + 1)
+        miner_box = transform_bbox(matrix, textbox)
         LTComponent.__init__(self, miner_box, glyph.mcstack)
         # FIXME: This is quite wrong for rotated glyphs, but so is pdfminer.six
         if font.vertical:
