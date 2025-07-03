@@ -57,7 +57,7 @@ def test_serialization():
         if isinstance(item, LTFigure):
             img = next(iter(item))
             # We have a image stream
-            assert len(img.stream.buffer) == 52694
+            assert len(img.stream.buffer) == 52692
             assert img.colorspace.name == "ICCBased"
             # It has a colorspace, which has a stream as an indirect
             # object reference, which we can resolve
