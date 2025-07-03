@@ -3,10 +3,12 @@ Various ways of converting PDFs to images for feeding them to
 models and/or visualisation.`
 """
 
+import contextlib
 import functools
 import itertools
 import subprocess
 import tempfile
+from io import BytesIO
 from os import PathLike
 from pathlib import Path
 from typing import (
@@ -189,42 +191,49 @@ def _get_pdfium_pages(
     doc.close()
 
 
-@_get_pdfium_pages.register(Document)
-def _get_pdfium_pages_doc(pdf: Document) -> Iterator["pypdfium2.PdfPage"]:
+@contextlib.contextmanager
+def _get_pdfium_doc(pdf: Document) -> Iterator["pypdfium2.PdfDocument"]:
     import pypdfium2
 
-    doc = pypdfium2.PdfDocument(pdf._fp)
-    for page in doc:
-        yield page
-        page.close()
-    doc.close()
+    if pdf._fp is None:
+        # Yes, you can actually wrap a BytesIO around an mmap!
+        with BytesIO(pdf.buffer) as fp:
+            doc = pypdfium2.PdfDocument(fp)
+            yield doc
+            doc.close()
+    else:
+        doc = pypdfium2.PdfDocument(pdf._fp)
+        yield doc
+        doc.close()
+
+
+@_get_pdfium_pages.register(Document)
+def _get_pdfium_pages_doc(pdf: Document) -> Iterator["pypdfium2.PdfPage"]:
+    with _get_pdfium_doc(pdf) as doc:
+        for page in doc:
+            yield page
+            page.close()
 
 
 @_get_pdfium_pages.register(Page)
 def _get_pdfium_pages_page(page: Page) -> Iterator["pypdfium2.PdfPage"]:
-    import pypdfium2
-
     pdf = page.doc
     assert pdf is not None
-    doc = pypdfium2.PdfDocument(pdf._fp)
-    pdfium_page = doc[page.page_idx]
-    yield pdfium_page
-    pdfium_page.close()
-    doc.close()
+    with _get_pdfium_doc(pdf) as doc:
+        pdfium_page = doc[page.page_idx]
+        yield pdfium_page
+        pdfium_page.close()
 
 
 @_get_pdfium_pages.register(PageList)
 def _get_pdfium_pages_pagelist(pages: PageList) -> Iterator["pypdfium2.PdfPage"]:
-    import pypdfium2
-
     pdf = pages.doc
     assert pdf is not None
-    doc = pypdfium2.PdfDocument(pdf._fp)
-    for page in pages:
-        pdfium_page = doc[page.page_idx]
-        yield pdfium_page
-        pdfium_page.close()
-    doc.close()
+    with _get_pdfium_doc(pdf) as doc:
+        for page in pages:
+            pdfium_page = doc[page.page_idx]
+            yield pdfium_page
+            pdfium_page.close()
 
 
 def pdfium(
