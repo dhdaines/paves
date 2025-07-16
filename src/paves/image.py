@@ -19,6 +19,7 @@ from typing import (
     Iterable,
     Iterator,
     List,
+    Protocol,
     Tuple,
     Union,
     cast,
@@ -324,7 +325,15 @@ def show(page: Page, dpi: int = 72) -> Image.Image:
     return next(convert(page, dpi=dpi))
 
 
-Boxable = Union[Annotation, ContentObject, Element, Rect]
+class HasBbox(Protocol):
+    bbox: Rect
+
+
+class HasPage(Protocol):
+    page: Page
+
+
+Boxable = Union[Annotation, ContentObject, Element, HasBbox, Rect]
 """Object for which we can get a bounding box."""
 LabelFunc = Callable[[Boxable], Any]
 """Function to get a label for a Boxable."""
@@ -333,8 +342,10 @@ BoxFunc = Callable[[Boxable], Rect]
 
 
 @functools.singledispatch
-def get_box(obj: Boxable) -> Rect:
+def get_box(obj) -> Rect:
     """Default function to get the bounding box for an object."""
+    if hasattr(obj, "bbox"):
+        return obj.bbox
     raise RuntimeError(f"Don't know how to get the box for {obj!r}")
 
 
@@ -397,6 +408,7 @@ def _make_boxes(
         ContentObject,
         Element,
         Rect,
+        HasBbox,
         Iterable[Union[Boxable, None]],
     ],
 ) -> Iterable[Union[Boxable, None]]:
@@ -410,6 +422,9 @@ def _make_boxes(
         return list(obj)
     if isinstance(obj, (Annotation, ContentObject, Element)):
         return [obj]
+    if hasattr(obj, "bbox"):
+        # Ugh, we have to cast
+        return [cast(HasBbox, obj)]
     return obj
 
 
@@ -419,9 +434,9 @@ def _render(
     dpi: int = 72,
 ) -> Image.Image:
     if page is None:
-        if isinstance(obj, tuple):
+        if not hasattr(obj, "page"):
             raise ValueError("Must explicitly specify page or image to show rectangles")
-        page = obj.page
+        page = cast(HasPage, obj).page
     if page is None:
         raise ValueError("No page found in object: %r" % (obj,))
     return show(page, dpi=dpi)
