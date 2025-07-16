@@ -1,4 +1,5 @@
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -54,6 +55,32 @@ def test_box():
         img = pi.box(page, color=["green", "orange", "purple"])
         assert img
         img = pi.box(page, dpi=100, color={"text": "red", "image": "green"})
+        assert img
+
+        @dataclass
+        class PagyThing:
+            bbox: playa.Rect
+            page: playa.Page
+
+        img = pi.box(PagyThing(bbox=(1, 2, 3, 4), page=page))
+        assert img
+        img = pi.box([(1, 2, 3, 4), (4, 5, 6, 7)], image=pi.show(page))
+        assert img
+        img = pi.box(iter([(1, 2, 3, 4), (4, 5, 6, 7)]), image=pi.show(page))
+        assert img
+        img = pi.box(((1, 2, 3, 4), (4, 5, 6, 7)), image=pi.show(page))
+        assert img
+
+        @dataclass
+        class BoxyThing:
+            bbox: playa.Rect
+
+        img = pi.box(BoxyThing(bbox=(1, 2, 3, 4)), image=pi.show(page))
+        assert img
+        img = pi.box(
+            [BoxyThing(bbox=(1, 2, 3, 4)), BoxyThing(bbox=(4, 5, 6, 7))],
+            image=pi.show(page),
+        )
         assert img
 
 
