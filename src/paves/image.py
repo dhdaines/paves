@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
 from playa.structure import Element
-from playa.utils import Rect, get_transformed_bound
+from playa.utils import Rect, transform_bbox
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore
@@ -365,7 +365,7 @@ def get_box_content(obj: Union[ContentObject, Element]) -> Rect:
 @get_box.register(Annotation)
 def get_box_annotation(obj: Annotation) -> Rect:
     """Get the bounding box of an Annotation"""
-    return get_transformed_bound(obj.page.ctm, obj.rect)
+    return transform_bbox(obj.page.ctm, obj.rect)
 
 
 @functools.singledispatch
