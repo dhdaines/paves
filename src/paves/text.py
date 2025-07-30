@@ -15,6 +15,7 @@ from typing import (
 import playa
 from playa.content import ContentObject, GlyphObject, TextObject
 from playa.document import Document, PageList
+from playa.font import Font
 from playa.page import Page
 from playa.pdftypes import Point
 
@@ -30,7 +31,7 @@ class WordObject(ContentObject):
 
     @property
     def origin(self) -> Point:
-        return self.glyphs[0].origin
+        return self._glyphs[0].origin
 
     @property
     def displacement(self) -> Point:
@@ -38,11 +39,72 @@ class WordObject(ContentObject):
         bx, by = self._next_origin
         return bx - ax, by - ay
 
+    @property
+    def font(self) -> Font:
+        """Initial font for this word.
+
+        If there are multiple fonts in the word (it could happen) then
+        you don't get them, so if you care about that, use:
+
+            fonts = [glyph.font for glyph in word]
+        """
+        return self._glyphs[0].font
+
+    @property
+    def fontbase(self) -> str:
+        """Original font name for this word.
+
+        Fonts in PDF files are usually "subsetted", meaning only the
+        glyphs actually used in the document are included.  In this
+        case the font's `fontname` property usually consists of an
+        arbitrary "tag", plus (literally, a `+`) and the original
+        name.  This is a convenience property to get that original
+        name.
+
+        This is not the same as `WordObject.font.basefont` which
+        usually also includes the subset tag.
+
+        """
+        fontname = self._glyphs[0].font.fontname
+        subset, _, base = fontname.partition("+")
+        if base:
+            return base
+        return fontname
+
+    @property
+    def size(self) -> float:
+        """Initial font size for this word.
+
+        This is the actual font size in device space, which is **not**
+        the same as `WordObject.gstate.fontsize`.  That's the font
+        size in text space which is not a very useful number (it's
+        usually 1).
+
+        If there are multiple fonts in the word (it could happen) then
+        you don't get them, so if you care about that, use:
+
+            sizes = [glyph.size for glyph in word]
+
+        """
+        return self._glyphs[0].size
+
+    @property
+    def textfont(self) -> str:
+        """Convenient short form of the font name and size.
+
+        To make labeling simple when using `paves.image`, here's a
+        convenience property for you combining `fontbase` and `size`,
+        for example, "Helvetica 12".
+        """
+        return f"{self.fontbase} {round(self.size)}"
+
     def __iter__(self) -> Iterator["ContentObject"]:
         return iter(self._glyphs)
 
 
 def word_break(glyph: GlyphObject, origin: Point) -> bool:
+    """Heuristically predict a word break based on the predicted origin
+    from the previous glyph."""
     if glyph.text == " ":
         return True
     x, y = glyph.origin
@@ -57,6 +119,8 @@ def word_break(glyph: GlyphObject, origin: Point) -> bool:
 
 
 def line_break(glyph: GlyphObject, origin: Point) -> bool:
+    """Heuristically predict a line break based on the predicted origin
+    from the previous glyph."""
     x, y = glyph.origin
     px, py = origin
     if glyph.font.vertical:
