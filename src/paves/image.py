@@ -173,6 +173,7 @@ def popple(
     args = make_poppler_args(dpi, width, height)
     with tempfile.TemporaryDirectory() as tempdir:
         temppath = Path(tempdir)
+        # FIXME: Possible to Popple in a Parallel Pipeline
         _popple(pdf, temppath, args)
         for ppm in sorted(temppath.iterdir()):
             if ppm.suffix == ".ppm":

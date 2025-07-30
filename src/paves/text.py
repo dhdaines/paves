@@ -5,12 +5,9 @@ processing text in PDFs.
 
 from dataclasses import dataclass
 from functools import singledispatch
+from itertools import chain
 from os import PathLike
-from typing import (
-    Iterator,
-    List,
-    Union,
-)
+from typing import Iterator, List, Union, cast
 
 import playa
 from playa.content import ContentObject, GlyphObject, TextObject
@@ -22,6 +19,19 @@ from playa.pdftypes import Point
 
 @dataclass
 class WordObject(ContentObject):
+    """
+    "Word" in a PDF.
+
+    This is heuristically determined, either by explicit whitespace
+    (if you're lucky enough to have a Tagged PDF) or by a sufficient
+    gap between adjacent glyphs (otherwise).
+
+    It otherwise behaves just like a `TextObject`.  You can iterate
+    over its glyphs, etc.  But, as a treat, these glyphs are
+    "finalized" so you don't have to worry about inconsistent graphics
+    states and so forth, and you also get some convenience properties.
+    """
+
     _glyphs: List[GlyphObject]
     _next_origin: Point
 
@@ -158,8 +168,7 @@ def text_objects_doc(pdf: Document) -> Iterator[TextObject]:
 
 @text_objects.register
 def text_objects_pagelist(pdf: PageList) -> Iterator[TextObject]:
-    for page in pdf:
-        yield from text_objects_page(page)
+    return chain.from_iterable(pdf)
 
 
 @text_objects.register
@@ -195,11 +204,12 @@ def words(
                     gstate=glyphs[0].gstate,  # Not necessarily correct!
                     ctm=glyphs[0].ctm,  # Not necessarily correct!
                     mcstack=glyphs[0].mcstack,  # Not necessarily correct!
-                    _glyphs=glyphs, _next_origin=next_origin
+                    _glyphs=glyphs,
+                    _next_origin=next_origin,
                 )
                 glyphs = []
             if glyph.text is not None and glyph.text != " ":
-                glyphs.append(glyph.finalize())
+                glyphs.append(cast(GlyphObject, glyph.finalize()))
             x, y = glyph.origin
             dx, dy = glyph.displacement
             next_origin = (x + dx, y + dy)
@@ -210,5 +220,6 @@ def words(
             gstate=glyphs[0].gstate,  # Not necessarily correct!
             ctm=glyphs[0].ctm,  # Not necessarily correct!
             mcstack=glyphs[0].mcstack,  # Not necessarily correct!
-            _glyphs=glyphs, _next_origin=next_origin
+            _glyphs=glyphs,
+            _next_origin=next_origin,
         )
