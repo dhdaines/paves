@@ -27,7 +27,7 @@ class WordObject(ContentObject):
 
     @property
     def text(self) -> str:
-        return "".join(g.text for g in self)
+        return "".join(g.text for g in self._glyphs if g.text is not None)
 
     @property
     def origin(self) -> Point:
@@ -146,7 +146,9 @@ def text_objects(
 @text_objects.register(PathLike)
 def text_objects_path(pdf: Union[str, PathLike]) -> Iterator[TextObject]:
     with playa.open(pdf) as doc:
-        return text_objects_doc(doc)
+        # NOTE: This *must* be `yield from` or else we will return a
+        # useless iterator (as the document will go out of scope)
+        yield from text_objects_doc(doc)
 
 
 @text_objects.register
