@@ -183,12 +183,12 @@ def popple(
 @functools.singledispatch
 def _get_pdfium_pages(
     pdf: Union[str, PathLike, Document, Page, PageList],
-) -> Iterator["pypdfium2.PdfPage"]:
+) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     import pypdfium2
 
     doc = pypdfium2.PdfDocument(pdf)
-    for page in doc:
-        yield page
+    for idx, page in enumerate(doc):
+        yield idx, page
         page.close()
     doc.close()
 
@@ -210,31 +210,33 @@ def _get_pdfium_doc(pdf: Document) -> Iterator["pypdfium2.PdfDocument"]:
 
 
 @_get_pdfium_pages.register(Document)
-def _get_pdfium_pages_doc(pdf: Document) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_doc(pdf: Document) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     with _get_pdfium_doc(pdf) as doc:
-        for page in doc:
-            yield page
+        for idx, page in enumerate(doc):
+            yield idx, page
             page.close()
 
 
 @_get_pdfium_pages.register(Page)
-def _get_pdfium_pages_page(page: Page) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_page(page: Page) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     pdf = page.doc
     assert pdf is not None
     with _get_pdfium_doc(pdf) as doc:
         pdfium_page = doc[page.page_idx]
-        yield pdfium_page
+        yield page.page_idx, pdfium_page
         pdfium_page.close()
 
 
 @_get_pdfium_pages.register(PageList)
-def _get_pdfium_pages_pagelist(pages: PageList) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_pagelist(
+    pages: PageList,
+) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     pdf = pages.doc
     assert pdf is not None
     with _get_pdfium_doc(pdf) as doc:
         for page in pages:
             pdfium_page = doc[page.page_idx]
-            yield pdfium_page
+            yield page.page_idx, pdfium_page
             pdfium_page.close()
 
 
@@ -264,7 +266,7 @@ def pdfium(
         import pypdfium2  # noqa: F401
     except ImportError as e:
         raise NotInstalledError("PyPDFium2 does not seem to be installed") from e
-    for page in _get_pdfium_pages(pdf):
+    for _, page in _get_pdfium_pages(pdf):
         if width == 0 and height == 0:
             scale = (dpi or 72) / 72
             yield page.render(scale=scale).to_pil()
