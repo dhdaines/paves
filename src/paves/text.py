@@ -5,7 +5,6 @@ processing text in PDFs.
 
 from dataclasses import dataclass
 from functools import singledispatch
-from itertools import chain
 from os import PathLike
 from typing import Iterator, List, Union, cast
 
@@ -167,13 +166,14 @@ def text_objects_doc(pdf: Document) -> Iterator[TextObject]:
 
 
 @text_objects.register
-def text_objects_pagelist(pdf: PageList) -> Iterator[TextObject]:
-    return chain.from_iterable(pdf)
+def text_objects_pagelist(pagelist: PageList) -> Iterator[TextObject]:
+    for page in pagelist:
+        yield from text_objects_page(page)
 
 
 @text_objects.register
-def text_objects_page(pdf: Page) -> Iterator[TextObject]:
-    return pdf.texts
+def text_objects_page(page: Page) -> Iterator[TextObject]:
+    return page.texts
 
 
 def words(
