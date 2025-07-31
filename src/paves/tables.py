@@ -7,22 +7,18 @@ from copy import copy
 from dataclasses import dataclass
 from functools import singledispatch
 from itertools import groupby
-from typing import Iterable, Iterator, Tuple, Union, TYPE_CHECKING
+from typing import Iterable, Iterator, Tuple, Union
 from operator import attrgetter
 from os import PathLike
 
 import playa
 from playa import Document, Page, PageList
-from playa.content import ContentObject
+from playa.content import ContentObject, GraphicState, MarkedContent
 from playa.page import Annotation
-from playa.pdftypes import Rect, BBOX_NONE
+from playa.pdftypes import Matrix, Rect, BBOX_NONE
 from playa.structure import Element, ContentItem, ContentObject as StructContentObject
 from playa.utils import get_bound_rects
 from playa.worker import _ref_page
-
-if TYPE_CHECKING:
-    from playa.content import GraphicState, MarkedContent
-    from playa.pdftypes import Matrix
 
 
 @dataclass
@@ -75,9 +71,9 @@ class TableObject(ContentObject):
             contents = el.contents
         # Find a ContentObject so we can get a bbox, mcstack, ctm
         # (they might not be *correct* of course, but oh well)
-        gstate: Union["GraphicState", None] = None
-        ctm: Union["Matrix", None] = None
-        mcstack: Union[Tuple["MarkedContent", ...], None] = None
+        gstate: Union[GraphicState, None] = None
+        ctm: Union[Matrix, None] = None
+        mcstack: Union[Tuple[MarkedContent, ...], None] = None
         bbox: Union[Rect, None] = None
         for kid in contents:
             if kid.page != page:
@@ -195,7 +191,8 @@ def tables(
         prediction on these, too, but that's a different function.
 
     """
-    for el in table_elements(pdf):
+    itor = table_elements(pdf)
+    for el in itor:
         # It might have a page
         if el.page is not None:
             table = TableObject.from_element(el, el.page)
