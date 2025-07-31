@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "playa-pdf>=0.7",
+    "playa-pdf @ git+https://github.com/dhdaines/playa.git",
     "pillow",
 ]
 
