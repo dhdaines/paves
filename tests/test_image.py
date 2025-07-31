@@ -16,17 +16,22 @@ THISDIR = Path(__file__).parent
 )
 def test_popple():
     path = THISDIR / "contrib" / "PSC_Station.pdf"
+    images = list(pi.popple(path))
+    assert len(images) == 15
+    assert all("page_width" in image.info for image in images)
     with playa.open(path) as pdf:
-        images = list(pi.popple(path))
-        assert len(images) == len(pdf.pages)
         images = list(pi.popple(pdf))
         assert len(images) == len(pdf.pages)
+        assert all("page_height" in image.info for image in images)
         images = list(pi.popple(pdf.pages[1:6]))
         assert len(images) == 5
+        assert all("page_width" in image.info for image in images)
         images = list(pi.popple(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
+        assert all("page_height" in image.info for image in images)
         images = list(pi.popple(pdf.pages[1]))
         assert len(images) == 1
+        assert all("page_width" in image.info for image in images)
 
 
 def test_pdfium():
@@ -34,14 +39,19 @@ def test_pdfium():
     with playa.open(path) as pdf:
         images = list(pi.pdfium(path))
         assert len(images) == len(pdf.pages)
+        assert all("page_width" in image.info for image in images)
         images = list(pi.pdfium(pdf))
         assert len(images) == len(pdf.pages)
+        assert all("page_height" in image.info for image in images)
         images = list(pi.pdfium(pdf.pages[1:6]))
         assert len(images) == 5
+        assert all("page_width" in image.info for image in images)
         images = list(pi.pdfium(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
+        assert all("page_height" in image.info for image in images)
         images = list(pi.pdfium(pdf.pages[1]))
         assert len(images) == 1
+        assert all("page_width" in image.info for image in images)
 
 
 def test_box():

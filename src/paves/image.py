@@ -25,6 +25,7 @@ from typing import (
     cast,
 )
 
+import playa
 from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
@@ -57,7 +58,15 @@ def make_poppler_args(dpi: int, width: int, height: int) -> List[str]:
 
 
 @functools.singledispatch
-def _popple(pdf, tempdir: Path, args: List[str]) -> None:
+def _popple(pdf, tempdir: Path, args: List[str]) -> List[Tuple[float, float]]:
+    raise NotImplementedError
+
+
+@_popple.register(str)
+@_popple.register(PathLike)
+def _popple_path(
+    pdf: Union[str, PathLike], tempdir: Path, args: List[str]
+) -> List[Tuple[float, float]]:
     subprocess.run(
         [
             "pdftoppm",
@@ -67,11 +76,16 @@ def _popple(pdf, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    with playa.open(pdf) as doc:
+        return [(page.width, page.height) for page in doc.pages]
 
 
 @_popple.register(Document)
-def _popple_doc(pdf: Document, tempdir: Path, args: List[str]) -> None:
+def _popple_doc(
+    pdf: Document, tempdir: Path, args: List[str]
+) -> List[Tuple[float, float]]:
     pdfpdf = tempdir / "pdf.pdf"
+    # FIXME: This is... not great (can we popple in a pipeline please?)
     with open(pdfpdf, "wb") as outfh:
         outfh.write(pdf.buffer)
     subprocess.run(
@@ -83,10 +97,14 @@ def _popple_doc(pdf: Document, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    pdfpdf.unlink()
+    return [(page.width, page.height) for page in pdf.pages]
 
 
 @_popple.register(Page)
-def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
+def _popple_page(
+    pdf: Page, tempdir: Path, args: List[str]
+) -> List[Tuple[float, float]]:
     assert pdf.doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     pdfpdf = tempdir / "pdf.pdf"
     with open(pdfpdf, "wb") as outfh:
@@ -105,10 +123,14 @@ def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    pdfpdf.unlink()
+    return [(pdf.width, pdf.height)]
 
 
 @_popple.register(PageList)
-def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
+def _popple_pages(
+    pdf: PageList, tempdir: Path, args: List[str]
+) -> List[Tuple[float, float]]:
     pdfpdf = tempdir / "pdf.pdf"
     assert pdf[0].doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     with open(pdfpdf, "wb") as outfh:
@@ -142,6 +164,8 @@ def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
             ],
             check=True,
         )
+    pdfpdf.unlink()
+    return [(page.width, page.height) for page in pdf]
 
 
 def popple(
@@ -174,10 +198,13 @@ def popple(
     with tempfile.TemporaryDirectory() as tempdir:
         temppath = Path(tempdir)
         # FIXME: Possible to Popple in a Parallel Pipeline
-        _popple(pdf, temppath, args)
-        for ppm in sorted(temppath.iterdir()):
+        page_sizes = _popple(pdf, temppath, args)
+        for (width, height), ppm in zip(page_sizes, sorted(temppath.iterdir())):
             if ppm.suffix == ".ppm":
-                yield Image.open(ppm)
+                img = Image.open(ppm)
+                img.info["page_width"] = width
+                img.info["page_height"] = height
+                yield img
 
 
 @functools.singledispatch
@@ -255,7 +282,8 @@ def pdfium(
         width: Render to this width in pixels.
         height: Render to this height in pixels.
     Yields:
-        Pillow `Image.Image` objects, one per page.
+        Pillow `Image.Image` objects, one per page.  Page width and height are
+        available in the `info` property of the images.
     Raises:
         ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)
         NotInstalledError: If PyPDFium2 is not installed.
@@ -267,23 +295,28 @@ def pdfium(
     except ImportError as e:
         raise NotInstalledError("PyPDFium2 does not seem to be installed") from e
     for _, page in _get_pdfium_pages(pdf):
+        page_width = page.get_width()
+        page_height = page.get_height()
         if width == 0 and height == 0:
             scale = (dpi or 72) / 72
-            yield page.render(scale=scale).to_pil()
+            img = page.render(scale=scale).to_pil()
         else:
             if width and height:
                 # Scale to longest side (since pypdfium2 doesn't
                 # appear to allow non-1:1 aspect ratio)
-                scale = max(width / page.get_width(), height / page.get_height())
+                scale = max(width / page_width, height / page_height)
                 img = page.render(scale=scale).to_pil()
                 # Resize down to desired size
-                yield img.resize(size=(width, height))
+                img = img.resize(size=(width, height))
             elif width:
                 scale = width / page.get_width()
-                yield page.render(scale=scale).to_pil()
+                img = page.render(scale=scale).to_pil()
             elif height:
                 scale = height / page.get_height()
-                yield page.render(scale=scale).to_pil()
+                img = page.render(scale=scale).to_pil()
+        img.info["page_width"] = page_width
+        img.info["page_height"] = page_height
+        yield img
 
 
 METHODS = [popple, pdfium]
@@ -304,10 +337,14 @@ def convert(
         width: Render to this width in pixels (0 to keep aspect ratio).
         height: Render to this height in pixels (0 to keep aspect ratio).
     Yields:
-        Pillow `Image.Image` objects, one per page.
+        Pillow `Image.Image` objects, one per page.  The original page
+        width and height in default user space units are available in
+        the `info` property of these images as `page_width` and
+        `page_height`
     Raises:
         ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)
         NotInstalledError: If no renderer is available
+
     """
     for method in METHODS:
         try:
