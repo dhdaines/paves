@@ -46,8 +46,8 @@ class TableObject(ContentObject):
         if self._bbox is not None:
             return self._bbox
         elif self._el is not None:
-            bbox = self._el.bbox
             # Try to get it from the element first
+            bbox = self._el.bbox
             if bbox is not BBOX_NONE:
                 return bbox
             # We always have a page even if self._el doesn't
@@ -59,6 +59,20 @@ class TableObject(ContentObject):
         else:
             # This however should never happen
             return BBOX_NONE
+
+    @classmethod
+    def from_bbox(cls, page: Page, bbox: Rect) -> "TableObject":
+        # Use default values
+        return cls(
+            _pageref=_ref_page(page),
+            _parentkey=None,
+            gstate=GraphicState(),
+            ctm=page.ctm,
+            mcstack=(),
+            _el=None,
+            _bbox=bbox,
+            _parent=None,
+        )
 
     @classmethod
     def from_element(
@@ -157,20 +171,131 @@ def table_elements_page(page: Page) -> Iterator[Element]:
     return table_elements_pagelist(pagelist)
 
 
-def tables(
-    pdf: Union[str, PathLike, Document, Page, PageList],
+def table_elements_to_objects(
+    elements: Iterable[Element], page: Union[Page, None] = None
 ) -> Iterator[TableObject]:
+    """Make TableObjects from Elements."""
+    for el in elements:
+        # It might have a page
+        if el.page is not None:
+            table = TableObject.from_element(el, el.page)
+            if table is not None:
+                yield table
+        elif page is not None:
+            table = TableObject.from_element(el, page)
+            if table is not None:
+                yield table
+        else:
+            # Alert! We have a multi-page table! So we have to go
+            # through all of the marked content items for this element
+            # and group them by pages, then yield separate
+            # TableObjects for each of them.  This may be hard to test.
+            for page, kids in groupby(el.contents, attrgetter("page")):
+                if page is None:
+                    continue
+                table = TableObject.from_element(el, page, kids)
+                if table is not None:
+                    yield table
+
+
+def tables_structure(
+    pdf: Union[str, PathLike, Document, Page, PageList],
+) -> Union[Iterator[TableObject], None]:
+    """Identify tables in a PDF or one of its pages using logical structure.
+
+    Args:
+        pdf: PLAYA-PDF document, page, pages, or path to a PDF.
+
+    Returns:
+      An iterator over `TableObject`, or `None`, if there is no
+      logical structure (this will cause a TypeError, if you don't
+      check for it).
+    """
+    if pdf.structure is None:
+        return None
+    page = pdf if isinstance(pdf, Page) else None
+    return table_elements_to_objects(table_elements(pdf), page)
+
+
+@singledispatch
+def _get_pages(pdf: Union[str, PathLike, Document, Page, PageList]) -> Iterator[Page]:
+    raise NotImplementedError
+
+
+@_get_pages.register(str)
+@_get_pages.register(PathLike)
+def _get_pages_path(pdf: Union[str, PathLike]) -> Iterator[Page]:
+    with playa.open(pdf) as doc:
+        yield from doc.pages
+
+
+@_get_pages.register
+def _get_pages_pagelist(pagelist: PageList) -> Iterator[Page]:
+    yield from pagelist
+
+
+@_get_pages.register
+def _get_pages_doc(doc: Document) -> Iterator[Page]:
+    yield from doc.pages
+
+
+@_get_pages.register
+def _get_pages_page(page: Page) -> Iterator[Page]:
+    yield page
+
+
+def table_bounds_to_objects(
+    pdf: Union[str, PathLike, Document, Page, PageList],
+    bounds: Iterable[Tuple[int, Iterable[Rect]]],
+) -> Iterator[TableObject]:
+    """Create TableObjects from detected bounding boxes."""
+    for page, (page_idx, tables) in zip(_get_pages(pdf), bounds):
+        assert page.page_idx == page_idx
+        for bbox in tables:
+            yield TableObject.from_bbox(page, bbox)
+
+
+def tables_detr(
+    pdf: Union[str, PathLike, Document, Page, PageList],
+    device: str = "cpu",
+) -> Union[Iterator[TableObject], None]:
+    """Identify tables in a PDF or one of its pages using IBM's
+    RT-DETR layout detection model
+
+    Args:
+        pdf: PLAYA-PDF document, page, pages, or path to a PDF.
+        device: Torch device for running the model.
+
+    Returns:
+      An iterator over `TableObject`, or `None`, if the model can't be used
+    """
+    try:
+        from paves.tables_detr import table_bounds
+    except ImportError:
+        return None
+    return table_bounds_to_objects(pdf, table_bounds(pdf, device=device))
+
+
+METHODS = [tables_structure, tables_detr]
+
+
+def tables(
+    pdf: Union[str, PathLike, Document, Page, PageList], **kwargs: Any
+) -> Union[Iterator[TableObject], None]:
     """Identify tables in a PDF or one of its pages.
 
-    This will always try to use logical structure (via PLAYA-PDF) to
-    identify tables.
+    This will always try to use logical structure (via PLAYA-PDF)
+    first to identify tables.
 
     For the moment, this only works on tagged and accessible PDFs.
-    Like `paves.image`, it will eventually be able to use a variety of
-    other methods to do so, most of which involve nasty horrible
-    dependencyses (we hates them, they stole the precious) like
-    `cudnn-10-gigabytes-of-c++`.  But it will never require you to
-    install these so in the worst case... you won't get any tables.
+    So, like `paves.image`, it can also use Machine Learning Models™
+    to do so, which involves nasty horrible dependencyses (we hates
+    them, they stole the precious) like `cudnn-10-gigabytes-of-c++`.
+
+    If you'd like to try that, then you can do so by installing the
+    `transformers` package (if you don't have a GPU, try adding
+    `--extra-index-url https://download.pytorch.org/whl/cpu` to pip's
+    command line).
 
     Note: These tables cannot span multiple pages.
         Often, a table will span multiple pages.  With PDF logical
@@ -185,31 +310,14 @@ def tables(
     Args:
         pdf: PLAYA-PDF document, page, pages, or path to a PDF.
 
-    Yields:
-        `TableObject` objects, which can be visualized with
-        `paves.image` functions.  Yes, we can do table structure
-        prediction on these, too, but that's a different function.
-
+    Returns:
+        An iterator over `TableObject`, or `None`, if there is no
+        method available to detect tables.  This will cause a
+        `TypeError` if you try to iterate over it anyway.
     """
-    itor = table_elements(pdf)
-    for el in itor:
-        # It might have a page
-        if el.page is not None:
-            table = TableObject.from_element(el, el.page)
-            if table is not None:
-                yield table
-        elif isinstance(pdf, Page):
-            table = TableObject.from_element(el, pdf)
-            if table is not None:
-                yield table
-        else:
-            # Alert! We have a multi-page table! So we have to go
-            # through all of the marked content items for this element
-            # and group them by pages, then yield separate
-            # TableObjects for each of them.  This may be hard to test.
-            for page, kids in groupby(el.contents, attrgetter("page")):
-                if page is None:
-                    continue
-                table = TableObject.from_element(el, page, kids)
-                if table is not None:
-                    yield table
+    for method in METHODS:
+        itor = method(pdf, **kwargs)
+        if itor is not None:
+            return itor
+    else:
+        return None

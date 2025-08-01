@@ -29,8 +29,8 @@ def scale_to_model(page: PdfPage, modeldim: Union[float, dict]):
     if isinstance(modeldim, dict):
         width = modeldim.get("width", 640)
         height = modeldim.get("height", 640)
-        return min(page.get_width() / width,
-                   page.get_height() / height)
+        return min(width / page.get_width(),
+                   height / page.get_height())
     mindim = min(page.get_width(), page.get_height())
     return modeldim / mindim
 
