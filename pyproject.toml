@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "playa-pdf>=0.6.1",
+    "playa-pdf @ git+https://github.com/dhdaines/playa.git",
     "pillow",
 ]
 
@@ -66,9 +66,14 @@ config-path = "none"  # Disable hatch's unreasonable ruff defaults
 [tool.hatch.envs.types]
 extra-dependencies = [
    "mypy>=1.0.0",
+   "transformers[torch]",
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/paves tests}"
+[tool.hatch.envs.types.env-vars]
+# Avoid downloading gigabytes of CUDA junk
+PIP_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
+UV_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
 
 [tool.coverage.run]
 source_pkgs = ["paves", "tests"]

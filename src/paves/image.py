@@ -25,11 +25,12 @@ from typing import (
     cast,
 )
 
+import playa
 from PIL import Image, ImageDraw, ImageFont
 from playa.document import Document, PageList
 from playa.page import ContentObject, Page, Annotation
 from playa.structure import Element
-from playa.utils import Rect, get_transformed_bound
+from playa.utils import Rect, transform_bbox
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore
@@ -57,7 +58,15 @@ def make_poppler_args(dpi: int, width: int, height: int) -> List[str]:
 
 
 @functools.singledispatch
-def _popple(pdf, tempdir: Path, args: List[str]) -> None:
+def _popple(pdf, tempdir: Path, args: List[str]) -> List[Tuple[int, float, float]]:
+    raise NotImplementedError
+
+
+@_popple.register(str)
+@_popple.register(PathLike)
+def _popple_path(
+    pdf: Union[str, PathLike], tempdir: Path, args: List[str]
+) -> List[Tuple[int, float, float]]:
     subprocess.run(
         [
             "pdftoppm",
@@ -67,11 +76,16 @@ def _popple(pdf, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    with playa.open(pdf) as doc:
+        return [(page.page_idx, page.width, page.height) for page in doc.pages]
 
 
 @_popple.register(Document)
-def _popple_doc(pdf: Document, tempdir: Path, args: List[str]) -> None:
+def _popple_doc(
+    pdf: Document, tempdir: Path, args: List[str]
+) -> List[Tuple[int, float, float]]:
     pdfpdf = tempdir / "pdf.pdf"
+    # FIXME: This is... not great (can we popple in a pipeline please?)
     with open(pdfpdf, "wb") as outfh:
         outfh.write(pdf.buffer)
     subprocess.run(
@@ -83,10 +97,14 @@ def _popple_doc(pdf: Document, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    pdfpdf.unlink()
+    return [(page.page_idx, page.width, page.height) for page in pdf.pages]
 
 
 @_popple.register(Page)
-def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
+def _popple_page(
+    pdf: Page, tempdir: Path, args: List[str]
+) -> List[Tuple[int, float, float]]:
     assert pdf.doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     pdfpdf = tempdir / "pdf.pdf"
     with open(pdfpdf, "wb") as outfh:
@@ -105,10 +123,14 @@ def _popple_page(pdf: Page, tempdir: Path, args: List[str]) -> None:
         ],
         check=True,
     )
+    pdfpdf.unlink()
+    return [(pdf.page_idx, pdf.width, pdf.height)]
 
 
 @_popple.register(PageList)
-def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
+def _popple_pages(
+    pdf: PageList, tempdir: Path, args: List[str]
+) -> List[Tuple[int, float, float]]:
     pdfpdf = tempdir / "pdf.pdf"
     assert pdf[0].doc is not None  # bug in PLAYA-PDF, oops, it cannot be None
     with open(pdfpdf, "wb") as outfh:
@@ -142,6 +164,8 @@ def _popple_pages(pdf: PageList, tempdir: Path, args: List[str]) -> None:
             ],
             check=True,
         )
+    pdfpdf.unlink()
+    return [(page.page_idx, page.width, page.height) for page in pdf]
 
 
 def popple(
@@ -173,21 +197,28 @@ def popple(
     args = make_poppler_args(dpi, width, height)
     with tempfile.TemporaryDirectory() as tempdir:
         temppath = Path(tempdir)
-        _popple(pdf, temppath, args)
-        for ppm in sorted(temppath.iterdir()):
-            if ppm.suffix == ".ppm":
-                yield Image.open(ppm)
+        # FIXME: Possible to Popple in a Parallel Pipeline
+        page_sizes = _popple(pdf, temppath, args)
+        for (page_idx, page_width, page_height), ppm in zip(
+            page_sizes,
+            (path for path in sorted(temppath.iterdir()) if path.suffix == ".ppm"),
+        ):
+            img = Image.open(ppm)
+            img.info["page_index"] = page_idx
+            img.info["page_width"] = page_width
+            img.info["page_height"] = page_height
+            yield img
 
 
 @functools.singledispatch
 def _get_pdfium_pages(
     pdf: Union[str, PathLike, Document, Page, PageList],
-) -> Iterator["pypdfium2.PdfPage"]:
+) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     import pypdfium2
 
     doc = pypdfium2.PdfDocument(pdf)
-    for page in doc:
-        yield page
+    for idx, page in enumerate(doc):
+        yield idx, page
         page.close()
     doc.close()
 
@@ -209,31 +240,33 @@ def _get_pdfium_doc(pdf: Document) -> Iterator["pypdfium2.PdfDocument"]:
 
 
 @_get_pdfium_pages.register(Document)
-def _get_pdfium_pages_doc(pdf: Document) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_doc(pdf: Document) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     with _get_pdfium_doc(pdf) as doc:
-        for page in doc:
-            yield page
+        for idx, page in enumerate(doc):
+            yield idx, page
             page.close()
 
 
 @_get_pdfium_pages.register(Page)
-def _get_pdfium_pages_page(page: Page) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_page(page: Page) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     pdf = page.doc
     assert pdf is not None
     with _get_pdfium_doc(pdf) as doc:
         pdfium_page = doc[page.page_idx]
-        yield pdfium_page
+        yield page.page_idx, pdfium_page
         pdfium_page.close()
 
 
 @_get_pdfium_pages.register(PageList)
-def _get_pdfium_pages_pagelist(pages: PageList) -> Iterator["pypdfium2.PdfPage"]:
+def _get_pdfium_pages_pagelist(
+    pages: PageList,
+) -> Iterator[Tuple[int, "pypdfium2.PdfPage"]]:
     pdf = pages.doc
     assert pdf is not None
     with _get_pdfium_doc(pdf) as doc:
         for page in pages:
             pdfium_page = doc[page.page_idx]
-            yield pdfium_page
+            yield page.page_idx, pdfium_page
             pdfium_page.close()
 
 
@@ -252,7 +285,8 @@ def pdfium(
         width: Render to this width in pixels.
         height: Render to this height in pixels.
     Yields:
-        Pillow `Image.Image` objects, one per page.
+        Pillow `Image.Image` objects, one per page.  Page width and height are
+        available in the `info` property of the images.
     Raises:
         ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)
         NotInstalledError: If PyPDFium2 is not installed.
@@ -263,24 +297,30 @@ def pdfium(
         import pypdfium2  # noqa: F401
     except ImportError as e:
         raise NotInstalledError("PyPDFium2 does not seem to be installed") from e
-    for page in _get_pdfium_pages(pdf):
+    for idx, page in _get_pdfium_pages(pdf):
+        page_width = page.get_width()
+        page_height = page.get_height()
         if width == 0 and height == 0:
             scale = (dpi or 72) / 72
-            yield page.render(scale=scale).to_pil()
+            img = page.render(scale=scale).to_pil()
         else:
             if width and height:
                 # Scale to longest side (since pypdfium2 doesn't
                 # appear to allow non-1:1 aspect ratio)
-                scale = max(width / page.get_width(), height / page.get_height())
+                scale = max(width / page_width, height / page_height)
                 img = page.render(scale=scale).to_pil()
                 # Resize down to desired size
-                yield img.resize(size=(width, height))
+                img = img.resize(size=(width, height))
             elif width:
                 scale = width / page.get_width()
-                yield page.render(scale=scale).to_pil()
+                img = page.render(scale=scale).to_pil()
             elif height:
                 scale = height / page.get_height()
-                yield page.render(scale=scale).to_pil()
+                img = page.render(scale=scale).to_pil()
+        img.info["page_index"] = idx
+        img.info["page_width"] = page_width
+        img.info["page_height"] = page_height
+        yield img
 
 
 METHODS = [popple, pdfium]
@@ -301,10 +341,14 @@ def convert(
         width: Render to this width in pixels (0 to keep aspect ratio).
         height: Render to this height in pixels (0 to keep aspect ratio).
     Yields:
-        Pillow `Image.Image` objects, one per page.
+        Pillow `Image.Image` objects, one per page.  The original page
+        width and height in default user space units are available in
+        the `info` property of these images as `page_width` and
+        `page_height`
     Raises:
         ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)
         NotInstalledError: If no renderer is available
+
     """
     for method in METHODS:
         try:
@@ -365,7 +409,7 @@ def get_box_content(obj: Union[ContentObject, Element]) -> Rect:
 @get_box.register(Annotation)
 def get_box_annotation(obj: Annotation) -> Rect:
     """Get the bounding box of an Annotation"""
-    return get_transformed_bound(obj.page.ctm, obj.rect)
+    return transform_bbox(obj.page.ctm, obj.rect)
 
 
 @functools.singledispatch
