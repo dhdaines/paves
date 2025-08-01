@@ -14,7 +14,7 @@ THISDIR = Path(__file__).parent
     sys.platform.startswith("win") or sys.platform.startswith("darwin"),
     reason="Poppler Probably not Present on Proprietary Platforms",
 )
-def test_popple():
+def test_popple() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
         images = list(pi.popple(path))
@@ -43,7 +43,7 @@ def test_popple():
         assert [image.info["page_index"] for image in images] == [1]
 
 
-def test_pdfium():
+def test_pdfium() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
         images = list(pi.pdfium(path))
@@ -72,7 +72,7 @@ def test_pdfium():
         assert [image.info["page_index"] for image in images] == [1]
 
 
-def test_box():
+def test_box() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
         page = pdf.pages[0]
@@ -112,7 +112,7 @@ def test_box():
         assert img
 
 
-def test_mark():
+def test_mark() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
         page = pdf.pages[0]

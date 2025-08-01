@@ -23,9 +23,9 @@ def table_bounds(
     processor = AutoImageProcessor.from_pretrained(
         "ds4sd/docling-layout-old", use_fast=True
     )
-    device = torch.device(device)
+    torch_device = torch.device(device)
     model = AutoModelForObjectDetection.from_pretrained("ds4sd/docling-layout-old").to(
-        device
+        torch_device
     )
     width = processor.size["width"]
     height = processor.size["height"]
@@ -34,7 +34,7 @@ def table_bounds(
     # We could do this in a batch, but that easily runs out of memory
     with torch.inference_mode():
         for image in pi.convert(pdf, width=width, height=height):
-            inputs = processor(images=[image], return_tensors="pt").to(device)
+            inputs = processor(images=[image], return_tensors="pt").to(torch_device)
             outputs = model(**inputs)
             results = processor.post_process_object_detection(
                 outputs,

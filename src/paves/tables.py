@@ -7,7 +7,7 @@ from copy import copy
 from dataclasses import dataclass
 from functools import singledispatch
 from itertools import groupby
-from typing import Any, Iterable, Iterator, Tuple, Union
+from typing import Any, Callable, Iterable, Iterator, List, Tuple, Union
 from operator import attrgetter
 from os import PathLike
 
@@ -151,7 +151,7 @@ def table_elements_path(pdf: Union[str, PathLike]) -> Iterator[Element]:
 def table_elements_doc(pdf: Document) -> Iterator[Element]:
     structure = pdf.structure
     if structure is None:
-        return iter(())
+        raise TypeError
     return structure.find_all("Table")
 
 
@@ -159,7 +159,7 @@ def table_elements_doc(pdf: Document) -> Iterator[Element]:
 def table_elements_pagelist(pages: PageList) -> Iterator[Element]:
     structure = pages.doc.structure
     if structure is None:
-        return iter(())
+        raise TypeError
     # FIXME: Accelerate this with the ParentTree too
     return (table for table in structure.find_all("Table") if table.page in pages)
 
@@ -211,10 +211,11 @@ def tables_structure(
       logical structure (this will cause a TypeError, if you don't
       check for it).
     """
-    if pdf.structure is None:
-        return None
     page = pdf if isinstance(pdf, Page) else None
-    return table_elements_to_objects(table_elements(pdf), page)
+    try:
+        return table_elements_to_objects(table_elements(pdf), page)
+    except TypeError:  # means that structure is None
+        return None
 
 
 @singledispatch
@@ -276,7 +277,7 @@ def tables_detr(
     return table_bounds_to_objects(pdf, table_bounds(pdf, device=device))
 
 
-METHODS = [tables_structure, tables_detr]
+METHODS: List[Callable] = [tables_structure, tables_detr]
 
 
 def tables(

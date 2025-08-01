@@ -199,14 +199,14 @@ def popple(
         temppath = Path(tempdir)
         # FIXME: Possible to Popple in a Parallel Pipeline
         page_sizes = _popple(pdf, temppath, args)
-        for (idx, width, height), ppm in zip(
+        for (page_idx, page_width, page_height), ppm in zip(
             page_sizes,
             (path for path in sorted(temppath.iterdir()) if path.suffix == ".ppm"),
         ):
             img = Image.open(ppm)
-            img.info["page_index"] = idx
-            img.info["page_width"] = width
-            img.info["page_height"] = height
+            img.info["page_index"] = page_idx
+            img.info["page_width"] = page_width
+            img.info["page_height"] = page_height
             yield img
 
 
