@@ -33,6 +33,10 @@ class TableObject(ContentObject):
     model).  Do not assume one or the other, because notably, a
     logical structure element can span multiple pages.
 
+    Note that the graphics state and coordinate transformation matrix
+    may just be the page defaults, if Machine Learning™ was used to
+    detect the table in a rendered image of the page.
+
     """
 
     _el: Union[Element, None]
@@ -294,7 +298,7 @@ def tables(
     them, they stole the precious) like `cudnn-10-gigabytes-of-c++`.
 
     If you'd like to try that, then you can do so by installing the
-    `transformers` package (if you don't have a GPU, try adding
+    `transformers[torch]` package (if you don't have a GPU, try adding
     `--extra-index-url https://download.pytorch.org/whl/cpu` to pip's
     command line).
 
