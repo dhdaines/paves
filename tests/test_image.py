@@ -16,22 +16,31 @@ THISDIR = Path(__file__).parent
 )
 def test_popple():
     path = THISDIR / "contrib" / "PSC_Station.pdf"
-    images = list(pi.popple(path))
-    assert len(images) == 15
-    assert all("page_width" in image.info for image in images)
     with playa.open(path) as pdf:
+        images = list(pi.popple(path))
+        assert len(images) == 15
+        assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == list(
+            range(len(pdf.pages))
+        )
         images = list(pi.popple(pdf))
         assert len(images) == len(pdf.pages)
         assert all("page_height" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == list(
+            range(len(pdf.pages))
+        )
         images = list(pi.popple(pdf.pages[1:6]))
         assert len(images) == 5
         assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [1, 2, 3, 4, 5]
         images = list(pi.popple(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
         assert all("page_height" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [3, 4, 5, 9, 10]
         images = list(pi.popple(pdf.pages[1]))
         assert len(images) == 1
         assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [1]
 
 
 def test_pdfium():
@@ -40,18 +49,27 @@ def test_pdfium():
         images = list(pi.pdfium(path))
         assert len(images) == len(pdf.pages)
         assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == list(
+            range(len(pdf.pages))
+        )
         images = list(pi.pdfium(pdf))
         assert len(images) == len(pdf.pages)
         assert all("page_height" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == list(
+            range(len(pdf.pages))
+        )
         images = list(pi.pdfium(pdf.pages[1:6]))
         assert len(images) == 5
         assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [1, 2, 3, 4, 5]
         images = list(pi.pdfium(pdf.pages[[3, 4, 5, 9, 10]]))
         assert len(images) == 5
         assert all("page_height" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [3, 4, 5, 9, 10]
         images = list(pi.pdfium(pdf.pages[1]))
         assert len(images) == 1
         assert all("page_width" in image.info for image in images)
+        assert [image.info["page_index"] for image in images] == [1]
 
 
 def test_box():

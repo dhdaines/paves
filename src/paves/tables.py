@@ -7,7 +7,7 @@ from copy import copy
 from dataclasses import dataclass
 from functools import singledispatch
 from itertools import groupby
-from typing import Iterable, Iterator, Tuple, Union
+from typing import Any, Iterable, Iterator, Tuple, Union
 from operator import attrgetter
 from os import PathLike
 
