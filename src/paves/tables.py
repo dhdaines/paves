@@ -1,6 +1,5 @@
 """
-Simple and not at all Java-damaged interface for table detection
-and structure prediction.
+Simple and not at all Java-damaged interface for table detection.
 """
 
 from copy import copy
@@ -16,7 +15,12 @@ from playa import Document, Page, PageList
 from playa.content import ContentObject, GraphicState, MarkedContent
 from playa.page import Annotation
 from playa.pdftypes import Matrix, Rect, BBOX_NONE
-from playa.structure import Element, ContentItem, ContentObject as StructContentObject
+from playa.structure import (
+    Element,
+    ContentItem,
+    ContentObject as StructContentObject,
+    Tree,
+)
 from playa.utils import get_bound_rects
 from playa.worker import _ref_page
 
@@ -139,7 +143,7 @@ def table_elements(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator[Element]:
     """Iterate over all text objects in a PDF, page, or pages"""
-    raise NotImplementedError
+    raise NotImplementedError(f"Not implemented for {type(pdf)}")
 
 
 @table_elements.register(str)
@@ -161,18 +165,27 @@ def table_elements_doc(pdf: Document) -> Iterator[Element]:
 
 @table_elements.register
 def table_elements_pagelist(pages: PageList) -> Iterator[Element]:
-    structure = pages.doc.structure
-    if structure is None:
-        raise TypeError
-    # FIXME: Accelerate this with the ParentTree too
-    return (table for table in structure.find_all("Table") if table.page in pages)
+    for page in pages:
+        yield from table_elements_page(page)
 
 
 @table_elements.register
 def table_elements_page(page: Page) -> Iterator[Element]:
-    # FIXME: Accelerate this with the ParentTree
-    pagelist = page.doc.pages[(page.page_idx,)]
-    return table_elements_pagelist(pagelist)
+    structure = page.doc.structure
+    if structure is None:
+        raise TypeError
+    seen = set()
+    for element in page.structure:
+        while element is not None:
+            if element.role == "Table":
+                if repr(element) not in seen:
+                    yield element
+                seen.add(repr(element))
+                break
+            # This isn't necessary but it makes mypy happy
+            if isinstance(element.parent, Tree):
+                break
+            element = element.parent
 
 
 def table_elements_to_objects(
