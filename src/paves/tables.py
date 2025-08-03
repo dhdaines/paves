@@ -178,9 +178,9 @@ def table_elements_page(page: Page) -> Iterator[Element]:
     for element in page.structure:
         while element is not None:
             if element.role == "Table":
-                if repr(element) not in seen:
+                if element not in seen:
                     yield element
-                seen.add(repr(element))
+                seen.add(element)
                 break
             # This isn't necessary but it makes mypy happy
             if isinstance(element.parent, Tree):
