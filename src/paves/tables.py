@@ -1,6 +1,5 @@
 """
-Simple and not at all Java-damaged interface for table detection
-and structure prediction.
+Simple and not at all Java-damaged interface for table detection.
 """
 
 from copy import copy
@@ -16,7 +15,12 @@ from playa import Document, Page, PageList
 from playa.content import ContentObject, GraphicState, MarkedContent
 from playa.page import Annotation
 from playa.pdftypes import Matrix, Rect, BBOX_NONE
-from playa.structure import Element, ContentItem, ContentObject as StructContentObject
+from playa.structure import (
+    Element,
+    ContentItem,
+    ContentObject as StructContentObject,
+    Tree,
+)
 from playa.utils import get_bound_rects
 from playa.worker import _ref_page
 
@@ -139,7 +143,7 @@ def table_elements(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator[Element]:
     """Iterate over all text objects in a PDF, page, or pages"""
-    raise NotImplementedError
+    raise NotImplementedError(f"Not implemented for {type(pdf)}")
 
 
 @table_elements.register(str)
@@ -155,24 +159,23 @@ def table_elements_path(pdf: Union[str, PathLike]) -> Iterator[Element]:
 def table_elements_doc(pdf: Document) -> Iterator[Element]:
     structure = pdf.structure
     if structure is None:
-        raise TypeError
+        raise TypeError("Document has no logical structure")
     return structure.find_all("Table")
 
 
 @table_elements.register
 def table_elements_pagelist(pages: PageList) -> Iterator[Element]:
-    structure = pages.doc.structure
-    if structure is None:
-        raise TypeError
-    # FIXME: Accelerate this with the ParentTree too
-    return (table for table in structure.find_all("Table") if table.page in pages)
+    if pages.doc.structure is None:
+        raise TypeError("Document has no logical structure")
+    for page in pages:
+        yield from table_elements_page(page)
 
 
 @table_elements.register
 def table_elements_page(page: Page) -> Iterator[Element]:
-    # FIXME: Accelerate this with the ParentTree
-    pagelist = page.doc.pages[(page.page_idx,)]
-    return table_elements_pagelist(pagelist)
+    if page.structure is None:
+        raise TypeError("Page has no ParentTree")
+    return page.structure.find_all("Table")
 
 
 def table_elements_to_objects(
