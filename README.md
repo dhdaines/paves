@@ -51,16 +51,27 @@ structure tree, to look at the bounding boxes of the contents of those
 structure elements for a given page:
 
 ```python
-pi.box(pdf.structure.find_all(lambda el: el.page is page))
+pi.box(page.structure)
 ```
 
 ![Structure Elements](./docs/page3-elements.png)
 
-You can also look at the marked content sections, which are the
-leaf-nodes of the structure tree:
+Note however that this only gives you the elements associated with
+*marked content sections*, which are the leaf nodes of the structure
+tree.  So, you can also search up the structure tree to find things
+like tables, figures, or list items:
 
 ```python
-pi.box(page.structure)
+pi.box(page.structure.find_all("Table"))
+pi.box(page.structure.find_all("Figure"))
+pi.box(page.structure.find_all("LI"))
+```
+
+You can even search with regular expressions, to find headers for
+instance:
+
+```python
+pi.box(page.structure.find_all(re.compile(r"H\d+")))
 ```
 
 Alternately, if you have annotations (such as links), you can look at
