@@ -159,33 +159,23 @@ def table_elements_path(pdf: Union[str, PathLike]) -> Iterator[Element]:
 def table_elements_doc(pdf: Document) -> Iterator[Element]:
     structure = pdf.structure
     if structure is None:
-        raise TypeError
+        raise TypeError("Document has no logical structure")
     return structure.find_all("Table")
 
 
 @table_elements.register
 def table_elements_pagelist(pages: PageList) -> Iterator[Element]:
+    if pages.doc.structure is None:
+        raise TypeError("Document has no logical structure")
     for page in pages:
         yield from table_elements_page(page)
 
 
 @table_elements.register
 def table_elements_page(page: Page) -> Iterator[Element]:
-    structure = page.doc.structure
-    if structure is None:
-        raise TypeError
-    seen = set()
-    for element in page.structure:
-        while element is not None:
-            if element.role == "Table":
-                if element not in seen:
-                    yield element
-                seen.add(element)
-                break
-            # This isn't necessary but it makes mypy happy
-            if isinstance(element.parent, Tree):
-                break
-            element = element.parent
+    if page.structure is None:
+        raise TypeError("Page has no ParentTree")
+    return page.structure.find_all("Table")
 
 
 def table_elements_to_objects(
