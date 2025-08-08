@@ -19,7 +19,6 @@ from playa.structure import (
     Element,
     ContentItem,
     ContentObject as StructContentObject,
-    Tree,
 )
 from playa.utils import get_bound_rects
 from playa.worker import _ref_page
@@ -34,8 +33,10 @@ class TableObject(ContentObject):
 
     It could either come from a logical structure element, or it could
     simply be a bounding box (as detected by some sort of visual
-    model).  Do not assume one or the other, because notably, a
-    logical structure element can span multiple pages.
+    model).  While these `TableObject`s will never span multiple
+    pages, the underlying logical structure element may do so.  This
+    is currently the only way to detect multi-page tables through this
+    interface (they will have an equivalent `parent` property).
 
     Note that the graphics state and coordinate transformation matrix
     may just be the page defaults, if Machine Learning™ was used to
@@ -43,25 +44,25 @@ class TableObject(ContentObject):
 
     """
 
-    _el: Union[Element, None]
     _bbox: Union[Rect, None]
     _parent: Union[Element, None]
 
     @property
     def bbox(self) -> Rect:
-        # _bbox takes priority as we *could* have both (in the case of
-        # a multi-page table, in which case _el.bbox will be BBOX_NONE)
+        # _bbox takes priority as we *could* have both
         if self._bbox is not None:
             return self._bbox
-        elif self._el is not None:
-            # Try to get it from the element first
-            bbox = self._el.bbox
-            if bbox is not BBOX_NONE:
-                return bbox
-            # We always have a page even if self._el doesn't
+        elif self._parent is not None:
+            # Try to get it from the element but only if it has the
+            # same page as us (otherwise it will be wrong!)
+            if self._parent.page is self.page:
+                bbox = self._parent.bbox
+                if bbox is not BBOX_NONE:
+                    return bbox
+            # We always have a page even if self._parent doesn't
             return get_bound_rects(
                 item.bbox
-                for item in self._el.contents
+                for item in self._parent.contents
                 if item.page is self.page and item.bbox is not BBOX_NONE
             )
         else:
@@ -77,7 +78,6 @@ class TableObject(ContentObject):
             gstate=GraphicState(),
             ctm=page.ctm,
             mcstack=(),
-            _el=None,
             _bbox=bbox,
             _parent=None,
         )
@@ -98,6 +98,7 @@ class TableObject(ContentObject):
         mcstack: Union[Tuple[MarkedContent, ...], None] = None
         bbox: Union[Rect, None] = None
         for kid in contents:
+            # For multi-page tables, skip any contents on a different page
             if kid.page != page:
                 continue
             if isinstance(kid, StructContentObject):
@@ -132,7 +133,6 @@ class TableObject(ContentObject):
             gstate=gstate,
             ctm=ctm,
             mcstack=mcstack,
-            _el=el,
             _bbox=bbox,
             _parent=el,
         )
@@ -183,26 +183,17 @@ def table_elements_to_objects(
 ) -> Iterator[TableObject]:
     """Make TableObjects from Elements."""
     for el in elements:
-        # It might have a page
-        if el.page is not None:
-            table = TableObject.from_element(el, el.page)
+        # It usually has a page, but it can also span multiple pages
+        # if this is the case.  So a page passed explicitly here
+        # should take precedence.
+        for kidpage, kids in groupby(el.contents, attrgetter("page")):
+            if kidpage is None:
+                continue
+            if page is not None and kidpage is not page:
+                continue
+            table = TableObject.from_element(el, kidpage, kids)
             if table is not None:
                 yield table
-        elif page is not None:
-            table = TableObject.from_element(el, page)
-            if table is not None:
-                yield table
-        else:
-            # Alert! We have a multi-page table! So we have to go
-            # through all of the marked content items for this element
-            # and group them by pages, then yield separate
-            # TableObjects for each of them.  This may be hard to test.
-            for page, kids in groupby(el.contents, attrgetter("page")):
-                if page is None:
-                    continue
-                table = TableObject.from_element(el, page, kids)
-                if table is not None:
-                    yield table
 
 
 def tables_structure(
