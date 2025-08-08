@@ -25,7 +25,9 @@ def test_no_tables() -> None:
 def test_multi_page_tables() -> None:
     path = THISDIR / "data" / "multi-page-table.pdf"
     with playa.open(path) as pdf:
-        tables = list(pb.tables(pdf))
+        itor = pb.tables_orelse(pdf)
+        assert itor is not None
+        tables = list(itor)
         assert len(tables) == 2
         assert tables[0].parent == tables[1].parent
         table1 = next(pb.tables(pdf.pages[0]))

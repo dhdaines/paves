@@ -475,7 +475,7 @@ def _make_boxes(
 def _getpage(
     obj: Boxable,
     page: Union[Page, None] = None,
-) -> Image.Image:
+) -> Page:
     if page is None:
         if not hasattr(obj, "page"):
             raise ValueError("Must explicitly specify page or image to show rectangles")
@@ -584,8 +584,10 @@ def box(
     for obj in _make_boxes(objs):
         if obj is None:
             continue
-        if image_page is not None and obj.page != image_page:
-            break
+        if image_page is not None:
+            if hasattr(obj, "page"):
+                if cast(HasPage, obj).page != image_page:
+                    break
         if image is None:
             image_page = _getpage(obj, page)
             image = show(image_page, dpi)
@@ -652,8 +654,10 @@ def mark(
     for obj in _make_boxes(objs):
         if obj is None:
             continue
-        if image_page is not None and obj.page != image_page:
-            break
+        if image_page is not None:
+            if hasattr(obj, "page"):
+                if cast(HasPage, obj).page != image_page:
+                    break
         if image is None:
             image_page = _getpage(obj, page)
             image = show(image_page, dpi)

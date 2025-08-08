@@ -278,9 +278,35 @@ def tables_detr(
 METHODS: List[Callable] = [tables_structure, tables_detr]
 
 
-def tables(
+def tables_orelse(
     pdf: Union[str, PathLike, Document, Page, PageList], **kwargs: Any
 ) -> Union[Iterator[TableObject], None]:
+    """Identify tables in a PDF or one of its pages, or fail.
+
+    This works like `tables` but forces you (if you use type checking)
+    to detect the case where tables cannot be detected by any known
+    method.
+
+    Args:
+        pdf: PLAYA-PDF document, page, pages, or path to a PDF.
+
+    Returns:
+        An iterator over `TableObject`, or `None`, if there is no
+        method available to detect tables.  This will cause a
+        `TypeError` if you try to iterate over it anyway.
+
+    """
+    for method in METHODS:
+        itor = method(pdf, **kwargs)
+        if itor is not None:
+            return itor
+    else:
+        return None
+
+
+def tables(
+    pdf: Union[str, PathLike, Document, Page, PageList], **kwargs: Any
+) -> Iterator[TableObject]:
     """Identify tables in a PDF or one of its pages.
 
     This will always try to use logical structure (via PLAYA-PDF)
@@ -310,13 +336,13 @@ def tables(
         pdf: PLAYA-PDF document, page, pages, or path to a PDF.
 
     Returns:
-        An iterator over `TableObject`, or `None`, if there is no
-        method available to detect tables.  This will cause a
-        `TypeError` if you try to iterate over it anyway.
+        An iterator over `TableObject`.  If no method is available to
+        detect tables, this will return an iterator over an empty
+        list.  You may wish to use `tables_orelse` to ensure that
+        tables can be detected.
+
     """
-    for method in METHODS:
-        itor = method(pdf, **kwargs)
-        if itor is not None:
-            return itor
-    else:
-        return None
+    itor = tables_orelse(pdf, **kwargs)
+    if itor is None:
+        return iter(())
+    return itor
