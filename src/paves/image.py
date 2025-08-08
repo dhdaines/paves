@@ -472,10 +472,9 @@ def _make_boxes(
     return obj
 
 
-def _render(
+def _getpage(
     obj: Boxable,
     page: Union[Page, None] = None,
-    dpi: int = 72,
 ) -> Image.Image:
     if page is None:
         if not hasattr(obj, "page"):
@@ -483,7 +482,7 @@ def _render(
         page = cast(HasPage, obj).page
     if page is None:
         raise ValueError("No page found in object: %r" % (obj,))
-    return show(page, dpi=dpi)
+    return page
 
 
 Color = Union[str, Tuple[int, int, int], Tuple[float, float, float]]
@@ -581,11 +580,15 @@ def box(
     font = ImageFont.load_default(label_size * scale)
     label_margin *= scale
     make_color = color_maker(color)
+    image_page: Union[Page, None] = None
     for obj in _make_boxes(objs):
         if obj is None:
             continue
+        if image_page is not None and obj.page != image_page:
+            break
         if image is None:
-            image = _render(obj, page, dpi)
+            image_page = _getpage(obj, page)
+            image = show(image_page, dpi)
         try:
             left, top, right, bottom = (x * scale for x in boxfunc(obj))
         except ValueError:  # it has no content and no box
@@ -645,11 +648,15 @@ def mark(
     alpha = min(255, int(transparency * 255))
     label_margin *= scale
     make_color = color_maker(color)
+    image_page: Union[Page, None] = None
     for obj in _make_boxes(objs):
         if obj is None:
             continue
+        if image_page is not None and obj.page != image_page:
+            break
         if image is None:
-            image = _render(obj, page, dpi)
+            image_page = _getpage(obj, page)
+            image = show(image_page, dpi)
         if overlay is None:
             overlay = Image.new("RGB", image.size)
         if mask is None:
