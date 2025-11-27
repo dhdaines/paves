@@ -173,8 +173,11 @@ def table_elements_pagelist(pages: PageList) -> Iterator[Element]:
 
 @table_elements.register
 def table_elements_page(page: Page) -> Iterator[Element]:
+    # page.structure can actually never be None (why?)
     if page.structure is None:
         raise TypeError("Page has no ParentTree")
+    if len(page.structure) == 0:
+        raise TypeError("Page has no marked content")
     return page.structure.find_all("Table")
 
 
