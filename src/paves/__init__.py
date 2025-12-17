@@ -2,4 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from paves.__about__ import __version__  # noqa: F401
+from paves.__about__ import __version__
+
+__all__ = ["__version__"]

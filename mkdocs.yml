@@ -18,9 +18,9 @@ plugins:
           paths: [src]
           options:
             show_root_heading: true
-            docstring_style: auto
 nav:
   - Home: index.md
+  - Visualization: looking-at-stuff.md
   - Reference: reference.md
 watch:
 - src
