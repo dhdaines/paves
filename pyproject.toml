@@ -63,6 +63,17 @@ dependencies = [ "pytest", "pytest-xdist", "mypy", "pdfminer.six", "pandas", "po
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "none"  # Disable hatch's unreasonable ruff defaults
 
+[tool.hatch.envs.docs]
+dependencies = [
+    "mike",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mkdocs-include-markdown-plugin"
+]
+[tool.hatch.envs.docs.scripts]
+serve = "mkdocs serve"
+publish = "mike deploy --push --update-aliases $(playa --version) latest"
+
 [tool.hatch.envs.types]
 extra-dependencies = [
    "mypy>=1.0.0",
