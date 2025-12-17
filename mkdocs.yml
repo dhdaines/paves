@@ -1,0 +1,30 @@
+site_name: PAVÉS
+site_description: PDF, Analyse et Visualisation simplifiÉS
+site_author: David Huggins-Daines
+site_url: https://dhdaines.github.io/paves
+repo_name: dhdaines/paves
+repo_url: https://github.com/dhdaines/paves
+edit_uri: blob/main/docs
+copyright: "Copyright &copy; David Huggins-Daines 2025-present"
+
+theme:
+  name: material
+plugins:
+  - include-markdown
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_root_heading: true
+            docstring_style: auto
+nav:
+  - Home: index.md
+  - Reference: reference.md
+watch:
+- src
+- docs
+extra:
+  version:
+    provider: mike
