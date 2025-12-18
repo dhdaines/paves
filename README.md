@@ -15,6 +15,10 @@ functions that you can use to poke around in PDFs and get useful
 things out of them, often but not exclusively in the context of a
 Jupyter notebook.
 
+See the [https://dhdaines.github.io/paves](documentation) for more
+information.  There will also be some helpful notebooks soon, to help
+you.
+
 ## Installation
 
 Install it from PyPI (as `paves`) with `pip` or `uv`, preferably in a
