@@ -34,13 +34,17 @@ dependencies = [
     "pillow",
 ]
 
+[project.optional-dependencies]
+detr = ["docling-ibm-models"]
+tatr = ["gmft"]
+
 [project.urls]
 Documentation = "https://github.com/dhdaines/paves#readme"
 Issues = "https://github.com/dhdaines/paves/issues"
 Source = "https://github.com/dhdaines/paves"
 
 [dependency-groups]
-dev = [ "mypy", "pytest", "pytest-xdist", "pdfminer.six", "pypdfium2" ]
+dev = [ "mypy", "pytest", "pytest-xdist", "pdfminer.six", "pypdfium2", "docling-ibm-models", "gmft" ]
 
 [tool.hatch.version]
 source = "vcs"
