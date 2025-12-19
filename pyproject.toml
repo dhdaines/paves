@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "playa-pdf>=0.7.0",
+    "playa-pdf>=0.8.0",
     "pillow",
 ]
 
@@ -38,6 +38,9 @@ dependencies = [
 Documentation = "https://github.com/dhdaines/paves#readme"
 Issues = "https://github.com/dhdaines/paves/issues"
 Source = "https://github.com/dhdaines/paves"
+
+[dependency-groups]
+dev = [ "mypy", "pytest", "pytest-xdist", "pdfminer.six", "pypdfium2" ]
 
 [tool.hatch.version]
 source = "vcs"
@@ -55,10 +58,10 @@ exclude = [
 ]
 
 [tool.hatch.envs.hatch-test]
-extra-dependencies = [ "pdfminer.six", "pandas", "polars-lts-cpu", "pypdfium2" ]
+extra-dependencies = [ "pdfminer.six", "pypdfium2" ]
 
 [tool.hatch.envs.default]
-dependencies = [ "pytest", "pytest-xdist", "mypy", "pdfminer.six", "pandas", "polars-lts-cpu", "pypdfium2" ]
+dependencies = [ "pytest", "pytest-xdist", "mypy", "pdfminer.six", "pypdfium2" ]
 
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "none"  # Disable hatch's unreasonable ruff defaults
@@ -85,6 +88,9 @@ check = "mypy --install-types --non-interactive {args:src/paves tests}"
 # Avoid downloading gigabytes of CUDA junk
 PIP_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
 UV_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
+
+[tool.hatch.envs.notebooks]
+extra-dependencies = [ "jupyterlab" ]
 
 [tool.coverage.run]
 source_pkgs = ["paves", "tests"]
