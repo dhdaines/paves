@@ -3,6 +3,7 @@ Various somewhat-more-heuristic ways of guessing, getting, and
 processing text in PDFs.
 """
 
+import operator
 from dataclasses import dataclass
 from functools import singledispatch
 from os import PathLike
@@ -14,6 +15,13 @@ from playa.document import Document, PageList
 from playa.font import Font
 from playa.page import Page
 from playa.pdftypes import Point
+
+# For convenience in grouping
+line = operator.attrgetter("line")
+font = operator.attrgetter("font")
+fontbase = operator.attrgetter("fontbase")
+size = operator.attrgetter("size")
+textfont = operator.attrgetter("textfont")
 
 
 @dataclass
@@ -29,10 +37,15 @@ class WordObject(ContentObject):
     over its glyphs, etc.  But, as a treat, these glyphs are
     "finalized" so you don't have to worry about inconsistent graphics
     states and so forth, and you also get some convenience properties.
+
+    The origin of the curent (logical) line is also available, to
+    facilitate grouping words into lines, if you so desire (simply
+    use `itertools.groupby(words, paves.text.line)`)
     """
 
     _glyphs: List[GlyphObject]
     _next_origin: Point
+    line: Point
 
     @property
     def text(self) -> str:
@@ -190,30 +203,35 @@ def words(
         functions, or you can do various other things with them too.
     """
     glyphs: List[GlyphObject] = []
-    next_origin: Union[None, Point] = None
+    predicted_origin: Union[None, Point] = None
+    line_origin: Union[None, Point] = None
     for obj in text_objects(pdf):
         for glyph in obj:
-            if (
-                next_origin is not None
-                and glyphs
-                and (word_break(glyph, next_origin) or line_break(glyph, next_origin))
-            ):
-                yield WordObject(
-                    _pageref=glyphs[0]._pageref,
-                    _parentkey=glyphs[0]._parentkey,
-                    gstate=glyphs[0].gstate,  # Not necessarily correct!
-                    ctm=glyphs[0].ctm,  # Not necessarily correct!
-                    mcstack=glyphs[0].mcstack,  # Not necessarily correct!
-                    _glyphs=glyphs,
-                    _next_origin=next_origin,
-                )
-                glyphs = []
+            if line_origin is None:
+                line_origin = glyph.origin
+            if predicted_origin:
+                new_word = word_break(glyph, predicted_origin)
+                new_line = line_break(glyph, predicted_origin)
+                if glyphs and (new_word or new_line):
+                    yield WordObject(
+                        _pageref=glyphs[0]._pageref,
+                        _parentkey=glyphs[0]._parentkey,
+                        gstate=glyphs[0].gstate,  # Not necessarily correct!
+                        ctm=glyphs[0].ctm,  # Not necessarily correct!
+                        mcstack=glyphs[0].mcstack,  # Not necessarily correct!
+                        _glyphs=glyphs,
+                        _next_origin=predicted_origin,
+                        line=line_origin
+                    )
+                    glyphs = []
+                if new_line:
+                    line_origin = glyph.origin
             if glyph.text is not None and glyph.text != " ":
                 glyphs.append(cast(GlyphObject, glyph.finalize()))
             x, y = glyph.origin
             dx, dy = glyph.displacement
-            next_origin = (x + dx, y + dy)
-    if next_origin is not None and glyphs:
+            predicted_origin = (x + dx, y + dy)
+    if predicted_origin and line_origin and glyphs:
         yield WordObject(
             _pageref=glyphs[0]._pageref,
             _parentkey=glyphs[0]._parentkey,
@@ -221,5 +239,6 @@ def words(
             ctm=glyphs[0].ctm,  # Not necessarily correct!
             mcstack=glyphs[0].mcstack,  # Not necessarily correct!
             _glyphs=glyphs,
-            _next_origin=next_origin,
+            _next_origin=predicted_origin,
+            line=line_origin
         )
