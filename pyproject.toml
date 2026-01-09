@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "playa-pdf>=0.8.0",
+    "playa-pdf>=0.9.0",
     "pillow",
 ]
 
@@ -75,10 +75,10 @@ dependencies = [
     "mike",
     "mkdocs-material",
     "mkdocstrings[python]",
-    "mkdocs-include-markdown-plugin"
+    "mkdocs-include-markdown-plugin",
 ]
 [tool.hatch.envs.docs.scripts]
-serve = "mkdocs serve"
+serve = "mkdocs serve --livereload"
 publish = "mike deploy --push --update-aliases $(playa --version) latest"
 
 [tool.hatch.envs.types]
