@@ -16,7 +16,7 @@ def test_words_pdf() -> None:
 def test_words_page() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
-        texts = [w.text for w in px.words(pdf.pages[0])]
+        texts = [w.chars for w in px.words(pdf.pages[0])]
         assert texts == [
             "Réserve",
             "de",
@@ -47,7 +47,7 @@ def test_lines() -> None:
     path = THISDIR / "contrib" / "PSC_Station.pdf"
     with playa.open(path) as pdf:
         lines = [
-            " ".join(w.text for w in words)
+            " ".join(w.chars for w in words)
             for line, words in groupby(px.words(pdf.pages[0]), px.line)
         ]
         assert lines == [
