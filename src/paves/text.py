@@ -13,7 +13,7 @@ import playa
 from playa.content import ContentObject, GlyphObject, TextBase, TextObject
 from playa.document import Document, PageList
 from playa.page import Page
-from playa.pdftypes import Point
+from playa.pdftypes import Point, Matrix
 
 # For convenience in grouping word/text/glyph objects
 line = operator.attrgetter("line")
@@ -50,6 +50,10 @@ class WordObject(TextBase):
 
     def __iter__(self) -> Iterator["ContentObject"]:
         return iter(self._glyphs)
+
+    @property
+    def matrix(self) -> Matrix:
+        return self._glyphs[0].matrix
 
     @property
     def chars(self) -> str:
@@ -160,7 +164,7 @@ def words(
         for glyph in obj:
             if line_origin is None:
                 line_origin = glyph.origin
-            if predicted_origin:
+            if predicted_origin and prev_disp:
                 new_word = word_break(glyph, predicted_origin, prev_disp)
                 new_line = line_break(glyph, predicted_origin)
                 if glyphs and (new_word or new_line):
