@@ -5,7 +5,7 @@ Table detection using PDF logical structure.
 from copy import copy
 from functools import singledispatch
 from itertools import groupby
-from typing import Iterable, Iterator, Tuple, Union
+from typing import Iterable, Iterator, List, Tuple, Union
 from operator import attrgetter
 from os import PathLike
 
@@ -141,7 +141,7 @@ def table_elements_to_objects(
 
 
 @detector(priority=0)
-def tables_structure(
+def structure(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:
     """Identify tables in a PDF or one of its pages using logical structure.

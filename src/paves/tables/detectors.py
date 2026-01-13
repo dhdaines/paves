@@ -3,7 +3,7 @@ Common interface for table detectors.
 """
 
 from os import PathLike
-from typing import Any, Callable, Iterator, List, Protocol, Tuple, Union
+from typing import Callable, Iterator, List, Protocol, Tuple, Union
 from playa import Document, Page, PageList
 
 from paves.tables.table import TableObject
@@ -35,6 +35,14 @@ def detector(*, priority: int) -> Callable[[Detector], Detector]:
         return func
 
     return register
+
+
+def lookup(name: str) -> Union[Detector, None]:
+    """Look up a detector by name."""
+    for _, d in DETECTORS:
+        if d.__name__ == name:
+            return d
+    return None
 
 
 def tables_orelse(

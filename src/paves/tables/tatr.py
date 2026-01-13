@@ -1,5 +1,5 @@
 """
-Detect tables using RT-DETR models from IBM Docling project.
+Detect tables using Microsoft Table Transformer model
 """
 
 import logging
@@ -61,20 +61,21 @@ def table_bounds(
     """Iterate over all text objects in a PDF, page, or pages"""
     import torch
     from transformers import AutoImageProcessor, AutoModelForObjectDetection
-
+    # FIXME: Table Transformer is actually DETR, so this code could
+    # probably be merged with paves.tables.detr
     processor = AutoImageProcessor.from_pretrained(
-        "ds4sd/docling-layout-old", use_fast=True
+        "microsoft/table-transformer-detection",
+        use_fast=True  # May not actually be fast
     )
     # FIXME: sorry, AMD owners, and everybody else, this will get fixed
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch_device = torch.device(device)
-    model = AutoModelForObjectDetection.from_pretrained("ds4sd/docling-layout-old").to(
-        torch_device
-    )
-    width = processor.size["width"]
-    height = processor.size["height"]
-    # Labels are off-by-one for no good reason
-    table_label = int(model.config.label2id["Table"]) - 1
+    model = AutoModelForObjectDetection.from_pretrained(
+        "microsoft/table-transformer-detection", revision="no_timm"
+    ).to(torch_device)
+    # FIXME: pi.convert should support longest/shortest edge
+    width = processor.size["longest_edge"]
+    height = processor.size["longest_edge"]
     # We could do this in a batch, but that easily runs out of memory
     with torch.inference_mode():
         for image in pi.convert(pdf, width=width, height=height):
@@ -85,27 +86,26 @@ def table_bounds(
                 target_sizes=[(image.info["page_height"], image.info["page_width"])],
             )
             boxes: List[Rect] = []
-            for label, box in zip(results[0]["labels"], results[0]["boxes"]):
-                if label.item() != table_label:
-                    continue
+            for box in results[0]["boxes"]:
                 bbox = tuple(round(x) for x in box.tolist())
                 assert len(bbox) == 4
                 boxes.append(cast(Rect, bbox))
             yield image.info["page_index"], boxes
 
 
-@detector(priority=50)
-def detr(
+@detector(priority=25)
+def tatr(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:
-    """Identify tables in a PDF or one of its pages using IBM's
-    RT-DETR layout detection model
+    """Identify tables in a PDF or one of its pages using Microsoft Table
+    Transfomer model.
 
     Args:
         pdf: PLAYA-PDF document, page, pages, or path to a PDF.
 
     Returns:
       An iterator over `TableObject`, or `None`, if the model can't be used
+
     """
     try:
         return table_bounds_to_objects(pdf, table_bounds(pdf))
