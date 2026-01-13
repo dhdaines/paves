@@ -18,7 +18,7 @@ from playa.document import Document, PageList
 from playa.page import Page
 
 from paves.image.converters import converter
-from paves.image.exceptions import NotInstalledError
+from paves.exceptions import NotInstalledError
 
 if TYPE_CHECKING:
     import pypdfium2  # types: ignore

@@ -3,11 +3,11 @@ Common interface for image converters.
 """
 
 from os import PathLike
-from typing import Callable, Iterator, List, Protocol, Tuple, Union
+from typing import Any, Callable, Iterator, List, Protocol, Tuple, Union
 from playa import Document, Page, PageList
 from PIL import Image
 
-from paves.image.exceptions import NotInstalledError
+from paves.exceptions import NotInstalledError
 
 
 class Converter(Protocol):

@@ -19,7 +19,7 @@ from PIL import Image
 from playa.document import Document, PageList
 from playa.page import Page
 
-from paves.image.exceptions import NotInstalledError
+from paves.exceptions import NotInstalledError
 from paves.image.converters import converter
 
 
