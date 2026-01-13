@@ -7,18 +7,14 @@ from functools import singledispatch
 from os import PathLike
 from typing import Iterable, Iterator, List, Tuple, Union, cast
 
-import torch
 import playa
 from playa import Document, Page, PageList, Rect
-from transformers import AutoImageProcessor, AutoModelForObjectDetection
 
 import paves.image as pi
 from paves.tables.detectors import detector
 from paves.tables.table import TableObject
 
 LOGGER = logging.getLogger(__name__)
-# FIXME: sorry, AMD owners, and everybody else, this will get fixed
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 @singledispatch
@@ -60,13 +56,17 @@ def table_bounds_to_objects(
 
 
 def table_bounds(
-    pdf: Union[str, PathLike, Document, Page, PageList],
-    device: str = DEVICE,
+    pdf: Union[str, PathLike, Document, Page, PageList]
 ) -> Iterator[Tuple[int, List[Rect]]]:
     """Iterate over all text objects in a PDF, page, or pages"""
+    import torch
+    from transformers import AutoImageProcessor, AutoModelForObjectDetection
+
     processor = AutoImageProcessor.from_pretrained(
         "ds4sd/docling-layout-old", use_fast=True
     )
+    # FIXME: sorry, AMD owners, and everybody else, this will get fixed
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     torch_device = torch.device(device)
     model = AutoModelForObjectDetection.from_pretrained("ds4sd/docling-layout-old").to(
         torch_device
@@ -95,7 +95,7 @@ def table_bounds(
 
 
 @detector(priority=50)
-def tables_detr(
+def detr(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:
     """Identify tables in a PDF or one of its pages using IBM's
@@ -108,7 +108,6 @@ def tables_detr(
       An iterator over `TableObject`, or `None`, if the model can't be used
     """
     try:
-        from paves.tables.detr import table_bounds
+        return table_bounds_to_objects(pdf, table_bounds(pdf))
     except ImportError:
         return None
-    return table_bounds_to_objects(pdf, table_bounds(pdf, device=DEVICE))
