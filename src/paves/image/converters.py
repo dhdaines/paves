@@ -3,25 +3,41 @@ Common interface for image converters.
 """
 
 from os import PathLike
-from typing import Callable, Iterator, List, Tuple, Union
+from typing import Callable, Iterator, List, Protocol, Tuple, Union
 from playa import Document, Page, PageList
 from PIL import Image
 
 from paves.image.exceptions import NotInstalledError
 
-Converter = Callable[[Union[str, PathLike, Document, Page, PageList],
-                      int, int, int], Iterator[Image.Image]]
+
+class Converter(Protocol):
+    """Protocol for image to PDF converters."""
+
+    def __call__(
+        self,
+        pdf: Union[str, PathLike, Document, Page, PageList],
+        *,
+        dpi: int = 0,
+        width: int = 0,
+        height: int = 0,
+    ) -> Iterator[Image.Image]: ...
+
+    __name__: str
+
+
 CONVERTERS: List[Tuple[int, Converter]] = []
 
 
 def converter(*, priority: int) -> Callable[[Converter], Converter]:
     """Decorator to register converter functions with priorities."""
+
     def register(func: Converter) -> Converter:
         CONVERTERS.append((priority, func))
         # We don't care about the inefficiency of this as there are
         # only ever going to be a few of them
         CONVERTERS.sort()
         return func
+
     return register
 
 
@@ -58,8 +74,6 @@ def convert(
             continue
     else:
         raise NotInstalledError(
-            "No renderers available, tried: %s"
+            "No converters available, tried: %s"
             % (", ".join(m.__name__ for _, m in CONVERTERS))
         )
-
-
