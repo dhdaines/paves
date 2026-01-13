@@ -29,6 +29,7 @@ source code you can use `hatch` or `uv` (your choice), for instance:
     hatch shell
     # with uv
     uv venv
+    uv sync
     . .venv/bin/activate
 
 ## License
