@@ -73,7 +73,6 @@ def table_bounds(
     model = AutoModelForObjectDetection.from_pretrained(
         "microsoft/table-transformer-detection", revision="no_timm"
     ).to(torch_device)
-    print(processor)
     # FIXME: pi.convert should support longest/shortest edge
     width = processor.size["longest_edge"]
     height = processor.size["longest_edge"]
