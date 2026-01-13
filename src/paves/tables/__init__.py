@@ -272,7 +272,7 @@ def tables_detr(
       An iterator over `TableObject`, or `None`, if the model can't be used
     """
     try:
-        from paves.tables_detr import table_bounds
+        from paves.tables.detr import table_bounds
     except ImportError:
         return None
     return table_bounds_to_objects(pdf, table_bounds(pdf, device=device))
