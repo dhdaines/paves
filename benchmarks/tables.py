@@ -33,13 +33,13 @@ if __name__ == "__main__":
     parser.add_argument("pdf", type=Path)
     parser.add_argument("--over", choices=["doc", "page", "pagelist"], default="doc")
     parser.add_argument(
-        "--detector", choices=["structure", "detr"], default="structure"
+        "--detector", choices=["structure", "tatr", "detr"], default="structure"
     )
     args = parser.parse_args()
 
     detector = pt.detector(args.detector)
     if detector is None:
-        parser.error(f"Unknown detector {detector}")
+        parser.error(f"Unknown detector {args.detector}")
     if args.over == "doc":
         start = time.time()
         benchmark(detector, args.pdf)
