@@ -75,8 +75,8 @@ def detect_objects(
 
     # Concoct some arguments for pi.convert (FIXME: should be able to
     # pass it processor.size directly)
-    dpi = 0
-    if "width" in processor.size or "height" in processor.size:
+    dpi = width = height = 0
+    if "width" in processor.size and "height" in processor.size:
         width = processor.size["width"]
         height = processor.size["height"]
     elif "longest_edge" in processor.size:
