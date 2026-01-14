@@ -78,10 +78,10 @@ def tables(
     This will always try to use logical structure (via PLAYA-PDF)
     first to identify tables.
 
-    For the moment, this only works on tagged and accessible PDFs.
-    So, like `paves.image`, it can also use Machine Learning Models™
-    to do so, which involves nasty horrible dependencyses (we hates
-    them, they stole the precious) like `cudnn-10-gigabytes-of-c++`.
+    Of course, that only works on tagged and accessible PDFs.  So,
+    like `paves.image`, we can also use Machine Learning Models™ here,
+    which involves nasty horrible dependencyses (we hates them, they
+    stole the precious) like `cudnn-10-gigabytes-of-c++`.
 
     If you'd like to try that, then you can do so by installing the
     `transformers[torch]` package (if you don't have a GPU, try adding

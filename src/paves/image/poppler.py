@@ -135,6 +135,7 @@ def _popple_pages(
             first = last = next_last
         else:
             last = next_last
+    assert PATH_TO_POPPLER is not None
     for first, last in spans:
         subprocess.run(
             [
