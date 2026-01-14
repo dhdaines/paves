@@ -15,8 +15,7 @@ class Detector(Protocol):
     def __call__(
         self,
         pdf: Union[str, PathLike, Document, Page, PageList],
-    ) -> Union[Iterator[TableObject], None]:
-        ...
+    ) -> Union[Iterator[TableObject], None]: ...
 
     __name__: str
 
@@ -46,7 +45,7 @@ def lookup(name: str) -> Union[Detector, None]:
 
 
 def tables_orelse(
-    pdf: Union[str, PathLike, Document, Page, PageList]
+    pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:
     """Identify tables in a PDF or one of its pages, or fail.
 
@@ -72,7 +71,7 @@ def tables_orelse(
 
 
 def tables(
-    pdf: Union[str, PathLike, Document, Page, PageList]
+    pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator[TableObject]:
     """Identify tables in a PDF or one of its pages.
 

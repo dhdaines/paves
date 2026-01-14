@@ -56,25 +56,24 @@ def table_bounds_to_objects(
 
 
 def table_bounds(
-    pdf: Union[str, PathLike, Document, Page, PageList]
+    pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator[Tuple[int, List[Rect]]]:
     """Iterate over all text objects in a PDF, page, or pages"""
     import torch
     from transformers import AutoImageProcessor, AutoModelForObjectDetection
 
     processor = AutoImageProcessor.from_pretrained(
-        "ds4sd/docling-layout-old", use_fast=True
+        "docling-project/docling-layout-heron", use_fast=True
     )
     # FIXME: sorry, AMD owners, and everybody else, this will get fixed
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch_device = torch.device(device)
-    model = AutoModelForObjectDetection.from_pretrained("ds4sd/docling-layout-old").to(
-        torch_device
-    )
+    model = AutoModelForObjectDetection.from_pretrained(
+        "docling-project/docling-layout-heron"
+    ).to(torch_device)
     width = processor.size["width"]
     height = processor.size["height"]
-    # Labels are off-by-one for no good reason
-    table_label = int(model.config.label2id["Table"]) - 1
+    table_label = int(model.config.label2id["Table"])
     # We could do this in a batch, but that easily runs out of memory
     with torch.inference_mode():
         for image in pi.convert(pdf, width=width, height=height):
@@ -94,7 +93,7 @@ def table_bounds(
             yield image.info["page_index"], boxes
 
 
-@detector(priority=50)
+@detector(priority=10)
 def detr(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:

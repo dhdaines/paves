@@ -56,16 +56,17 @@ def table_bounds_to_objects(
 
 
 def table_bounds(
-    pdf: Union[str, PathLike, Document, Page, PageList]
+    pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Iterator[Tuple[int, List[Rect]]]:
     """Iterate over all text objects in a PDF, page, or pages"""
     import torch
     from transformers import AutoImageProcessor, AutoModelForObjectDetection
+
     # FIXME: Table Transformer is actually DETR, so this code could
     # probably be merged with paves.tables.detr
     processor = AutoImageProcessor.from_pretrained(
         "microsoft/table-transformer-detection",
-        use_fast=True  # May not actually be fast
+        use_fast=True,  # May not actually be fast
     )
     # FIXME: sorry, AMD owners, and everybody else, this will get fixed
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -93,7 +94,7 @@ def table_bounds(
             yield image.info["page_index"], boxes
 
 
-@detector(priority=25)
+@detector(priority=20)
 def tatr(
     pdf: Union[str, PathLike, Document, Page, PageList],
 ) -> Union[Iterator[TableObject], None]:

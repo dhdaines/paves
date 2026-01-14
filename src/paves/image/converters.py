@@ -3,7 +3,7 @@ Common interface for image converters.
 """
 
 from os import PathLike
-from typing import Any, Callable, Iterator, List, Protocol, Tuple, Union
+from typing import Callable, Iterator, List, Protocol, Tuple, Union
 from playa import Document, Page, PageList
 from PIL import Image
 
