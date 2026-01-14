@@ -3,6 +3,7 @@ Convert PDFs to images using poppler command-line tools.
 """
 
 import functools
+import shutil
 import subprocess
 import tempfile
 from os import PathLike
@@ -21,6 +22,8 @@ from playa.page import Page
 
 from paves.exceptions import NotInstalledError
 from paves.image.converters import converter
+
+PATH_TO_POPPLER: Union[str, None] = shutil.which("pdftoppm")
 
 
 def make_poppler_args(dpi: int, width: int, height: int) -> List[str]:
@@ -135,7 +138,7 @@ def _popple_pages(
     for first, last in spans:
         subprocess.run(
             [
-                "pdftoppm",
+                PATH_TO_POPPLER,
                 *args,
                 "-f",
                 str(first),
