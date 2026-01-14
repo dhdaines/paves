@@ -33,7 +33,9 @@ if __name__ == "__main__":
     parser.add_argument("pdf", type=Path)
     parser.add_argument("--over", choices=["doc", "page", "pagelist"], default="doc")
     parser.add_argument(
-        "--detector", choices=["structure", "tatr", "detr"], default="structure"
+        "--detector",
+        choices=["structure", "docling_heron", "table_transformer"],
+        default="structure",
     )
     args = parser.parse_args()
 

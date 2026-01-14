@@ -2,81 +2,20 @@
 Table detection using PDF logical structure.
 """
 
-from copy import copy
 from functools import singledispatch
 from itertools import groupby
-from typing import Iterable, Iterator, List, Tuple, Union
+from typing import Iterable, Iterator, Union
 from operator import attrgetter
 from os import PathLike
 
 import playa
 from playa import Document, Page, PageList
-from playa.content import GraphicState, MarkedContent
-from playa.page import Annotation
-from playa.pdftypes import Matrix, Rect
 from playa.structure import (
     Element,
-    ContentItem,
-    ContentObject as StructContentObject,
 )
-from playa.worker import _ref_page
 
 from paves.tables.detectors import detector
 from paves.tables.table import TableObject
-
-
-def _from_element(
-    el: Element,
-    page: Page,
-    contents: Union[Iterable[Union[ContentItem, StructContentObject]], None] = None,
-) -> Union["TableObject", None]:
-    if contents is None:
-        contents = el.contents
-    # Find a ContentObject so we can get a bbox, mcstack, ctm
-    # (they might not be *correct* of course, but oh well)
-    gstate: Union[GraphicState, None] = None
-    ctm: Union[Matrix, None] = None
-    mcstack: Union[Tuple[MarkedContent, ...], None] = None
-    bbox: Union[Rect, None] = None
-    for kid in contents:
-        # For multi-page tables, skip any contents on a different page
-        if kid.page != page:
-            continue
-        if isinstance(kid, StructContentObject):
-            obj = kid.obj
-            if obj is None:
-                continue
-            elif isinstance(obj, Annotation):
-                # FIXME: for the moment just ignore these
-                continue
-            else:
-                gstate = copy(obj.gstate)
-                ctm = obj.ctm
-                mcstack = obj.mcstack
-                bbox = obj.bbox
-                break
-        elif isinstance(kid, ContentItem):
-            # It's a ContentItem
-            try:
-                cobj = next(iter(kid))
-            except StopIteration:
-                continue
-            gstate = copy(cobj.gstate)
-            ctm = cobj.ctm
-            mcstack = cobj.mcstack
-            break
-    else:
-        # No contents, no table for you!
-        return None
-    return TableObject(
-        _pageref=_ref_page(page),
-        _parentkey=None,
-        gstate=gstate,
-        ctm=ctm,
-        mcstack=mcstack,
-        _bbox=bbox,
-        _parent=el,
-    )
 
 
 @singledispatch
@@ -135,7 +74,7 @@ def table_elements_to_objects(
                 continue
             if page is not None and kidpage is not page:
                 continue
-            table = _from_element(el, kidpage, kids)
+            table = TableObject.from_element(el, kidpage, kids)
             if table is not None:
                 yield table
 
