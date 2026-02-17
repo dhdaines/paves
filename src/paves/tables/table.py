@@ -18,7 +18,6 @@ from playa.worker import _ref_page
 from dataclasses import dataclass
 
 from playa.content import ContentObject
-from playa.pdftypes import BBOX_NONE
 from playa.utils import get_bound_rects
 
 
@@ -50,7 +49,7 @@ class TableObject(ContentObject):
     _parent: Union[Element, None]
 
     @property
-    def bbox(self) -> Rect:
+    def bbox(self) -> Union[Rect, None]:
         # _bbox takes priority as we *could* have both
         if self._bbox is not None:
             return self._bbox
@@ -59,17 +58,17 @@ class TableObject(ContentObject):
             # same page as us (otherwise it will be wrong!)
             if self._parent.page is self.page:
                 bbox = self._parent.bbox
-                if bbox is not BBOX_NONE:
+                if bbox is not None:
                     return bbox
             # We always have a page even if self._parent doesn't
             return get_bound_rects(
                 item.bbox
                 for item in self._parent.contents
-                if item.page is self.page and item.bbox is not BBOX_NONE
+                if item.page is self.page and item.bbox is not None
             )
         else:
             # This however should never happen
-            return BBOX_NONE
+            return None
 
     @classmethod
     def from_bbox(cls, page: Page, bbox: Rect) -> "TableObject":
