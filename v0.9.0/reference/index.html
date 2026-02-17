@@ -1,0 +1,3985 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PDF, Analyse et Visualisation simplifiÉS">
+      
+      
+        <meta name="author" content="David Huggins-Daines">
+      
+      
+        <link rel="canonical" href="https://dhdaines.github.io/paves/v0.9.0/reference/">
+      
+      
+        <link rel="prev" href="../looking-at-stuff/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Reference - PAVÉS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PAVÉS" class="md-header__button md-logo" aria-label="PAVÉS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PAVÉS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhdaines/paves" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhdaines/paves
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PAVÉS" class="md-nav__button md-logo" aria-label="PAVÉS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PAVÉS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhdaines/paves" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhdaines/paves
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../looking-at-stuff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#paves.image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.BoxFunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BoxFunc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Boxable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boxable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.ColorMaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ColorMaker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.DEFAULT_COLOR_CYCLE" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEFAULT_COLOR_CYCLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.LabelFunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LabelFunc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.PillowColor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PillowColor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        box
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.color_maker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        color_maker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.convert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_annotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_rect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_rect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_annotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_element" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_element
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.mark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.pillow_color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pillow_color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.popple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        popple
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paves.text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="text">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.WordObject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WordObject
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.line_break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        line_break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.text_objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text_objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.word_break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        word_break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        words
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paves.tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.detector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_detr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_detr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_orelse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_orelse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_tatr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_tatr
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#paves.image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.BoxFunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BoxFunc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Boxable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boxable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.ColorMaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ColorMaker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.Colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.DEFAULT_COLOR_CYCLE" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEFAULT_COLOR_CYCLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.LabelFunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LabelFunc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.PillowColor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PillowColor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        box
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.color_maker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        color_maker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.convert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_annotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_box_rect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_box_rect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_annotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.get_label_element" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_label_element
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.mark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.pillow_color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pillow_color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.popple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        popple
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.image.show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paves.text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="text">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.WordObject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WordObject
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.line_break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        line_break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.text_objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text_objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.word_break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        word_break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.text.words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        words
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paves.tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.detector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_detr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_detr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_orelse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_orelse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paves.tables.tables_tatr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tables_tatr
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="reference">Reference</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="paves.image" class="doc doc-heading">
+            <code>paves.image</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Various ways of converting PDFs to images for feeding them to
+models and/or visualisation.`</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.BoxFunc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">BoxFunc</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Boxable</span><span class="p">],</span> <span class="n">Rect</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Function to get a bounding box for a Boxable.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.Boxable" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Boxable</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Annotation</span><span class="p">,</span> <span class="n">ContentObject</span><span class="p">,</span> <span class="n">Element</span><span class="p">,</span> <span class="n">HasBbox</span><span class="p">,</span> <span class="n">Rect</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Object for which we can get a bounding box.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.Color" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Color</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Type alias for things that can be used as colors.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.ColorMaker" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ColorMaker</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">PillowColor</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Function that makes a Pillow color for a string label.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.Colors" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Colors</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Color</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Color</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Type alias for colors or collections of colors.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.DEFAULT_COLOR_CYCLE" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">DEFAULT_COLOR_CYCLE</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;brown&#39;</span><span class="p">,</span> <span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Default color cycle (same as matplotlib)</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.LabelFunc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">LabelFunc</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Boxable</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Function to get a label for a Boxable.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="paves.image.PillowColor" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">PillowColor</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Type alias for things Pillow accepts as colors.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.box" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">box</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">DEFAULT_COLOR_CYCLE</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">label_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">label_margin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label_fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labelfunc</span><span class="o">=</span><span class="n">get_label</span><span class="p">,</span> <span class="n">boxfunc</span><span class="o">=</span><span class="n">get_box</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Draw boxes around things in a page of a PDF.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">box</span><span class="p">(</span>
+    <span class="n">objs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">Boxable</span><span class="p">,</span>
+        <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Boxable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span>
+    <span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Colors</span> <span class="o">=</span> <span class="n">DEFAULT_COLOR_CYCLE</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">label_color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+    <span class="n">label_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="n">label_margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">label_fill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">labelfunc</span><span class="p">:</span> <span class="n">LabelFunc</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">,</span>
+    <span class="n">boxfunc</span><span class="p">:</span> <span class="n">BoxFunc</span> <span class="o">=</span> <span class="n">get_box</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Page</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw boxes around things in a page of a PDF.&quot;&quot;&quot;</span>
+    <span class="n">draw</span><span class="p">:</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">ImageDraw</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">dpi</span> <span class="o">/</span> <span class="mi">72</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">load_default</span><span class="p">(</span><span class="n">label_size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">label_margin</span> <span class="o">*=</span> <span class="n">scale</span>
+    <span class="n">make_color</span> <span class="o">=</span> <span class="n">color_maker</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">image_page</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Page</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">_make_boxes</span><span class="p">(</span><span class="n">objs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">image_page</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">cast</span><span class="p">(</span><span class="n">HasPage</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">page</span> <span class="o">!=</span> <span class="n">image_page</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image_page</span> <span class="o">=</span> <span class="n">_getpage</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">show</span><span class="p">(</span><span class="n">image_page</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">scale</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">boxfunc</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># it has no content and no box</span>
+            <span class="k">continue</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">ImageDraw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">labelfunc</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="n">obj_color</span> <span class="o">=</span> <span class="n">make_color</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">outline</span><span class="o">=</span><span class="n">obj_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="n">tl</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">getbbox</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">label_box</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">left</span><span class="p">,</span>
+                <span class="n">top</span> <span class="o">-</span> <span class="n">tb</span> <span class="o">-</span> <span class="n">label_margin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">left</span> <span class="o">+</span> <span class="n">tr</span> <span class="o">+</span> <span class="n">label_margin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">top</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+                <span class="n">label_box</span><span class="p">,</span>
+                <span class="n">outline</span><span class="o">=</span><span class="n">obj_color</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="n">obj_color</span> <span class="k">if</span> <span class="n">label_fill</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">label_margin</span><span class="p">,</span> <span class="n">top</span> <span class="o">-</span> <span class="n">label_margin</span><span class="p">),</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span> <span class="k">if</span> <span class="n">label_fill</span> <span class="k">else</span> <span class="n">obj_color</span><span class="p">,</span>
+                <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">image</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.color_maker" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">color_maker</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Create a function that makes colors.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">color_maker</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">Colors</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ColorMaker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that makes colors.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">pillow_color</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.convert" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">convert</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert a PDF to images.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dpi</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this resolution (default is 72 dpi).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>width</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this width in pixels (0 to keep aspect ratio).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>height</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this height in pixels (0 to keep aspect ratio).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Yields:
+    Pillow <code>Image.Image</code> objects, one per page.  The original page
+    width and height in default user space units are available in
+    the <code>info</code> property of these images as <code>page_width</code> and
+    <code>page_height</code>
+Raises:
+    ValueError: Invalid arguments (e.g. both <code>dpi</code> and <code>width</code>/<code>height</code>)
+    NotInstalledError: If no renderer is available</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/converters.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF to images.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+<span class="sd">        dpi: Render to this resolution (default is 72 dpi).</span>
+<span class="sd">        width: Render to this width in pixels (0 to keep aspect ratio).</span>
+<span class="sd">        height: Render to this height in pixels (0 to keep aspect ratio).</span>
+<span class="sd">    Yields:</span>
+<span class="sd">        Pillow `Image.Image` objects, one per page.  The original page</span>
+<span class="sd">        width and height in default user space units are available in</span>
+<span class="sd">        the `info` property of these images as `page_width` and</span>
+<span class="sd">        `page_height`</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)</span>
+<span class="sd">        NotInstalledError: If no renderer is available</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">convert</span> <span class="ow">in</span> <span class="n">CONVERTERS</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">convert</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">img</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="n">NotInstalledError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotInstalledError</span><span class="p">(</span>
+            <span class="s2">&quot;No converters available, tried: </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">CONVERTERS</span><span class="p">))</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_box" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_box</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Default function to get the bounding box for an object.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_box</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default function to get the bounding box for an object.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;bbox&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">bbox</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t know how to get the box for </span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_box_annotation" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_box_annotation</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the bounding box of an Annotation</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_box</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Annotation</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_box_annotation</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Annotation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the bounding box of an Annotation&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">transform_bbox</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">ctm</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_box_content" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_box_content</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the bounding box of a ContentObject</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_box</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ContentObject</span><span class="p">)</span>
+<span class="nd">@get_box</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Element</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_box_content</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ContentObject</span><span class="p">,</span> <span class="n">Element</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the bounding box of a ContentObject&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">bbox</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_box_rect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_box_rect</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the bounding box of a ContentObject</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_box</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_box_rect</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Rect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the bounding box of a ContentObject&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_label" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_label</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Default function to get the label text for an object.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_label</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Boxable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default function to get the label text for an object.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_label_annotation" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_label_annotation</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the default label text for an Annotation.</p>
+
+
+<details class="note" open>
+  <summary>This is just a default.</summary>
+  <p>This is one of many possible options, so you may wish to
+define your own custom LabelFunc.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_label</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Annotation</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_label_annotation</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Annotation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the default label text for an Annotation.</span>
+
+<span class="sd">    Note: This is just a default.</span>
+<span class="sd">        This is one of many possible options, so you may wish to</span>
+<span class="sd">        define your own custom LabelFunc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">subtype</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_label_content" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_label_content</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the label text for a ContentObject.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_label</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ContentObject</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_label_content</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">ContentObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the label text for a ContentObject.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">object_type</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.get_label_element" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_label_element</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get the default label text for an Element.</p>
+
+
+<details class="note" open>
+  <summary>This is just a default.</summary>
+  <p>This is one of many possible options, so you may wish to
+define your own custom LabelFunc.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@get_label</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Element</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_label_element</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the default label text for an Element.</span>
+
+<span class="sd">    Note: This is just a default.</span>
+<span class="sd">        This is one of many possible options, so you may wish to</span>
+<span class="sd">        define your own custom LabelFunc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.mark" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">mark</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">DEFAULT_COLOR_CYCLE</span><span class="p">,</span> <span class="n">transparency</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">label_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">label_margin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">outline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labelfunc</span><span class="o">=</span><span class="n">get_label</span><span class="p">,</span> <span class="n">boxfunc</span><span class="o">=</span><span class="n">get_box</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Highlight things in a page of a PDF.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mark</span><span class="p">(</span>
+    <span class="n">objs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">Boxable</span><span class="p">,</span>
+        <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Boxable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span>
+    <span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Colors</span> <span class="o">=</span> <span class="n">DEFAULT_COLOR_CYCLE</span><span class="p">,</span>
+    <span class="n">transparency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.75</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">label_color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+    <span class="n">label_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="n">label_margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">outline</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">labelfunc</span><span class="p">:</span> <span class="n">LabelFunc</span> <span class="o">=</span> <span class="n">get_label</span><span class="p">,</span>
+    <span class="n">boxfunc</span><span class="p">:</span> <span class="n">BoxFunc</span> <span class="o">=</span> <span class="n">get_box</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Page</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Highlight things in a page of a PDF.&quot;&quot;&quot;</span>
+    <span class="n">overlay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mask</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">draw</span><span class="p">:</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">ImageDraw</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">dpi</span> <span class="o">/</span> <span class="mi">72</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">load_default</span><span class="p">(</span><span class="n">label_size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">transparency</span> <span class="o">*</span> <span class="mi">255</span><span class="p">))</span>
+    <span class="n">label_margin</span> <span class="o">*=</span> <span class="n">scale</span>
+    <span class="n">make_color</span> <span class="o">=</span> <span class="n">color_maker</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">image_page</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Page</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">_make_boxes</span><span class="p">(</span><span class="n">objs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">image_page</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">cast</span><span class="p">(</span><span class="n">HasPage</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">page</span> <span class="o">!=</span> <span class="n">image_page</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image_page</span> <span class="o">=</span> <span class="n">_getpage</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">show</span><span class="p">(</span><span class="n">image_page</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overlay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">overlay</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">scale</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">boxfunc</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># it has no content and no box</span>
+            <span class="k">continue</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">ImageDraw</span><span class="p">(</span><span class="n">overlay</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">labelfunc</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="n">obj_color</span> <span class="o">=</span> <span class="n">make_color</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">fill</span><span class="o">=</span><span class="n">obj_color</span><span class="p">)</span>
+        <span class="n">mask_draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">ImageDraw</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+        <span class="n">mask_draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">fill</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">outline</span><span class="p">:</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+            <span class="n">mask_draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">outline</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="n">tl</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">getbbox</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">label_box</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">left</span><span class="p">,</span>
+                <span class="n">top</span> <span class="o">-</span> <span class="n">tb</span> <span class="o">-</span> <span class="n">label_margin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">left</span> <span class="o">+</span> <span class="n">tr</span> <span class="o">+</span> <span class="n">label_margin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">top</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+                <span class="n">label_box</span><span class="p">,</span>
+                <span class="n">outline</span><span class="o">=</span><span class="n">obj_color</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="n">obj_color</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">mask_draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+                <span class="n">label_box</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">outline</span><span class="p">:</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+                    <span class="n">label_box</span><span class="p">,</span>
+                    <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">mask_draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+                    <span class="n">label_box</span><span class="p">,</span>
+                    <span class="n">outline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">label_margin</span><span class="p">,</span> <span class="n">top</span> <span class="o">-</span> <span class="n">label_margin</span><span class="p">),</span>
+                    <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                    <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                    <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">mask_draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">label_margin</span><span class="p">,</span> <span class="n">top</span> <span class="o">-</span> <span class="n">label_margin</span><span class="p">),</span>
+                    <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                    <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">label_margin</span><span class="p">,</span> <span class="n">top</span> <span class="o">-</span> <span class="n">label_margin</span><span class="p">),</span>
+                    <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                    <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                    <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+    <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">overlay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Image</span><span class="o">.</span><span class="n">composite</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.pillow_color" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pillow_color</span><span class="p">(</span><span class="n">color</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert colors to a form acceptable to Pillow.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pillow_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">Color</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PillowColor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert colors to a form acceptable to Pillow.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">color</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="c1"># Would sure be nice if MyPy understood all()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">color</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.popple" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">popple</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert a PDF to images using Poppler's pdftoppm.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.document.Document">Document</span>, <span title="playa.page.Page">Page</span>, <span title="playa.document.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dpi</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this resolution (default is 72 dpi).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>width</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this width in pixels.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>height</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Render to this height in pixels.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Yields:
+    Pillow <code>Image.Image</code> objects, one per page.
+Raises:
+    ValueError: Invalid arguments (e.g. both <code>dpi</code> and <code>width</code>/<code>height</code>)
+    NotInstalledError: If Poppler is not installed.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/poppler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@converter</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">popple</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF to images using Poppler&#39;s pdftoppm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+<span class="sd">        dpi: Render to this resolution (default is 72 dpi).</span>
+<span class="sd">        width: Render to this width in pixels.</span>
+<span class="sd">        height: Render to this height in pixels.</span>
+<span class="sd">    Yields:</span>
+<span class="sd">        Pillow `Image.Image` objects, one per page.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Invalid arguments (e.g. both `dpi` and `width`/`height`)</span>
+<span class="sd">        NotInstalledError: If Poppler is not installed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dpi</span> <span class="ow">and</span> <span class="p">(</span><span class="n">width</span> <span class="ow">or</span> <span class="n">height</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot specify both `dpi` and `width` or `height`&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;pdftoppm&quot;</span><span class="p">,</span> <span class="s2">&quot;-h&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotInstalledError</span><span class="p">(</span><span class="s2">&quot;Poppler does not seem to be installed&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">make_poppler_args</span><span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tempdir</span><span class="p">:</span>
+        <span class="n">temppath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+        <span class="c1"># FIXME: Possible to Popple in a Parallel Pipeline</span>
+        <span class="n">page_sizes</span> <span class="o">=</span> <span class="n">_popple</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">temppath</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">page_idx</span><span class="p">,</span> <span class="n">page_width</span><span class="p">,</span> <span class="n">page_height</span><span class="p">),</span> <span class="n">ppm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">page_sizes</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">temppath</span><span class="o">.</span><span class="n">iterdir</span><span class="p">())</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.ppm&quot;</span><span class="p">),</span>
+        <span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ppm</span><span class="p">)</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;page_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_idx</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;page_width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_width</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;page_height&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_height</span>
+            <span class="k">yield</span> <span class="n">img</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.image.show" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">show</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Show a single page with some reasonable defaults.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/image/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show a single page with some reasonable defaults.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="paves.text" class="doc doc-heading">
+            <code>paves.text</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Various somewhat-more-heuristic ways of guessing, getting, and
+processing text in PDFs.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="paves.text.WordObject" class="doc doc-heading">
+            <code>WordObject</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="playa.content.TextBase">TextBase</span></code></p>
+
+
+
+        <p>"Word" in a PDF.</p>
+<p>This is heuristically determined, either by explicit whitespace
+(if you're lucky enough to have a Tagged PDF) or by a sufficient
+gap between adjacent glyphs (otherwise).</p>
+<p>It otherwise behaves just like a <code>TextObject</code>.  You can iterate
+over its glyphs, etc.  But, as a treat, these glyphs are
+"finalized" so you don't have to worry about inconsistent graphics
+states and so forth, and you also get some convenience properties.</p>
+<p>The origin of the curent (logical) line is also available, to
+facilitate grouping words into lines, if you so desire (simply
+use <code>itertools.groupby(words, paves.text.line)</code>)</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>src/paves/text/__init__.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">WordObject</span><span class="p">(</span><span class="n">TextBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;Word&quot; in a PDF.</span>
+
+<span class="sd">    This is heuristically determined, either by explicit whitespace</span>
+<span class="sd">    (if you&#39;re lucky enough to have a Tagged PDF) or by a sufficient</span>
+<span class="sd">    gap between adjacent glyphs (otherwise).</span>
+
+<span class="sd">    It otherwise behaves just like a `TextObject`.  You can iterate</span>
+<span class="sd">    over its glyphs, etc.  But, as a treat, these glyphs are</span>
+<span class="sd">    &quot;finalized&quot; so you don&#39;t have to worry about inconsistent graphics</span>
+<span class="sd">    states and so forth, and you also get some convenience properties.</span>
+
+<span class="sd">    The origin of the curent (logical) line is also available, to</span>
+<span class="sd">    facilitate grouping words into lines, if you so desire (simply</span>
+<span class="sd">    use `itertools.groupby(words, paves.text.line)`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_glyphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GlyphObject</span><span class="p">]</span>
+    <span class="n">_next_origin</span><span class="p">:</span> <span class="n">Point</span>
+    <span class="n">line</span><span class="p">:</span> <span class="n">Point</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="s2">&quot;ContentObject&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_glyphs</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">matrix</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_glyphs</span> <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">origin</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displacement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point</span><span class="p">:</span>
+        <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+        <span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_origin</span>
+        <span class="k">return</span> <span class="n">bx</span> <span class="o">-</span> <span class="n">ax</span><span class="p">,</span> <span class="n">by</span> <span class="o">-</span> <span class="n">ay</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.text.line_break" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">line_break</span><span class="p">(</span><span class="n">glyph</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Heuristically predict a line break based on the predicted origin
+from the previous glyph.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/text/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">line_break</span><span class="p">(</span><span class="n">glyph</span><span class="p">:</span> <span class="n">GlyphObject</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Heuristically predict a line break based on the predicted origin</span>
+<span class="sd">    from the previous glyph.&quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">glyph</span><span class="o">.</span><span class="n">origin</span>
+    <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="n">predicted_origin</span>
+    <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">vertical</span><span class="p">:</span>
+        <span class="n">line_offset</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">px</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">line_offset</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">py</span>
+        <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">space</span> <span class="o">==</span> <span class="s2">&quot;screen&quot;</span><span class="p">:</span>
+            <span class="n">line_offset</span> <span class="o">=</span> <span class="o">-</span><span class="n">line_offset</span>
+    <span class="k">return</span> <span class="n">line_offset</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">line_offset</span> <span class="o">&gt;</span> <span class="mi">100</span>  <span class="c1"># FIXME: arbitrary!</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.text.text_objects" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">text_objects</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Iterate over all text objects in a PDF, page, or pages</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/text/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_objects</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">TextObject</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate over all text objects in a PDF, page, or pages&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.text.word_break" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">word_break</span><span class="p">(</span><span class="n">glyph</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">,</span> <span class="n">prev_displacement</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Heuristically predict a word break based on the predicted origin
+from the previous glyph.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/text/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">word_break</span><span class="p">(</span>
+    <span class="n">glyph</span><span class="p">:</span> <span class="n">GlyphObject</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span> <span class="n">prev_displacement</span><span class="p">:</span> <span class="n">Point</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Heuristically predict a word break based on the predicted origin</span>
+<span class="sd">    from the previous glyph.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">glyph</span><span class="o">.</span><span class="n">origin</span>
+    <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="n">predicted_origin</span>
+    <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">vertical</span><span class="p">:</span>
+        <span class="n">glyph_offset</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">py</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">displacement</span> <span class="o">=</span> <span class="n">prev_displacement</span>
+        <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">space</span> <span class="o">==</span> <span class="s2">&quot;screen&quot;</span><span class="p">:</span>
+            <span class="n">glyph_offset</span> <span class="o">=</span> <span class="o">-</span><span class="n">glyph_offset</span>
+            <span class="n">displacement</span> <span class="o">=</span> <span class="o">-</span><span class="n">displacement</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">glyph_offset</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">px</span>
+        <span class="n">displacement</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prev_displacement</span>
+    <span class="c1"># If there&#39;s a space, *or* if we are before the prev glyph</span>
+    <span class="k">return</span> <span class="n">glyph_offset</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="n">glyph_offset</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">displacement</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.text.words" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">words</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Extract "words" (i.e. whitespace-separated text cells) from a
+PDF or one of its pages.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.document.Document">Document</span>, <span title="playa.page.Page">Page</span>, <span title="playa.document.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Yields:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="WordObject
+
+
+  
+      dataclass
+   (paves.text.WordObject)" href="#paves.text.WordObject">WordObject</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>WordObject</code> objects, which can be visualized with <code>paves.image</code></p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="WordObject
+
+
+  
+      dataclass
+   (paves.text.WordObject)" href="#paves.text.WordObject">WordObject</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>functions, or you can do various other things with them too.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/text/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">words</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">WordObject</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract &quot;words&quot; (i.e. whitespace-separated text cells) from a</span>
+<span class="sd">    PDF or one of its pages.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        `WordObject` objects, which can be visualized with `paves.image`</span>
+<span class="sd">        functions, or you can do various other things with them too.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">glyphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GlyphObject</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">predicted_origin</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">prev_disp</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">line_origin</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">text_objects</span><span class="p">(</span><span class="n">pdf</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line_origin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">line_origin</span> <span class="o">=</span> <span class="n">glyph</span><span class="o">.</span><span class="n">origin</span>
+            <span class="k">if</span> <span class="n">predicted_origin</span> <span class="ow">and</span> <span class="n">prev_disp</span><span class="p">:</span>
+                <span class="n">new_word</span> <span class="o">=</span> <span class="n">word_break</span><span class="p">(</span><span class="n">glyph</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">,</span> <span class="n">prev_disp</span><span class="p">)</span>
+                <span class="n">new_line</span> <span class="o">=</span> <span class="n">line_break</span><span class="p">(</span><span class="n">glyph</span><span class="p">,</span> <span class="n">predicted_origin</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">glyphs</span> <span class="ow">and</span> <span class="p">(</span><span class="n">new_word</span> <span class="ow">or</span> <span class="n">new_line</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">WordObject</span><span class="p">(</span>
+                        <span class="n">_pageref</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_pageref</span><span class="p">,</span>
+                        <span class="n">_parentkey</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_parentkey</span><span class="p">,</span>
+                        <span class="n">gstate</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">gstate</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+                        <span class="n">ctm</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ctm</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+                        <span class="n">mcstack</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mcstack</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+                        <span class="n">_glyphs</span><span class="o">=</span><span class="n">glyphs</span><span class="p">,</span>
+                        <span class="n">_next_origin</span><span class="o">=</span><span class="n">predicted_origin</span><span class="p">,</span>
+                        <span class="n">line</span><span class="o">=</span><span class="n">line_origin</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">glyphs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="n">new_line</span><span class="p">:</span>
+                    <span class="n">line_origin</span> <span class="o">=</span> <span class="n">glyph</span><span class="o">.</span><span class="n">origin</span>
+            <span class="k">if</span> <span class="n">glyph</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">glyph</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+                <span class="n">glyphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">GlyphObject</span><span class="p">,</span> <span class="n">glyph</span><span class="o">.</span><span class="n">finalize</span><span class="p">()))</span>
+            <span class="n">prev_disp</span> <span class="o">=</span> <span class="n">glyph</span><span class="o">.</span><span class="n">displacement</span>
+            <span class="n">predicted_origin</span> <span class="o">=</span> <span class="n">_add_point</span><span class="p">(</span><span class="n">glyph</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">prev_disp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">predicted_origin</span> <span class="ow">and</span> <span class="n">line_origin</span> <span class="ow">and</span> <span class="n">glyphs</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">WordObject</span><span class="p">(</span>
+            <span class="n">_pageref</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_pageref</span><span class="p">,</span>
+            <span class="n">_parentkey</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_parentkey</span><span class="p">,</span>
+            <span class="n">gstate</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">gstate</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+            <span class="n">ctm</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ctm</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+            <span class="n">mcstack</span><span class="o">=</span><span class="n">glyphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mcstack</span><span class="p">,</span>  <span class="c1"># Not necessarily correct!</span>
+            <span class="n">_glyphs</span><span class="o">=</span><span class="n">glyphs</span><span class="p">,</span>
+            <span class="n">_next_origin</span><span class="o">=</span><span class="n">predicted_origin</span><span class="p">,</span>
+            <span class="n">line</span><span class="o">=</span><span class="n">line_origin</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="paves.tables" class="doc doc-heading">
+            <code>paves.tables</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Simple and not at all Java-damaged interface for table detection.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.detector" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">detector</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Look up a detector by name.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/detectors.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">lookup</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Detector</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look up a detector by name.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">DETECTORS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.tables" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tables</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identify tables in a PDF or one of its pages.</p>
+<p>This will always try to use logical structure (via PLAYA-PDF)
+first to identify tables.</p>
+<p>Of course, that only works on tagged and accessible PDFs.  So,
+like <code>paves.image</code>, we can also use Machine Learning Models™ here,
+which involves nasty horrible dependencyses (we hates them, they
+stole the precious) like <code>cudnn-10-gigabytes-of-c++</code>.</p>
+<p>If you'd like to try that, then you can do so by installing the
+<code>transformers[torch]</code> package (if you don't have a GPU, try adding
+<code>--extra-index-url https://download.pytorch.org/whl/cpu</code> to pip's
+command line).</p>
+
+
+<details class="note" open>
+  <summary>These tables cannot span multiple pages.</summary>
+  <p>Often, a table will span multiple pages.  With PDF logical
+structure, this can be represented (and sometimes is), but if
+there is no logical structure, this is not possible, since
+tables are detected from the rendered image of a page.
+Reconstructing this information is both extremely important
+and also very difficult with current models (perhaps very big
+VLMs can do it?).  Since we also want to visualize tables with
+<code>paves.image</code>, we don't return multi-page tables here.</p>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An iterator over <code>TableObject</code>.  If no method is available to</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>detect tables, this will return an iterator over an empty</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>list.  You may wish to use <code>tables_orelse</code> to ensure that</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>tables can be detected.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/detectors.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tables</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify tables in a PDF or one of its pages.</span>
+
+<span class="sd">    This will always try to use logical structure (via PLAYA-PDF)</span>
+<span class="sd">    first to identify tables.</span>
+
+<span class="sd">    Of course, that only works on tagged and accessible PDFs.  So,</span>
+<span class="sd">    like `paves.image`, we can also use Machine Learning Models™ here,</span>
+<span class="sd">    which involves nasty horrible dependencyses (we hates them, they</span>
+<span class="sd">    stole the precious) like `cudnn-10-gigabytes-of-c++`.</span>
+
+<span class="sd">    If you&#39;d like to try that, then you can do so by installing the</span>
+<span class="sd">    `transformers[torch]` package (if you don&#39;t have a GPU, try adding</span>
+<span class="sd">    `--extra-index-url https://download.pytorch.org/whl/cpu` to pip&#39;s</span>
+<span class="sd">    command line).</span>
+
+<span class="sd">    Note: These tables cannot span multiple pages.</span>
+<span class="sd">        Often, a table will span multiple pages.  With PDF logical</span>
+<span class="sd">        structure, this can be represented (and sometimes is), but if</span>
+<span class="sd">        there is no logical structure, this is not possible, since</span>
+<span class="sd">        tables are detected from the rendered image of a page.</span>
+<span class="sd">        Reconstructing this information is both extremely important</span>
+<span class="sd">        and also very difficult with current models (perhaps very big</span>
+<span class="sd">        VLMs can do it?).  Since we also want to visualize tables with</span>
+<span class="sd">        `paves.image`, we don&#39;t return multi-page tables here.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An iterator over `TableObject`.  If no method is available to</span>
+<span class="sd">        detect tables, this will return an iterator over an empty</span>
+<span class="sd">        list.  You may wish to use `tables_orelse` to ensure that</span>
+<span class="sd">        tables can be detected.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">itor</span> <span class="o">=</span> <span class="n">tables_orelse</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">itor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(())</span>
+    <span class="k">return</span> <span class="n">itor</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.tables_detr" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tables_detr</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identify tables in a PDF or one of its pages using Docling Project
+layout model.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An iterator over <code>TableObject</code>, or <code>None</code>, if the model can't be used</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/detr.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@detector</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">docling_heron</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify tables in a PDF or one of its pages using Docling Project</span>
+<span class="sd">    layout model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An iterator over `TableObject`, or `None`, if the model can&#39;t be used</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">detected</span> <span class="o">=</span> <span class="n">detect_objects</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="s2">&quot;docling-project/docling-layout-heron&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">itor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">page</span><span class="p">,</span> <span class="p">(</span><span class="n">page_idx</span><span class="p">,</span> <span class="n">objects</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_get_pages</span><span class="p">(</span><span class="n">pdf</span><span class="p">),</span> <span class="n">detected</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">page</span><span class="o">.</span><span class="n">page_idx</span> <span class="o">==</span> <span class="n">page_idx</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">bbox</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;Table&quot;</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">TableObject</span><span class="o">.</span><span class="n">from_bbox</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">itor</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.tables_orelse" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tables_orelse</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identify tables in a PDF or one of its pages, or fail.</p>
+<p>This works like <code>tables</code> but forces you (if you use type checking)
+to detect the case where tables cannot be detected by any known
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An iterator over <code>TableObject</code>, or <code>None</code>, if there is no</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>method available to detect tables.  This will cause a</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>TypeError</code> if you try to iterate over it anyway.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/detectors.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tables_orelse</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify tables in a PDF or one of its pages, or fail.</span>
+
+<span class="sd">    This works like `tables` but forces you (if you use type checking)</span>
+<span class="sd">    to detect the case where tables cannot be detected by any known</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An iterator over `TableObject`, or `None`, if there is no</span>
+<span class="sd">        method available to detect tables.  This will cause a</span>
+<span class="sd">        `TypeError` if you try to iterate over it anyway.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">DETECTORS</span><span class="p">:</span>
+        <span class="n">itor</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">itor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">itor</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.tables_structure" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tables_structure</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identify tables in a PDF or one of its pages using logical structure.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An iterator over <code>TableObject</code>, or <code>None</code>, if there is no</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>logical structure (this will cause a TypeError, if you don't</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>check for it).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@detector</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">structure</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify tables in a PDF or one of its pages using logical structure.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An iterator over `TableObject`, or `None`, if there is no</span>
+<span class="sd">      logical structure (this will cause a TypeError, if you don&#39;t</span>
+<span class="sd">      check for it).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">pdf</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">Page</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">table_elements_to_objects</span><span class="p">(</span><span class="n">table_elements</span><span class="p">(</span><span class="n">pdf</span><span class="p">),</span> <span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># means that structure is None</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="paves.tables.tables_tatr" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tables_tatr</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identify tables in a PDF or one of its pages using Microsoft Table
+Transformer model.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pdf</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="os.PathLike">PathLike</span>, <span title="playa.Document">Document</span>, <span title="playa.Page">Page</span>, <span title="playa.PageList">PageList</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PLAYA-PDF document, page, pages, or path to a PDF.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="typing.Iterator">Iterator</span>[<span title="paves.tables.table.TableObject">TableObject</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An iterator over <code>TableObject</code>, or <code>None</code>, if the model can't be used</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/paves/tables/detr.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@detector</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">table_transformer</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">Document</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageList</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify tables in a PDF or one of its pages using Microsoft Table</span>
+<span class="sd">    Transformer model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf: PLAYA-PDF document, page, pages, or path to a PDF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An iterator over `TableObject`, or `None`, if the model can&#39;t be used</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">detected</span> <span class="o">=</span> <span class="n">detect_objects</span><span class="p">(</span>
+            <span class="n">pdf</span><span class="p">,</span>
+            <span class="s2">&quot;microsoft/table-transformer-detection&quot;</span><span class="p">,</span>
+            <span class="n">model_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;revision&quot;</span><span class="p">:</span> <span class="s2">&quot;no_timm&quot;</span><span class="p">},</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">itor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">TableObject</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">page</span><span class="p">,</span> <span class="p">(</span><span class="n">page_idx</span><span class="p">,</span> <span class="n">objects</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_get_pages</span><span class="p">(</span><span class="n">pdf</span><span class="p">),</span> <span class="n">detected</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">page</span><span class="o">.</span><span class="n">page_idx</span> <span class="o">==</span> <span class="n">page_idx</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">bbox</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">TableObject</span><span class="o">.</span><span class="n">from_bbox</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">itor</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; David Huggins-Daines 2025-present
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
