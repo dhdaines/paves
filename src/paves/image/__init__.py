@@ -31,7 +31,13 @@ __all__ = ["convert", "popple", "pdfium", "show", "box", "mark"]
 
 def show(page: Page, dpi: int = 72) -> Image.Image:
     """Show a single page with some reasonable defaults."""
-    return next(convert(page, dpi=dpi))
+    try:
+        return next(convert(page, dpi=dpi))
+    except NotImplementedError as e:
+        raise ValueError(
+            f"Can't call show() on a {type(page).__name__}, "
+            "did you mean to call box() or mark()?"
+        ) from e
 
 
 class HasBbox(Protocol):
