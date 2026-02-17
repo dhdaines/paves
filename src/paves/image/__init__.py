@@ -20,7 +20,7 @@ from typing import (
 from PIL import Image, ImageDraw, ImageFont
 from playa.page import ContentObject, Page, Annotation
 from playa.structure import Element
-from playa.utils import Rect, transform_bbox
+from playa.utils import Rect
 
 from paves.image.converters import convert
 from paves.image.poppler import popple
@@ -46,12 +46,12 @@ Boxable = Union[Annotation, ContentObject, Element, HasBbox, Rect]
 """Object for which we can get a bounding box."""
 LabelFunc = Callable[[Boxable], Any]
 """Function to get a label for a Boxable."""
-BoxFunc = Callable[[Boxable], Rect]
+BoxFunc = Callable[[Boxable], Union[Rect, None]]
 """Function to get a bounding box for a Boxable."""
 
 
 @functools.singledispatch
-def get_box(obj) -> Rect:
+def get_box(obj) -> Union[Rect, None]:
     """Default function to get the bounding box for an object."""
     if hasattr(obj, "bbox"):
         return obj.bbox
@@ -59,22 +59,9 @@ def get_box(obj) -> Rect:
 
 
 @get_box.register(tuple)
-def get_box_rect(obj: Rect) -> Rect:
-    """Get the bounding box of a ContentObject"""
+def get_box_rect(obj: Rect) -> Union[Rect, None]:
+    """Get the bounding box of a bounding box"""
     return obj
-
-
-@get_box.register(ContentObject)
-@get_box.register(Element)
-def get_box_content(obj: Union[ContentObject, Element]) -> Rect:
-    """Get the bounding box of a ContentObject"""
-    return obj.bbox
-
-
-@get_box.register(Annotation)
-def get_box_annotation(obj: Annotation) -> Rect:
-    """Get the bounding box of an Annotation"""
-    return transform_bbox(obj.page.ctm, obj.rect)
 
 
 @functools.singledispatch
@@ -97,7 +84,7 @@ def get_label_annotation(obj: Annotation) -> str:
         This is one of many possible options, so you may wish to
         define your own custom LabelFunc.
     """
-    return obj.subtype
+    return obj.type
 
 
 @get_label.register(Element)
@@ -257,7 +244,10 @@ def box(
             image_page = _getpage(obj, page)
             image = show(image_page, dpi)
         try:
-            left, top, right, bottom = (x * scale for x in boxfunc(obj))
+            box = boxfunc(obj)
+            if box is None:  # it has no box
+                continue
+            left, top, right, bottom = (x * scale for x in box)
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(image)
@@ -331,7 +321,10 @@ def mark(
         if mask is None:
             mask = Image.new("L", image.size, 255)
         try:
-            left, top, right, bottom = (x * scale for x in boxfunc(obj))
+            box = boxfunc(obj)
+            if box is None:  # it has no box
+                continue
+            left, top, right, bottom = (x * scale for x in box)
         except ValueError:  # it has no content and no box
             continue
         draw = ImageDraw.ImageDraw(overlay)

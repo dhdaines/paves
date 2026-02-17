@@ -98,6 +98,9 @@ UV_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
 [tool.hatch.envs.notebooks]
 extra-dependencies = [ "jupyterlab" ]
 
+[tool.hatch.envs.notebooks.scripts]
+lab = "jupyter lab"
+
 [tool.coverage.run]
 source_pkgs = ["paves", "tests"]
 branch = true
