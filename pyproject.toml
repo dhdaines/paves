@@ -80,7 +80,7 @@ dependencies = [
 [tool.hatch.envs.docs.scripts]
 serve = "mkdocs serve --livereload"
 publish = """
-mike deploy --push --update-aliases $(python -c 'import paves; print(paves.__version__)') latest
+mike deploy --push --update-aliases v$(python -c 'import paves; print(paves.__version__)') latest
 """
 
 [tool.hatch.envs.types]
