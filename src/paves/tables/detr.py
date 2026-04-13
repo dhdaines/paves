@@ -127,7 +127,7 @@ def docling_heron(
         for page, (page_idx, objects) in zip(_get_pages(pdf), detected):
             assert page.page_idx == page_idx
             for label, bbox in objects:
-                if label == "Table":
+                if label.lower() == "table":
                     yield TableObject.from_bbox(page, bbox)
 
     return itor()
