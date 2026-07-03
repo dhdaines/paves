@@ -226,6 +226,7 @@ def box(
     label_size: float = 9,
     label_margin: float = 1,
     label_fill: bool = True,
+    label_font: Union[ImageFont.ImageFont, ImageFont.FreeTypeFont, None] = None,
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
     boxfunc: BoxFunc = get_box,
@@ -235,7 +236,13 @@ def box(
     """Draw boxes around things in a page of a PDF."""
     draw: ImageDraw.ImageDraw
     scale = dpi / 72
-    font = ImageFont.load_default(label_size * scale)
+    font: Union[ImageFont.ImageFont, ImageFont.FreeTypeFont]
+    if isinstance(label_font, str):
+        font = ImageFont.truetype(label_font, size=label_size * scale)
+    elif isinstance(label_font, ImageFont.ImageFont):
+        font = label_font  # Note: impossible to set label_size
+    else:
+        font = ImageFont.load_default(label_size * scale)
     label_margin *= scale
     make_color = color_maker(color)
     image_page: Union[Page, None] = None
@@ -295,6 +302,7 @@ def mark(
     label_color: Color = "white",
     label_size: float = 9,
     label_margin: float = 1,
+    label_font: Union[ImageFont.ImageFont, ImageFont.FreeTypeFont, None] = None,
     outline: bool = False,
     image: Union[Image.Image, None] = None,
     labelfunc: LabelFunc = get_label,
@@ -307,7 +315,13 @@ def mark(
     mask: Union[Image.Image, None] = None
     draw: ImageDraw.ImageDraw
     scale = dpi / 72
-    font = ImageFont.load_default(label_size * scale)
+    font: Union[ImageFont.ImageFont, ImageFont.FreeTypeFont]
+    if isinstance(label_font, str):
+        font = ImageFont.truetype(label_font, size=label_size * scale)
+    elif isinstance(label_font, ImageFont.ImageFont):
+        font = label_font  # Note: impossible to set label_size
+    else:
+        font = ImageFont.load_default(label_size * scale)
     alpha = min(255, int(transparency * 255))
     label_margin *= scale
     make_color = color_maker(color)

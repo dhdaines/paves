@@ -1,3 +1,8 @@
+## PAVES 0.10.0: unreleased
+
+- Add `font` option to `mark` and `box` because Pillow's built-in
+  fonts can't show accented characters
+
 ## PAVES 0.9.1: 2026-02-17
 
 - Update for PLAYA 1.0
